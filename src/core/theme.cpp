@@ -56,7 +56,8 @@ bool BruceTheme::openThemeFile(FS *fs, String filepath) {
         {"connect",     &theme.connect,     theme.paths.connect    },
         {"config",      &theme.config,      theme.paths.config     },
         {"boot_img",    &theme.boot_img,    theme.paths.boot_img   },
-        {"boot_sound",  &theme.boot_sound,  theme.paths.boot_sound }
+        {"boot_sound",  &theme.boot_sound,  theme.paths.boot_sound },
+        {"lora",        &theme.lora,        theme.paths.lora       }
     };
 
     JsonObject _th = jsonDoc.as<JsonObject>();

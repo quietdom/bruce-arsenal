@@ -100,7 +100,7 @@ public:
     String wigleBasicToken = "";
     int devMode = 0;
     int colorInverted = 1;
-
+    int loraspc = 1;
     std::vector<String> disabledMenus = {};
 
     std::vector<QrCodeEntry> qrCodes = {

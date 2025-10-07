@@ -87,6 +87,22 @@ public:
     const char *filepath = "/brucePins.conf";
 
     // SPI Buses
+
+    // SPI.begin(LORA_SCK, LORA_MISO, LORA_MOSI, LORA_CS);
+    // LoRa.setPins(LORA_CS, LORA_RST, LORA_DIO0);
+#ifdef LORA_SCK_PIN
+    SPIPins LoRa_bus = {
+        (gpio_num_t)LORA_SCK_PIN,
+        (gpio_num_t)LORA_MISO_PIN,
+        (gpio_num_t)LORA_MOSI_PIN,
+        (gpio_num_t)LORA_CS_PIN,
+        (gpio_num_t)LORA_RST_PIN,
+        (gpio_num_t)LORA_DIO0_PIN
+    };
+#else
+    SPIPins LoRa_bus;
+#endif
+
 #ifdef CC1101_SCK_PIN
     SPIPins CC1101_bus = {
         (gpio_num_t)CC1101_SCK_PIN,
@@ -157,6 +173,7 @@ public:
     void setCC1101Pins(SPIPins value);
     void setNrf24Pins(SPIPins value);
     void setSDCardPins(SPIPins value);
+    void setLoRaPins(SPIPins value);
 
     void setSpiPins(SPIPins value);
     void setI2CPins(I2CPins value);

@@ -18,6 +18,13 @@ void BruceConfigPins::fromJson(JsonObject obj) {
 
     JsonObject root = obj[mac].as<JsonObject>();
 
+    if (!root["LoRa_Pins"].isNull()) {
+        LoRa_bus.fromJson(root["LoRa_Pins"].as<JsonObject>());
+    } else {
+        count++;
+        log_e("Fail");
+    }
+
     if (!root["CC1101_Pins"].isNull()) {
         CC1101_bus.fromJson(root["CC1101_Pins"].as<JsonObject>());
     } else {
@@ -76,6 +83,9 @@ void BruceConfigPins::fromJson(JsonObject obj) {
 
 void BruceConfigPins::toJson(JsonObject obj) const {
     JsonObject root = obj[getMacAddress()].to<JsonObject>();
+
+    JsonObject _LoRa = root["LoRa_Pins"].to<JsonObject>();
+    LoRa_bus.toJson(_LoRa);
 
     JsonObject _CC1101 = root["CC1101_Pins"].to<JsonObject>();
     CC1101_bus.toJson(_CC1101);
@@ -190,12 +200,19 @@ void BruceConfigPins::factoryReset() {
 }
 
 void BruceConfigPins::validateConfig() {
+    validateSpiPins(LoRa_bus);
     validateSpiPins(CC1101_bus);
     validateSpiPins(NRF24_bus);
     validateSpiPins(SDCARD_bus);
     validateI2CPins(i2c_bus);
     validateUARTPins(uart_bus);
     validateUARTPins(gps_bus);
+}
+
+void BruceConfigPins::setLoRaPins(SPIPins value) {
+    LoRa_bus = value;
+    validateSpiPins(LoRa_bus);
+    saveFile();
 }
 
 void BruceConfigPins::setCC1101Pins(SPIPins value) {

@@ -88,16 +88,14 @@ public:
 
     // SPI Buses
 
-    // SPI.begin(LORA_SCK, LORA_MISO, LORA_MOSI, LORA_CS);
-    // LoRa.setPins(LORA_CS, LORA_RST, LORA_DIO0);
-#ifdef LORA_SCK_PIN
+#ifdef LORA_SCK
     SPIPins LoRa_bus = {
-        (gpio_num_t)LORA_SCK_PIN,
-        (gpio_num_t)LORA_MISO_PIN,
-        (gpio_num_t)LORA_MOSI_PIN,
-        (gpio_num_t)LORA_CS_PIN,
-        (gpio_num_t)LORA_RST_PIN,
-        (gpio_num_t)LORA_DIO0_PIN
+        (gpio_num_t)LORA_SCK,
+        (gpio_num_t)LORA_MISO,
+        (gpio_num_t)LORA_MOSI,
+        (gpio_num_t)LORA_CS,
+        (gpio_num_t)LORA_RST,
+        (gpio_num_t)LORA_DIO0
     };
 #else
     SPIPins LoRa_bus;

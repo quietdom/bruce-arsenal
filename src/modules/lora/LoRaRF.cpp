@@ -13,15 +13,15 @@ bool update = false;
 String msg;
 String rcvmsg;
 String screendata;
+String displayName = "Brucetest";
 // class lora {
-#define BAND 434500000.00
+// define BAND 434500000.00
 #define spreadingFactor 9
 #define SignalBandwidth 31.25E3
 #define codingRateDenominator 8
 #define preambleLength 8
 
 // missing config im stupid
-#define displayName "Brucetest"
 int animtest = -120;
 int contentWidth = tftWidth - 20;
 int yStart = 35;
@@ -60,9 +60,9 @@ void render() {
         while (file.available()) {
             tft.setTextSize(1);
             tft.setTextColor(bruceConfig.priColor);
-            String wholeFile = file.readStringUntil('\n'); // Read one line up to newline
-            tft.drawString(wholeFile, 10, yPos);           // Print line at (10, yPos)
-            yPos += ySpacing;                              // Move down for next line
+            String wholeFile = file.readStringUntil('\n');
+            tft.drawString(wholeFile, 10, yPos);
+            yPos += ySpacing;
         }
         file.close();
         update = false;
@@ -106,13 +106,32 @@ void lorachat() {
     if (!LittleFS.exists("/chats.txt")) {
         File file = LittleFS.open("/chats.txt", "w");
         file.close();
+        Serial.println("chat file created :)");
     }
+    if (!LittleFS.exists("/lora_settings.json")) {
+        Serial.println("creating lora settings .json file");
+        StaticJsonDocument<128> doc;
+        File file = LittleFS.open("/lora_settings.json", "w");
+        doc["LoRa_Frequency"] = 434500000.00;
+        doc["LoRa_Name"] = displayName;
+        serializeJson(doc, file);
+        file.close();
+    }
+    File file = LittleFS.open("/lora_settings.json", "r");
+    StaticJsonDocument<128> doc;
+    deserializeJson(doc, file);
+    String displayName = doc["LoRa_Name"];
+    double BAND = doc["LoRa_Frequency"];
+    file.close();
     tft.fillScreen(TFT_BLACK);
     update = true;
     Serial.println("Initializing LoRa...");
     SPI.begin(LORA_SCK, LORA_MISO, LORA_MOSI, LORA_CS);
     LoRa.setPins(LORA_CS, LORA_RST, LORA_DIO0);
-    LoRa.begin(BAND);
+    if (!LoRa.begin(BAND)) {
+        Serial.println("Starting LoRa failed!");
+        return;
+    }
     LoRa.setSpreadingFactor(spreadingFactor);
     LoRa.setSignalBandwidth(SignalBandwidth);
     LoRa.setCodingRate4(codingRateDenominator);
@@ -120,6 +139,8 @@ void lorachat() {
     Serial.println("LoRa Started");
     mainloop();
 }
+
+// settings
 
 void loraconf() {
     // unfinished
@@ -130,6 +151,9 @@ void loraconf() {
     tft.drawString("LoRa Config maybe idk", 10, 10);
 }
 
-void test() {
-    // nothing
+/*
+void Changeusername() {
+    tft.fillScreen(TFT_BLACK);
+    String newname = keyboard(bruceConfig.username, 32, "New Username:")
 }
+    */

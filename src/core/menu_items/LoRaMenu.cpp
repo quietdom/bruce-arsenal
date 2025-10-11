@@ -5,8 +5,9 @@
 
 void LoRaMenu::optionsMenu() {
     options = {
-        {"Chat",   []() { lorachat(); }},
-        {"Config", []() { loraconf(); }},
+        {"Chat",             []() { lorachat(); }      },
+        {"Change username",  []() { changeusername(); }},
+        {"Change Frequency", []() { chfreq(); }        },
     };
     addOptionToMainMenu();
     String txt = "LoRa (" + String(bruceConfig.loraspc);

@@ -28,6 +28,7 @@ MainMenu::MainMenu() {
 #if !defined(LITE_VERSION)
         &scriptsMenu,
 #endif
+        &loraMenu,
         &othersMenu,
         &clockMenu,
 #if !defined(LITE_VERSION)

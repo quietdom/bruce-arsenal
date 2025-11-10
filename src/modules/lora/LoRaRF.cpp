@@ -18,7 +18,7 @@ String displayName = "Brucetest";
 // scrolling thing
 std::vector<String> messages;
 int scrollOffset = 0;
-const int maxMessages = 10;
+const int maxMessages = 14;
 
 #define spreadingFactor 9
 #define SignalBandwidth 31.25E3
@@ -58,7 +58,7 @@ void render() {
     tft.setTextSize(1);
     tft.fillScreen(TFT_BLACK);
     tft.setTextColor(0x6DFC);
-    tft.drawString("Lora Chat", 10, yStart);
+    tft.drawString("Lora Chat", 15, yStart);
 
     int yPos = yStart;
 

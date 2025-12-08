@@ -222,7 +222,7 @@ void RFScan::read_raw() {
 }
 
 void RFScan::select_menu_option() {
-#ifndef T_EMBED_1101
+#if !defined(T_EMBED_1101) && !defined(CONFIG_IDF_TARGET_ESP32C5)
     rcswitch.disableReceive(); // it is causing T-Embed to restart
 #endif
 

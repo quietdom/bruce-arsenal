@@ -5,6 +5,7 @@
 
 #include <pins_arduino.h>
 
+#ifdef BOARD_HAS_PSRAM
 #ifndef SERIAL_CMDS_TASK_STACK_SIZE
   #define SERIAL_CMDS_TASK_STACK_SIZE 20000
 #endif
@@ -17,10 +18,29 @@
 #ifndef SSH_TASK_STACK_SIZE
   #define SSH_TASK_STACK_SIZE 20000
 #endif
-
 #ifndef SAFE_STACK_BUFFER_SIZE
   #define SAFE_STACK_BUFFER_SIZE 4096
 #endif
+#else
+// Boards without PSRAM need smaller stack sizes to be able to run properly
+#ifndef SERIAL_CMDS_TASK_STACK_SIZE
+  #define SERIAL_CMDS_TASK_STACK_SIZE 1024*12
+#endif
+#ifndef INTERPRETER_TASK_STACK_SIZE
+  #define INTERPRETER_TASK_STACK_SIZE 16384
+#endif
+#ifndef INPUT_HANDLER_TASK_STACK_SIZE
+  #define INPUT_HANDLER_TASK_STACK_SIZE 2048
+#endif
+#ifndef SSH_TASK_STACK_SIZE
+  #define SSH_TASK_STACK_SIZE 1024*8
+#endif
+#ifndef SAFE_STACK_BUFFER_SIZE
+  #define SAFE_STACK_BUFFER_SIZE 1024
+#endif
+
+#endif
+
 
 #ifndef GROVE_SDA           // Pin to be used in I2C communications
   #define GROVE_SDA -1

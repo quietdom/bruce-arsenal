@@ -1,6 +1,7 @@
 #include "LoRaRF.h"
 #include "WString.h"
 #include "core/config.h"
+#include "core/configPins.h"
 #include <Arduino.h>
 #include <FS.h>
 #include <LittleFS.h>
@@ -10,22 +11,24 @@
 #include <core/utils.h>
 #include <globals.h>
 #include <vector>
+
+extern BruceConfigPins bruceConfigPins;
+
 bool update = false;
 String msg;
 String rcvmsg;
-String displayName = "Brucetest";
-
+String displayName;
+bool intlora = true;
 // scrolling thing
 std::vector<String> messages;
 int scrollOffset = 0;
-const int maxMessages = 14;
+const int maxMessages = 19;
 
 #define spreadingFactor 9
 #define SignalBandwidth 31.25E3
 #define codingRateDenominator 8
 #define preambleLength 8
 
-// missing config im stupid
 int contentWidth = tftWidth - 20;
 int yStart = 35;
 int yPos = yStart;
@@ -39,8 +42,6 @@ void reciveMessage() {
             rcvmsg = "";
             while (LoRa.available()) { rcvmsg += (char)LoRa.read(); }
             Serial.println("Recived:" + rcvmsg);
-            // make the rollable thingy
-            // append to littlefs
             File file = LittleFS.open("/chats.txt", "a");
             file.println(rcvmsg);
             file.close();
@@ -58,10 +59,11 @@ void render() {
     tft.setTextSize(1);
     tft.fillScreen(TFT_BLACK);
     tft.setTextColor(0x6DFC);
-    tft.drawString("Lora Chat", 15, yStart);
+    if (!intlora) { tft.drawString("Lora Init Failed", 10, 13); }
+    Serial.println(String(displayName));
+    tft.drawString("USRN: " + String(displayName), 10, 25);
 
     int yPos = yStart;
-
     int endLine = scrollOffset + maxMessages;
     if (endLine > messages.size()) endLine = messages.size();
     for (int i = scrollOffset; i < endLine; i++) {
@@ -86,26 +88,27 @@ void loadMessages() {
         scrollOffset = 0;
     }
 }
-/*
- while (file.available()) {
-            tft.setTextSize(1);
-            tft.setTextColor(bruceConfig.priColor);
-            String wholeFile = file.readStringUntil('\n');
-            tft.drawString(wholeFile, 10, yPos);
-            yPos += ySpacing;
-        }
-*/
 
-void rendersetting() {
-    // thing
-}
 // optional call funcs
 void sendmsg() {
     Serial.println("C bttn");
     tft.fillScreen(TFT_BLACK);
-    tft.fillScreen(TFT_BLACK);
+    if (!intlora) {
+        tft.setTextColor(bruceConfig.priColor);
+
+        tft.setTextColor(TFT_RED);
+        tft.setTextSize(2);
+        tft.setCursor(10, tftHeight / 2 - 10);
+        tft.print("LoRa not init!");
+
+        tft.drawCentreString("LoRa not initialized!", tftWidth / 2, tftHeight / 2, 2);
+        delay(1500);
+        update = true;
+        return;
+    }
     msg = keyboard(msg, 256, "Message:");
     msg = String(displayName) + ": " + msg;
+    if (msg == "") return;
     Serial.println(msg);
     LoRa.beginPacket();
     LoRa.print(msg);
@@ -125,7 +128,6 @@ void upress() {
     Serial.println("Up Pressed");
     if (scrollOffset > 0) {
         scrollOffset--;
-        Serial.println("Scroll Up");
         update = true;
     }
 }
@@ -134,54 +136,70 @@ void downpress() {
     Serial.println("Down Pressed");
     if (scrollOffset < messages.size() - maxMessages) {
         scrollOffset++;
-        Serial.println("Scroll Down");
         update = true;
     }
 }
-/*void checkKeypresses() {
-    if (check(SelPress)) sendmsg();
-    if (UpPress) upress();
-    if (DownPress) downpress();
-}
-*/
+
 void mainloop() {
     long pressStartTime = 0;
     bool isPressing = false;
-
+    bool breakloop = false;
     while (true) {
         render();
         reciveMessage();
+        if (breakloop) { break; }
+#ifndef HAS_KEYBOARD
+        if (EscPress) {
+            long _tmp = millis();
 
-#if !defined(HAS_KEYBOARD) && !defined(HAS_ENCODER)
-        // This is for devices like the M5StickC where one button has two functions.
-        if (check(EscPress)) {
-            // A press just started. Record the time and set a flag.
-            isPressing = true;
-            pressStartTime = millis();
-        }
+            LongPress = true;
+            while (EscPress) {
+                if (millis() - _tmp > 200) {
+                    // start drawing arc after short delay; animate over 500ms
+                    int sweep = 0;
+                    long elapsed = millis() - (_tmp + 200);
+                    if (elapsed > 0) sweep = 360 * elapsed / 500;
+                    if (sweep > 360) sweep = 360;
+                    tft.drawArc(
+                        tftWidth / 2,
+                        tftHeight / 2,
+                        25,
+                        15,
+                        0,
+                        sweep,
+                        getColorVariation(bruceConfig.priColor),
+                        bruceConfig.bgColor
+                    );
+                }
+                vTaskDelay(10 / portTICK_PERIOD_MS);
+            }
+            // clear arc
+            tft.drawArc(
+                tftWidth / 2, tftHeight / 2, 25, 15, 0, 360, bruceConfig.bgColor, bruceConfig.bgColor
+            );
+            LongPress = false;
+            // #endif
 
-        if (isPressing && !EscPress) {
-            // The button was just released.
-            isPressing = false;
-            if (millis() - pressStartTime < 700) {
-                // It was a SHORT press because it was released quickly.
+            // decide short vs long after release
+            if (millis() - _tmp > 700) {
+                // long press -> exit
+                breakloop = true;
+            } else {
+                // short press -> scroll down; consume flag first
+                check(EscPress);
                 upress();
             }
         }
 
-        if (isPressing && (millis() - pressStartTime > 700)) {
-            // The button is STILL being held down after 700ms.
-            // This is a LONG press. Exit the loop.
-            break;
-        }
+        if (check(NextPress)) downpress();
+        if (check(SelPress)) sendmsg();
 #else
-        // This is for devices with dedicated keys (Cardputer, etc.)
+
+        if (check(EscPress)) downpress();
         if (check(EscPress)) break;
         if (check(PrevPress)) upress();
-#endif
-
         if (check(SelPress)) sendmsg();
-        if (check(NextPress)) downpress();
+#endif
 
         delay(20);
     }
@@ -199,55 +217,59 @@ void lorachat() {
         StaticJsonDocument<128> doc;
         File file = LittleFS.open("/lora_settings.json", "w");
         doc["LoRa_Frequency"] = 434500000.00;
-        doc["LoRa_Name"] = displayName;
+        doc["LoRa_Name"] = "BruceTest";
         serializeJson(doc, file);
         file.close();
     }
     File file = LittleFS.open("/lora_settings.json", "r");
     StaticJsonDocument<128> doc;
     deserializeJson(doc, file);
-    String displayName = doc["LoRa_Name"];
+    displayName = doc["LoRa_Name"].as<String>();
     double BAND = doc["LoRa_Frequency"];
     file.close();
     tft.fillScreen(TFT_BLACK);
     update = true;
     Serial.println("Initializing LoRa...");
     Serial.println(
-        "Pins: SCK:" + String(LORA_SCK) + " MISO:" + String(LORA_MISO) + " MOSI:" + String(LORA_MOSI) +
-        " CS:" + String(LORA_CS) + " RST:" + String(LORA_RST) + " DIO0:" + String(LORA_DIO0)
+        "Pins: SCK:" + String(bruceConfigPins.LoRa_bus.sck) + " MISO:" + String(bruceConfigPins.LoRa_bus.miso) + " MOSI:" + String(bruceConfigPins.LoRa_bus.mosi) +
+        " CS:" + String(bruceConfigPins.LoRa_bus.cs) + " RST:" + String(bruceConfigPins.LoRa_bus.io0) + " DIO0:" + String(bruceConfigPins.LoRa_bus.io2) +
+        "BAND: " + String(BAND) + " DisplayName:  " + displayName
     );
-    SPI.begin(LORA_SCK, LORA_MISO, LORA_MOSI, LORA_CS);
-    LoRa.setPins(LORA_CS, LORA_RST, LORA_DIO0);
+
+    if (bruceConfigPins.LoRa_bus.sck == GPIO_NUM_NC || bruceConfigPins.LoRa_bus.miso == GPIO_NUM_NC ||
+        bruceConfigPins.LoRa_bus.mosi == GPIO_NUM_NC || bruceConfigPins.LoRa_bus.cs == GPIO_NUM_NC) {
+        Serial.println("LoRa pins not configured!");
+        intlora = false;
+        tft.drawString("LoRa pins not configured!", 10, 50);
+        delay(2000);
+        return;
+    }
+
+    SPI.begin(bruceConfigPins.LoRa_bus.sck, bruceConfigPins.LoRa_bus.miso, bruceConfigPins.LoRa_bus.mosi, bruceConfigPins.LoRa_bus.cs);
+    LoRa.setPins(bruceConfigPins.LoRa_bus.cs, bruceConfigPins.LoRa_bus.io0, bruceConfigPins.LoRa_bus.io2);
+    // add return RETURN TO MENU THING **************
     if (!LoRa.begin(BAND)) {
         Serial.println("Starting LoRa failed!");
-        return;
+        intlora = false;
     }
     LoRa.setSpreadingFactor(spreadingFactor);
     LoRa.setSignalBandwidth(SignalBandwidth);
     LoRa.setCodingRate4(codingRateDenominator);
     LoRa.setPreambleLength(preambleLength);
     Serial.println("LoRa Started");
+    tft.setTextWrap(true, true);
+    tft.setTextDatum(TL_DATUM);
     loadMessages();
     mainloop();
 }
 
 // settings
-
-/*
-void loraconf() {
-    Serial.println("testingconf");
-    tft.fillScreen(TFT_BLACK);
-    tft.setTextColor(bruceConfig.bgColor);
-    tft.setTextSize(1);
-    tft.drawString("LoRa Config maybe idk", 10, 10);
-}
-*/
-
+// check the saving and loading
 void changeusername() {
     tft.fillScreen(TFT_BLACK);
     String username = keyboard(username, 64, "");
     if (username == "") return;
-    File file = LittleFS.open("/lora_settings.json", "w");
+    File file = LittleFS.open("/lora_settings.json", "r");
     StaticJsonDocument<128> doc;
     deserializeJson(doc, file);
     file.close();
@@ -262,10 +284,11 @@ void chfreq() {
     String freq = keyboard(freq, 12, "");
     double dfreq = freq.toDouble();
     if (dfreq == 0) return;
-    File file = LittleFS.open("/lora_settings.json", "w");
+    File file = LittleFS.open("/lora_settings.json", "r");
     StaticJsonDocument<128> doc;
     deserializeJson(doc, file);
     file.close();
+    file = LittleFS.open("/lora_settings.json", "w");
     doc["LoRa_Frequency"] = dfreq;
     serializeJson(doc, file);
     file.close();

@@ -116,7 +116,6 @@ public:
     String wigleBasicToken = "";
     int devMode = 0;
     int colorInverted = 1;
-    int loraspc = 1;
     int badUSBBLEKeyboardLayout = 0;
     int badUSBBLEKeyDelay = 50;
 

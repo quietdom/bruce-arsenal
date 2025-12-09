@@ -20,28 +20,48 @@ void BruceConfigPins::fromJson(JsonObject obj) {
     JsonObject root = obj[mac].as<JsonObject>();
 
     if (!root["LoRa_Pins"].isNull()) {
+        SPIPins def = LoRa_bus;
         LoRa_bus.fromJson(root["LoRa_Pins"].as<JsonObject>());
+        if (LoRa_bus.sck == GPIO_NUM_NC && def.sck != GPIO_NUM_NC) {
+            LoRa_bus = def;
+            count++;
+        }
     } else {
         count++;
         log_e("Fail");
     }
 
     if (!root["CC1101_Pins"].isNull()) {
+        SPIPins def = CC1101_bus;
         CC1101_bus.fromJson(root["CC1101_Pins"].as<JsonObject>());
+        if (CC1101_bus.sck == GPIO_NUM_NC && def.sck != GPIO_NUM_NC) {
+            CC1101_bus = def;
+            count++;
+        }
     } else {
         count++;
         log_e("Fail");
     }
 
     if (!root["NRF24_Pins"].isNull()) {
+        SPIPins def = NRF24_bus;
         NRF24_bus.fromJson(root["NRF24_Pins"].as<JsonObject>());
+        if (NRF24_bus.sck == GPIO_NUM_NC && def.sck != GPIO_NUM_NC) {
+            NRF24_bus = def;
+            count++;
+        }
     } else {
         count++;
         log_e("Fail");
     }
 
     if (!root["SDCard_Pins"].isNull()) {
+        SPIPins def = SDCARD_bus;
         SDCARD_bus.fromJson(root["SDCard_Pins"].as<JsonObject>());
+        if (SDCARD_bus.sck == GPIO_NUM_NC && def.sck != GPIO_NUM_NC) {
+            SDCARD_bus = def;
+            count++;
+        }
     } else {
         count++;
         log_e("Fail");

@@ -10,47 +10,72 @@ void LoRaMenu::optionsMenu() {
         {"Change Frequency", []() { chfreq(); }        },
     };
     addOptionToMainMenu();
-    String txt = "LoRa (" + String(bruceConfig.loraspc);
-    ")";
+    String txt = "LoRa";
     loopOptions(options, MENU_TYPE_SUBMENU, txt.c_str());
 }
 
+void LoRaMenu::drawIconImg() { drawIcon(1.0); }
+
 void LoRaMenu::drawIcon(float scale) {
     clearIconArea();
-    int centerX = iconCenterX;
-    int centerY = iconCenterY;
-    int boxWidth = scale * 26;
-    int boxHeight = scale * 16;
-    int cornerRadius = scale * 4;
+    scale *= 0.75;
+    int cx = iconCenterX;
+    int cy = iconCenterY + (scale * 8);
 
-    tft.fillRoundRect(
-        centerX - boxWidth / 2,
-        centerY - boxHeight / 2,
-        boxWidth,
-        boxHeight,
-        cornerRadius,
-        bruceConfig.priColor
+#define CALC_X(val) (cx + ((val - 50) * scale))
+#define CALC_Y(val) (cy + ((val - 50) * scale))
+
+    int lineWidth = scale * 4.5;
+    if (lineWidth < 2) lineWidth = 2;
+    int ballRad = scale * 6;
+
+    tft.drawWideLine(
+        CALC_X(44), CALC_Y(35), CALC_X(26), CALC_Y(95), lineWidth, bruceConfig.priColor, bruceConfig.priColor
+    );
+    // Right Leg (SVG: 56,35 to 74,95)
+    tft.drawWideLine(
+        CALC_X(56), CALC_Y(35), CALC_X(74), CALC_Y(95), lineWidth, bruceConfig.priColor, bruceConfig.priColor
     );
 
-    int slotWidth = scale * 18;
-    int slotHeight = scale * 3;
-    tft.fillRect(
-        centerX - slotWidth / 2, centerY - slotHeight / 2, slotWidth, slotHeight, bruceConfig.bgColor
+    // Top Cross Bar
+    tft.drawWideLine(
+        CALC_X(44), CALC_Y(35), CALC_X(56), CALC_Y(35), lineWidth, bruceConfig.priColor, bruceConfig.priColor
     );
 
-    int postWidth = scale * 4;
-    int postHeight = scale * 15;
-    tft.fillRect(
-        centerX - postWidth / 2, centerY + boxHeight / 2, postWidth, postHeight, bruceConfig.priColor
+    // Middle Cross Bar
+    tft.drawWideLine(
+        CALC_X(35), CALC_Y(65), CALC_X(65), CALC_Y(65), lineWidth, bruceConfig.priColor, bruceConfig.priColor
     );
 
-    tft.setTextSize(1);
-    tft.setTextColor(bruceConfig.priColor);
-    tft.drawCentreString("LoRa", centerX, centerY + boxHeight / 2 + postHeight + 5, 1);
-}
-
-void LoRaMenu::drawIconImg() {
-    drawImg(
-        *bruceConfig.themeFS(), bruceConfig.getThemeItemImg(bruceConfig.theme.paths.lora), 0, imgCenterY, true
+    // X-Bracing (Top Section)
+    tft.drawWideLine(
+        CALC_X(44), CALC_Y(35), CALC_X(65), CALC_Y(65), lineWidth, bruceConfig.priColor, bruceConfig.priColor
     );
+    tft.drawWideLine(
+        CALC_X(56), CALC_Y(35), CALC_X(35), CALC_Y(65), lineWidth, bruceConfig.priColor, bruceConfig.priColor
+    );
+
+    // X-Bracing (Bottom Section)
+    tft.drawWideLine(
+        CALC_X(35), CALC_Y(65), CALC_X(74), CALC_Y(95), lineWidth, bruceConfig.priColor, bruceConfig.priColor
+    );
+    tft.drawWideLine(
+        CALC_X(65), CALC_Y(65), CALC_X(26), CALC_Y(95), lineWidth, bruceConfig.priColor, bruceConfig.priColor
+    );
+
+    // ball
+    int ballY = CALC_Y(25);
+    tft.fillCircle(cx, ballY, ballRad, bruceConfig.priColor);
+
+    // waves
+    int r1 = scale * 20;
+    int r2 = scale * 32;
+
+    // Right Side (90 degrees +/-)
+    tft.drawArc(cx, ballY, r1 + lineWidth, r1, 60, 120, bruceConfig.priColor, bruceConfig.bgColor);
+    tft.drawArc(cx, ballY, r2 + lineWidth, r2, 60, 120, bruceConfig.priColor, bruceConfig.bgColor);
+
+    // Left Side (270 degrees +/-)
+    tft.drawArc(cx, ballY, r1 + lineWidth, r1, 240, 300, bruceConfig.priColor, bruceConfig.bgColor);
+    tft.drawArc(cx, ballY, r2 + lineWidth, r2, 240, 300, bruceConfig.priColor, bruceConfig.bgColor);
 }

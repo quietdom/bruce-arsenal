@@ -190,6 +190,8 @@ static const uint8_t RX = SERIAL_RX;
 // TODO: Need to implement ES8311
 #define HAS_NS4168_SPKR
 #define HAS_ES8311
+#define ES8311_CODEC 1
+#define ES8311_ADDR 0x18
 #define BCLK 11
 #define WCLK 18
 #define DOUT 45
@@ -197,7 +199,7 @@ static const uint8_t RX = SERIAL_RX;
 
 // Mic
 // TODO: Need to implement ES8311
-#define PIN_WS 18
+#define PIN_BCLK 18
 #define PIN_CLK 11
 #define PIN_DATA 17
 

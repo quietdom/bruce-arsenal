@@ -9,6 +9,7 @@
 
 void BleMenu::optionsMenu() {
     options.clear();
+
     if (BLEConnected) {
         options.push_back({"Disconnect", [=]() {
                                BLEDevice::deinit();

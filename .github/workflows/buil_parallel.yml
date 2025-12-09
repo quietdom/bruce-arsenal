@@ -20,7 +20,7 @@ jobs:
           - { env: "m5stack-cardputer",               family: "ESP32-S3",}
           - { env: "m5stack-cplus2",                  family: "ESP32",}
           - { env: "m5stack-cplus1_1",                family: "ESP32",}
-          # - { env: "LAUNCHER_m5stack-cplus1_1",       family: "ESP32",}
+          - { env: "LAUNCHER_m5stack-cplus1_1",       family: "ESP32",}
           - { env: "m5stack-core2",                   family: "ESP32",}
           - { env: "m5stack-core16mb",                family: "ESP32",}
           - { env: "m5stack-core4mb",                 family: "ESP32",}
@@ -63,6 +63,8 @@ jobs:
           - { env: "LAUNCHER_Marauder-V4-V6",         family: "ESP32",}
           - { env: "LAUNCHER_Marauder-v61",           family: "ESP32",}
           - { env: "Awok-Touch",                      family: "ESP32",}
+          - { env: "WaveSentry-R1",                   family: "ESP32",}
+          - { env: "LAUNCHER_WaveSentry-R1",          family: "ESP32",}
 
     steps:
       - uses: actions/checkout@v4
@@ -73,34 +75,34 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Cache pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+      # - name: Cache pip
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.cache/pip
+      #     key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-pip-
 
       - name: Install dependencies
         run: |
           pip install requests esptool intelhex
 
-      - name: Cache PlatformIO
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.platformio
-          key: Bruce-platformio-${{ hashFiles('**/platformio.ini') }}
-          restore-keys: Bruce-platformio-
+      # - name: Cache PlatformIO
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       ~/.platformio
+      #     key: Bruce-platformio-${{ hashFiles('**/platformio.ini') }}
+      #     restore-keys: Bruce-platformio-
 
-      - name: Restore PIO
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            ${{ github.workspace }}/.pio
-          key: Bruce-pio-${{ matrix.board.env }}-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: |
-            Bruce-pio-${{ matrix.board.env }}-
+      # - name: Restore PIO
+      #   uses: actions/cache/restore@v4
+      #   with:
+      #     path: |
+      #       ${{ github.workspace }}/.pio
+      #     key: Bruce-pio-${{ matrix.board.env }}-${{ github.run_id }}-${{ github.run_attempt }}
+      #     restore-keys: |
+      #       Bruce-pio-${{ matrix.board.env }}-
 
       - name: Install PlatformIO Core
         run: |
@@ -121,12 +123,12 @@ jobs:
         run: |
           platformio run -e ${{ matrix.board.env }}
 
-      - name: Cache PIO
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            ${{ github.workspace }}/.pio
-          key: Bruce-pio-${{ matrix.board.env }}-${{ github.run_id }}-${{ github.run_attempt }}
+      # - name: Cache PIO
+      #   uses: actions/cache/save@v4
+      #   with:
+      #     path: |
+      #       ${{ github.workspace }}/.pio
+      #     key: Bruce-pio-${{ matrix.board.env }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Merge files
         run: |
@@ -138,7 +140,7 @@ jobs:
         with:
           name: Bruce-${{ matrix.board.env }}
           path: Bruce-*.*
-          retention-days: 5
+          retention-days: 1
           if-no-files-found: error
 
   post_compile_steps:

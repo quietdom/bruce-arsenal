@@ -43,11 +43,9 @@
 #include "modules/wifi/wifi_atks.h" // to use deauth frames and cmds
 
 //===== SETTINGS =====//
-#define CHANNEL 1
 #define FILENAME "raw_"
 #define SAVE_INTERVAL 10            // save new file every 30s
 #define CHANNEL_HOPPING true        // if true it will scan on all channels
-#define MAX_CHANNEL 12              //(only necessary if channelHopping is true)
 #define HOP_INTERVAL 214            // in ms (only necessary if channelHopping is true)
 #define DEAUTH_INTERVAL (15 * 1000) // Send deauth packets every ms
 #define EAPOL_ONLY true
@@ -56,7 +54,7 @@
 unsigned long lastTime = 0;
 unsigned long lastChannelChange = 0;
 uint32_t lastRedraw = 0;
-uint8_t ch = CHANNEL;
+uint8_t ch = 0;
 bool rawFileOpen = false;
 bool isLittleFS = true;
 bool littleFsWasFull = false; // true when we exit because LittleFS ran out
@@ -120,6 +118,7 @@ struct FrameInfo {
     bool isBeacon = false;
     bool isDeauth = false;
     bool isEapol = false;
+    int eapolMsgNum = -1;
     uint8_t apAddr[6] = {0};
     uint64_t apKey = 0;
     String ssid;
@@ -197,6 +196,51 @@ bool isItEAPOL(const wifi_promiscuous_pkt_t *packet) {
 
     return false;
 }
+
+HandshakeTracker hsTracker;
+
+bool handshakeUsable(const HandshakeTracker &hs) { // EAPOL Messages needed: 1+2 or 3+4
+    return (hs.msg1 && hs.msg2) || (hs.msg3 && hs.msg4);
+}
+
+// Analyze the EAPOL Message Number
+int classifyEapolMessage(const wifi_promiscuous_pkt_t *pkt) {
+    const uint8_t *payload = pkt->payload;
+    // QoS frames add 2 bytes to MAC header
+    int qosOffset = ((payload[0] & 0x0F) == 0x08) ? 2 : 0;
+
+    // Offset to Key Information field:
+    // MAC header (24 + qosOffset) + LLC/SNAP (8) + EAPOL header (4) + Descriptor Type (1)
+    int keyInfoOffset = 24 + qosOffset + 8 + 4 + 1;
+
+    if (pkt->rx_ctrl.sig_len < keyInfoOffset + 2) return -1; // safety check
+
+    uint16_t keyInfo = (payload[keyInfoOffset] << 8) | payload[keyInfoOffset + 1];
+
+    bool install = keyInfo & (1 << 6);
+    bool ack = keyInfo & (1 << 7);
+    bool mic = keyInfo & (1 << 8);
+    bool secure = keyInfo & (1 << 9);
+
+    if (ack && !mic && !install) return 1;            // Message 1
+    if (!ack && mic && !install && !secure) return 2; // Message 2
+    if (ack && mic && install) return 3;              // Message 3
+    if (!ack && mic && !install && secure) return 4;  // Message 4
+
+    return -1; // Unknown
+}
+
+bool matchesTargetAP(const wifi_promiscuous_pkt_t *pkt, const uint8_t targetBssid[6]) {
+    const uint8_t *payload = pkt->payload;
+
+    const uint8_t *addr1 = payload + 4;
+    const uint8_t *addr2 = payload + 10;
+    const uint8_t *addr3 = payload + 16; // BSSID
+
+    return memcmp(addr1, targetBssid, 6) == 0 || memcmp(addr2, targetBssid, 6) == 0 ||
+           memcmp(addr3, targetBssid, 6) == 0;
+}
+
 // Définition de l'en-tête d'un paquet PCAP
 typedef struct pcaprec_hdr_s {
     uint32_t ts_sec;   /* timestamp secondes */
@@ -422,6 +466,18 @@ static FrameInfo analyzeFrame(wifi_promiscuous_pkt_t *pkt) {
     info.isDeauth = (frameType == 0x00) && (frameSubType == 0x0C || frameSubType == 0x0A);
     info.isEapol = isItEAPOL(pkt);
 
+    if (info.isEapol && matchesTargetAP(pkt, targetBssid)) {
+        int msg = classifyEapolMessage(pkt);
+        info.eapolMsgNum = msg;
+        // Update handshake tracker
+        switch (msg) {
+            case 1: hsTracker.msg1 = true; break;
+            case 2: hsTracker.msg2 = true; break;
+            case 3: hsTracker.msg3 = true; break;
+            case 4: hsTracker.msg4 = true; break;
+        }
+    }
+
     info.ssid = resolveSsidForFrame(info, pkt);
     if (info.isBeacon) {
         registerBeacon(info.apAddr);
@@ -562,9 +618,14 @@ static bool ensureSnifferBackend() {
     if (!snifferQueue) { snifferQueue = xQueueCreate(SNIFFER_QUEUE_DEPTH, sizeof(SnifferQueueItem)); }
     if (!snifferQueue) { return false; }
     if (!snifferWriterHandle) {
+#if SOC_CPU_CORES_NUM > 1
         BaseType_t res = xTaskCreatePinnedToCore(
             snifferWriterTask, "sniff_writer", 4096, nullptr, 4, &snifferWriterHandle, 1
         );
+#else
+        BaseType_t res =
+            xTaskCreate(snifferWriterTask, "sniff_writer", 4096, nullptr, 4, &snifferWriterHandle);
+#endif
         if (res != pdPASS) { snifferWriterHandle = nullptr; }
     }
     return snifferWriterHandle != nullptr;
@@ -935,7 +996,7 @@ void sniffer_setup() {
     esp_wifi_set_promiscuous(true);
     esp_wifi_set_promiscuous_rx_cb(sniffer);
     wifi_second_chan_t secondCh = (wifi_second_chan_t)NULL;
-    esp_wifi_set_channel(ch, secondCh);
+    esp_wifi_set_channel(all_wifi_channels[ch], secondCh);
 
     Serial.println("Sniffer started!");
     vTaskDelay(1000 / portTICK_RATE_MS);
@@ -978,9 +1039,9 @@ void sniffer_setup() {
             esp_wifi_set_promiscuous(false);
             esp_wifi_set_promiscuous_rx_cb(nullptr);
             ch++; // increase channel
-            if (ch > MAX_CHANNEL) ch = 1;
+            if (ch >= sizeof(all_wifi_channels)) ch = 0;
             wifi_second_chan_t secondCh = (wifi_second_chan_t)NULL;
-            esp_wifi_set_channel(ch, secondCh);
+            esp_wifi_set_channel(all_wifi_channels[ch], secondCh);
             redraw = true;
             vTaskDelay(50 / portTICK_RATE_MS);
             esp_wifi_set_promiscuous(true);
@@ -1014,10 +1075,11 @@ void sniffer_setup() {
             check(PrevPress);
             esp_wifi_set_promiscuous(false);
             esp_wifi_set_promiscuous_rx_cb(nullptr);
-            ch--; // increase channel
-            if (ch < 1) ch = MAX_CHANNEL;
+
+            if (ch == 0) ch = sizeof(all_wifi_channels) - 1;
+            else ch--; // decrease channel
             wifi_second_chan_t secondCh = (wifi_second_chan_t)NULL;
-            esp_wifi_set_channel(ch, secondCh);
+            esp_wifi_set_channel(all_wifi_channels[ch], secondCh);
             redraw = true;
             vTaskDelay(50 / portTICK_PERIOD_MS);
             esp_wifi_set_promiscuous(true);
@@ -1122,14 +1184,14 @@ void sniffer_setup() {
             padprintln("Run time " + String(runtime / 60) + ":" + String(runtime % 60));
 
             // New: show beacon counts and recent SSIDs
-            size_t activeOnChannel = countActiveBeaconsOnChannel(ch);
+            size_t activeOnChannel = countActiveBeaconsOnChannel(all_wifi_channels[ch]);
             padprintln(
                 "Beacons " + String(beacon_frames) + " tot. /" + String(registeredBeacons.size()) +
                 " cached / ch " + String(activeOnChannel) + " active"
             );
 
             // show a short list of recent SSIDs on this channel (comma-separated)
-            std::vector<String> recentSsids = recentSsidsOnChannel(ch, 5);
+            std::vector<String> recentSsids = recentSsidsOnChannel(all_wifi_channels[ch], 5);
             if (!recentSsids.empty()) {
                 String s = "SSIDs: ";
                 for (size_t i = 0; i < recentSsids.size(); ++i) {
@@ -1142,7 +1204,16 @@ void sniffer_setup() {
             // make a nice reverse video bar
             tft.setTextColor(bruceConfig.bgColor, bruceConfig.priColor);
             tft.drawRightString(
-                "Ch" + String(ch < 10 ? "0" : "") + String(ch) + " (Next)", tftWidth - 10, tftHeight - 18, 1
+                "Ch" +
+                    String(
+                        all_wifi_channels[ch] < 10    ? "  "
+                        : all_wifi_channels[ch] < 100 ? " "
+                                                      : ""
+                    ) +
+                    String(all_wifi_channels[ch]) + " (Next)",
+                tftWidth - 10,
+                tftHeight - 18,
+                1
             );
             tft.drawString(
                 " EAPOL: " + String(num_EAPOL) + " HS: " + String(num_HS) + " ", 10, tftHeight - 18

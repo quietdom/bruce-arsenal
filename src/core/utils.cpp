@@ -169,3 +169,27 @@ String getOptionsJSON() {
     response += "], \"active\":" + String(sel) + "}";
     return response;
 }
+
+/*********************************************************************
+** Function: i2c_bulk_write
+** Sends múltiple registers via I2C using a compact table.
+   bulk_data example..
+   const uint8_t bulk_data[] = {
+      2, 0x00, 0x00,       // <- datalen = 2, reg = 0x00, data = 0x00
+      3, 0x01, 0x00, 0x02, // <- datalen = 3, reg = 0x01, data = 0x00, 0x02
+      0 };                 // <- datalen 0 is end of data.
+**********************************************************************/
+void i2c_bulk_write(TwoWire *wire, uint8_t addr, const uint8_t *bulk_data) {
+    const uint8_t *p = bulk_data;
+    while (true) {
+        uint8_t datalen = *p++;
+        if (datalen == 0) { break; } // --- end of table ---
+        uint8_t reg = *p++;
+        wire->beginTransmission(addr);
+        wire->write(reg);
+        for (uint8_t i = 0; i < datalen - 1; i++) { wire->write(*p++); }
+        uint8_t error = wire->endTransmission();
+        if (error != 0) { log_e("I2C Write error %d", error); }
+        delay(1);
+    }
+}

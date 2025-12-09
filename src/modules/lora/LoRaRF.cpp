@@ -231,9 +231,11 @@ void lorachat() {
     update = true;
     Serial.println("Initializing LoRa...");
     Serial.println(
-        "Pins: SCK:" + String(bruceConfigPins.LoRa_bus.sck) + " MISO:" + String(bruceConfigPins.LoRa_bus.miso) + " MOSI:" + String(bruceConfigPins.LoRa_bus.mosi) +
-        " CS:" + String(bruceConfigPins.LoRa_bus.cs) + " RST:" + String(bruceConfigPins.LoRa_bus.io0) + " DIO0:" + String(bruceConfigPins.LoRa_bus.io2) +
-        "BAND: " + String(BAND) + " DisplayName:  " + displayName
+        "Pins: SCK:" + String(bruceConfigPins.LoRa_bus.sck) +
+        " MISO:" + String(bruceConfigPins.LoRa_bus.miso) + " MOSI:" + String(bruceConfigPins.LoRa_bus.mosi) +
+        " CS:" + String(bruceConfigPins.LoRa_bus.cs) + " RST:" + String(bruceConfigPins.LoRa_bus.io0) +
+        " DIO0:" + String(bruceConfigPins.LoRa_bus.io2) + "BAND: " + String(BAND) +
+        " DisplayName:  " + displayName
     );
 
     if (bruceConfigPins.LoRa_bus.sck == GPIO_NUM_NC || bruceConfigPins.LoRa_bus.miso == GPIO_NUM_NC ||
@@ -245,7 +247,12 @@ void lorachat() {
         return;
     }
 
-    SPI.begin(bruceConfigPins.LoRa_bus.sck, bruceConfigPins.LoRa_bus.miso, bruceConfigPins.LoRa_bus.mosi, bruceConfigPins.LoRa_bus.cs);
+    SPI.begin(
+        bruceConfigPins.LoRa_bus.sck,
+        bruceConfigPins.LoRa_bus.miso,
+        bruceConfigPins.LoRa_bus.mosi,
+        bruceConfigPins.LoRa_bus.cs
+    );
     LoRa.setPins(bruceConfigPins.LoRa_bus.cs, bruceConfigPins.LoRa_bus.io0, bruceConfigPins.LoRa_bus.io2);
     // add return RETURN TO MENU THING **************
     if (!LoRa.begin(BAND)) {

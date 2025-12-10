@@ -32,18 +32,18 @@
 #define CC1101_MISO_PIN 2
 
 #define USE_NRF24_VIA_SPI
-#define NRF24_CE_PIN 44
-#define NRF24_SS_PIN 1
+#define NRF24_CE_PIN 17
+#define NRF24_SS_PIN 18
 #define NRF24_MOSI_PIN 3
 #define NRF24_SCK_PIN 43
 #define NRF24_MISO_PIN 2
 
 #define USE_W5500_VIA_SPI
-#define W5500_SS_PIN 1
+#define W5500_SS_PIN -1
 #define W5500_MOSI_PIN 3
 #define W5500_SCK_PIN 43
 #define W5500_MISO_PIN 2
-#define W5500_INT_PIN 44
+#define W5500_INT_PIN -1
 
 // Set Main I2C Bus
 #define GROVE_SDA 13
@@ -85,11 +85,11 @@ static const uint8_t SCL = GROVE_SCL;
 #define NRF24_MISO_PIN SPI_MISO_PIN
 
 #define USE_W5500_VIA_SPI
-#define W5500_SS_PIN SPI_SS_PIN
+#define W5500_SS_PIN -1
 #define W5500_MOSI_PIN SPI_MOSI_PIN
 #define W5500_SCK_PIN SPI_SCK_PIN
 #define W5500_MISO_PIN SPI_MISO_PIN
-#define W5500_INT_PIN 3
+#define W5500_INT_PIN -1
 
 // Set Main I2C Bus
 #define GROVE_SDA 44

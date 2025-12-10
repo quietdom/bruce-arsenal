@@ -6,6 +6,9 @@
 | SD Card | 12    | 13    | 11    | 1     | ---       |
 | CC1101  | 12    | 13    | 11    | 2     | 21        |
 | NRF24   | 12    | 13    | 11    | 10    | 3         |
+| WS500   | 12    | 13    | 11    | **    | **        |
+
+** WS500 need to be configured in brucePins.config to set the pis according to your need.
 
 | Device  | RX    | TX    | GPIO  |
 | ---     | :---: | :---: | :---: |
@@ -24,6 +27,9 @@ Configured to be compatible with [Willy's firmware](https://willy-firmware.com/)
 | ---     | :---: | :---: | :---: | :---: | :---:     |
 | CC1101  | 43    | 2     | 3     | 1     | 44        |
 | NRF24   | 43    | 2     | 3     | 18    | 17        |
+| WS500   | 43    | 2     | 3     | **    | **        |
+
+** WS500 need to be configured in brucePins.config to set the pis according to your need.
 
 | Device  | RX    | TX    | GPIO  |
 | ---     | :---: | :---: | :---: |

@@ -1,7 +1,7 @@
 #ifdef USE_SD_MMC
 #include "../SD.h"
+
 #include "io_pin_remap.h"
-#include "pins_arduino.h"
 #ifdef SOC_SDMMC_HOST_SUPPORTED
 #include "vfs_api.h"
 
@@ -113,7 +113,7 @@ bool SDFS::setPins(int clk, int cmd, int d0, int d1, int d2, int d3) {
                     ((d1 == (int)SDMMC_SLOT1_IOMUX_PIN_NUM_D1) && (d2 == (int)SDMMC_SLOT1_IOMUX_PIN_NUM_D2) &&
                      (d3 == (int)SDMMC_SLOT1_IOMUX_PIN_NUM_D3)));
     if (!pins_ok) {
-        log_e("SDFS: specified pins are not supported by this chip.");
+        log_e("SDMMCFS: specified pins are not supported by this chip.");
         return false;
     }
     return true;
@@ -126,7 +126,7 @@ bool SDFS::setPins(int clk, int cmd, int d0, int d1, int d2, int d3) {
                     ((d1 == (int)SDMMC_SLOT0_IOMUX_PIN_NUM_D1) && (d2 == (int)SDMMC_SLOT0_IOMUX_PIN_NUM_D2) &&
                      (d3 == (int)SDMMC_SLOT0_IOMUX_PIN_NUM_D3)));
     if (!pins_ok) {
-        log_e("SDFS: specified pins are not supported when using IOMUX (SDMMC SLOT 0).");
+        log_e("SDMMCFS: specified pins are not supported when using IOMUX (SDMMC SLOT 0).");
         return false;
     }
     return true;
@@ -186,7 +186,7 @@ bool SDFS::begin(
     // Check that the pins have been set either in the constructor or setPins function.
     if (_pin_cmd == -1 || _pin_clk == -1 || _pin_d0 == -1 ||
         (!mode1bit && (_pin_d1 == -1 || _pin_d2 == -1 || _pin_d3 == -1))) {
-        log_e("SDFS: some SD pins are not set");
+        log_e("SDMMCFS: some SD pins are not set");
         return false;
     }
 
@@ -213,7 +213,19 @@ bool SDFS::begin(
 #if defined(CONFIG_IDF_TARGET_ESP32P4) && defined(BOARD_SDMMC_SLOT) && (BOARD_SDMMC_SLOT == 0)
     host.slot = SDMMC_HOST_SLOT_0;
     // reconfigure slot_config to remove all pins in order to use IO_MUX
-    slot_config = {
+    // Use 0 instead of GPIO_NUM_NC (-1) because ESP-IDF's s_check_pin_not_set()
+    // function uses !pin which doesn't work correctly with -1 (GPIO_NUM_NC)
+    slot_config = sdmmc_slot_config_t{
+        .clk = GPIO_NUM_0,
+        .cmd = GPIO_NUM_0,
+        .d0 = GPIO_NUM_0,
+        .d1 = GPIO_NUM_0,
+        .d2 = GPIO_NUM_0,
+        .d3 = GPIO_NUM_0,
+        .d4 = GPIO_NUM_0,
+        .d5 = GPIO_NUM_0,
+        .d6 = GPIO_NUM_0,
+        .d7 = GPIO_NUM_0,
         .cd = SDMMC_SLOT_NO_CD,
         .wp = SDMMC_SLOT_NO_WP,
         .width = 4,

@@ -15,12 +15,8 @@
 
 #include <MD5Builder.h>
 #include <algorithm> // for std::sort
-
-#if (ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0))
 #include <esp_rom_crc.h>
-#else
-#include <esp32/rom/crc.h> // for CRC32
-#endif
+
 // SPIClass sdcardSPI;
 String fileToCopy;
 std::vector<FileList> fileList;
@@ -432,13 +428,9 @@ String crc32File(FS &fs, String filepath) {
     String txt = readSmallFile(fs, filepath);
 // derived from
 // https://techoverflow.net/2022/08/05/how-to-compute-crc32-with-ethernet-polynomial-0x04c11db7-on-esp32-crc-h/
-#if (ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0))
     uint32_t romCRC =
         (~esp_rom_crc32_le((uint32_t)~(0xffffffff), (const uint8_t *)txt.c_str(), txt.length())) ^ 0xffffffff;
-#else
-    uint32_t romCRC =
-        (~crc32_le((uint32_t)~(0xffffffff), (const uint8_t *)txt.c_str(), txt.length())) ^ 0xffffffff;
-#endif
+
     char s[18] = {0};
     char crcBytes[4] = {0};
     memcpy(crcBytes, &romCRC, sizeof(uint32_t));

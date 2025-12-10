@@ -234,54 +234,6 @@ void initCC1101once(SPIClass *SSPI) {
     return;
 }
 
-void deinitRMT() {
-#if (ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)) // RMT
-#pragma message("Should not be using deinitRMT()")
-#else
-    if (rmtInstalled) {
-        esp_err_t err = rmt_driver_uninstall((rmt_channel_t)RMT_RX_CHANNEL);
-        if (err == ESP_OK) {
-            rmtInstalled = false;
-        } else {
-            Serial.printf("RMT uninstall failed: %s\n", esp_err_to_name(err));
-        }
-    } else {
-        Serial.println("RMT already uninstalled.");
-    }
-
-#endif
-}
-
-void initRMT() {
-#if (ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)) // RMT
-#pragma message("Should not be using initRMT()")
-#else
-    deinitRMT();
-
-    rmt_config_t rxconfig;
-    rxconfig.rmt_mode = RMT_MODE_RX;
-    rxconfig.channel = RMT_RX_CHANNEL;
-    rxconfig.gpio_num = gpio_num_t(bruceConfig.rfRx);
-
-    if (bruceConfig.rfModule == CC1101_SPI_MODULE)
-        rxconfig.gpio_num = gpio_num_t(bruceConfigPins.CC1101_bus.io0);
-
-    rxconfig.clk_div = RMT_CLK_DIV; // RMT_DEFAULT_CLK_DIV=32
-    rxconfig.mem_block_num = 2;
-    rxconfig.flags = 0;
-    rxconfig.rx_config.idle_threshold = 3 * RMT_1MS_TICKS,
-    rxconfig.rx_config.filter_ticks_thresh = 200 * RMT_1US_TICKS;
-    rxconfig.rx_config.filter_en = true;
-
-    ESP_ERROR_CHECK(rmt_config(&rxconfig));
-    ESP_ERROR_CHECK_WITHOUT_ABORT(rmt_driver_install(rxconfig.channel, 8192, 0));
-
-    if (ESP_OK == rmt_config(&rxconfig) && ESP_OK == rmt_driver_install(rxconfig.channel, 8192, 0)) {
-        rmtInstalled = true;
-    }
-#endif
-}
-
 void setMHZ(float frequency) {
     if (frequency > 928 || frequency < 280) {
         frequency = 433.92;
@@ -389,7 +341,6 @@ struct RfCodes selectRecentRfMenu() {
 
     return selected_code;
 }
-#if (ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0)) // RMT
 rmt_channel_handle_t setup_rf_rx() {
     if (!initRfModule("rx", bruceConfig.rfFreq)) return NULL;
     setMHZ(bruceConfig.rfFreq);
@@ -410,4 +361,22 @@ rmt_channel_handle_t setup_rf_rx() {
     ESP_ERROR_CHECK(rmt_new_rx_channel(&rx_channel_cfg, &rx_channel));
     return rx_channel;
 }
-#endif
+
+bool setMHZMenu() {
+    if (bruceConfig.rfModule != CC1101_SPI_MODULE) return false;
+    if (check(SelPress)) {
+        options = {};
+        int ind = 0;
+        int arraySize = sizeof(subghz_frequency_list) / sizeof(subghz_frequency_list[0]);
+        for (int i = 0; i < arraySize; i++) {
+            if (subghz_frequency_list[i] - bruceConfig.rfFreq < 0.1) ind = i;
+            String tmp = String(subghz_frequency_list[i], 2) + "Mhz";
+            options.push_back({tmp.c_str(), [=]() { bruceConfig.rfFreq = subghz_frequency_list[i]; }});
+        }
+        loopOptions(options, ind);
+        options.clear();
+        setMHZ(bruceConfig.rfFreq);
+        return true;
+    }
+    return false;
+}

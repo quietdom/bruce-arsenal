@@ -20,6 +20,7 @@ void RFMenu::optionsMenu() {
 #endif
         {"Spectrum",        rf_spectrum               },
 #if !defined(LITE_VERSION)
+        {"RSSI Spectrum",   rf_CC1101_rssi            }, // @Pirata
         {"SquareWave Spec", rf_SquareWave             }, // @Pirata
         {"Spectogram",      rf_waterfall              }, // dev_eclipse
 #if defined(BUZZ_PIN) or defined(HAS_NS4168_SPKR) and defined(RF_LISTEN_H)

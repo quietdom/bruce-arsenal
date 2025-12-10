@@ -20,8 +20,7 @@
 #include <SPI.h>
 #include <stdio.h>
 #include <string.h>
-EthernetHelper::EthernetHelper() {
-}
+EthernetHelper::EthernetHelper() {}
 
 EthernetHelper::~EthernetHelper() {}
 
@@ -149,11 +148,7 @@ bool EthernetHelper::setup() {
 
     spi_bus_add_device(SPI2_HOST, &devcfg, &spi_handle);
     // w5500 ethernet driver is based on spi driver
-#if (ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0))
     eth_w5500_config_t w5500_config = ETH_W5500_DEFAULT_CONFIG(SPI2_HOST, &devcfg);
-#else
-    eth_w5500_config_t w5500_config = ETH_W5500_DEFAULT_CONFIG(spi_handle);
-#endif
     // Set remaining GPIO numbers and configuration used by the SPI module
     w5500_config.int_gpio_num = spi_eth_module_config.int_gpio;
     phy_config_spi.phy_addr = spi_eth_module_config.phy_addr;
@@ -163,9 +158,7 @@ bool EthernetHelper::setup() {
     phy_spi = esp_eth_phy_new_w5500(&phy_config_spi);
 
     esp_eth_config_t eth_config_spi = ETH_DEFAULT_CONFIG(mac_spi, phy_spi);
-    if(esp_eth_driver_install(&eth_config_spi, &eth_handle_spi) != ESP_OK) {
-        return false;
-    }
+    if (esp_eth_driver_install(&eth_config_spi, &eth_handle_spi) != ESP_OK) { return false; }
 
     // Configure MAC address
     ESP_ERROR_CHECK(esp_eth_ioctl(eth_handle_spi, ETH_CMD_S_MAC_ADDR, mac));
@@ -202,11 +195,6 @@ void EthernetHelper::stop() {
         // Stop interface and delete it
         ESP_ERROR_CHECK(esp_eth_stop(eth_handle_spi));
         ESP_ERROR_CHECK(esp_eth_del_netif_glue(eth_glue));
-#if (ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 0, 0))
-        // function removed in IDF v5
-#else
-        ESP_ERROR_CHECK(esp_eth_clear_default_handlers(eth_netif_spi));
-#endif
         ESP_ERROR_CHECK(esp_eth_driver_uninstall(eth_handle_spi));
         esp_netif_destroy(eth_netif_spi); // Destroy interface
     }

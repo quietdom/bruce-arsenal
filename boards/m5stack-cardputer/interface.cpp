@@ -141,14 +141,14 @@ void _post_setup_gpio() {
 ** Description:   Delivers the battery value from 1-100
 ***************************************************************************************/
 int getBattery() {
-    pinMode(GPIO_NUM_10, INPUT);
-    uint8_t percent;
-    uint32_t volt = analogReadMilliVolts(GPIO_NUM_10);
-
-    float mv = volt;
-    percent = (mv - 3300) * 100 / (float)(4150 - 3350);
-
-    return (percent >= 100) ? 100 : percent;
+    uint16_t adcReading = analogReadMilliVolts(GPIO_NUM_10);
+    float actualVoltage = adcReading * 2.0f;
+    const float MIN_VOLTAGE = 3300.0f;
+    const float MAX_VOLTAGE = 4150.0f;
+    float percent = ((actualVoltage - MIN_VOLTAGE) / (MAX_VOLTAGE - MIN_VOLTAGE)) * 100.0f;
+    if (percent < 0) percent = 0;
+    if (percent > 100) percent = 100;
+    return (int)percent;
 }
 
 /*********************************************************************

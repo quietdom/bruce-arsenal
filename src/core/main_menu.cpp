@@ -22,6 +22,7 @@ MainMenu::MainMenu() {
 #if !defined(LITE_VERSION) && !defined(DISABLE_INTERPRETER)
         &scriptsMenu,
 #endif
+        &loraMenu,
         &othersMenu,
         &clockMenu,
 #if !defined(LITE_VERSION)

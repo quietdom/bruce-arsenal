@@ -75,8 +75,27 @@
 #ifndef	TFT_WIDTH
   #define TFT_WIDTH 240
 #endif
-#ifndef	TFT_HEIGHT
+#ifndef TFT_HEIGHT
   #define TFT_HEIGHT 135
+#endif
+
+#ifndef LORA_SCK
+  #define LORA_SCK -1
+#endif
+#ifndef LORA_MISO
+  #define LORA_MISO -1
+#endif
+#ifndef LORA_MOSI
+  #define LORA_MOSI -1
+#endif
+#ifndef LORA_CS
+  #define LORA_CS -1
+#endif
+#ifndef LORA_RST
+  #define LORA_RST -1
+#endif
+#ifndef LORA_DIO0
+  #define LORA_DIO0 -1
 #endif
 
 // Default initializers
@@ -205,6 +224,30 @@
 
 #ifndef CC1101_GDO0_PIN
 #define CC1101_GDO0_PIN -1
+#endif
+
+#ifndef LORA_SCK
+#define LORA_SCK -1
+#endif
+
+#ifndef LORA_MISO
+#define LORA_MISO -1
+#endif
+
+#ifndef LORA_MOSI
+#define LORA_MOSI -1
+#endif
+
+#ifndef LORA_CS
+#define LORA_CS -1
+#endif
+
+#ifndef LORA_RST
+#define LORA_RST -1
+#endif
+
+#ifndef LORA_DIO0
+#define LORA_DIO0 -1
 #endif
 
 // Temporary, delete after finish Interfaces

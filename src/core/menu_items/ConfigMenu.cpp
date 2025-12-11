@@ -71,6 +71,7 @@ void ConfigMenu::devMenu() {
         {"I2C Finder",      find_i2c_addresses                                   },
         {"CC1101 Pins",     [=]() { setSPIPinsMenu(bruceConfigPins.CC1101_bus); }},
         {"NRF24  Pins",     [=]() { setSPIPinsMenu(bruceConfigPins.NRF24_bus); } },
+        {"LoRa Pins",       [=]() { setSPIPinsMenu(bruceConfigPins.LoRa_bus); }  },
         {"SDCard Pins",     [=]() { setSPIPinsMenu(bruceConfigPins.SDCARD_bus); }},
         //{"SYSI2C Pins", [=]() { setI2CPinsMenu(bruceConfigPins.sys_i2c); }   },
         {"I2C Pins",        [=]() { setI2CPinsMenu(bruceConfigPins.i2c_bus); }   },

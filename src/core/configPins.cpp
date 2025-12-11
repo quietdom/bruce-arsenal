@@ -19,22 +19,49 @@ void BruceConfigPins::fromJson(JsonObject obj) {
 
     JsonObject root = obj[mac].as<JsonObject>();
 
+    if (!root["LoRa_Pins"].isNull()) {
+        SPIPins def = LoRa_bus;
+        LoRa_bus.fromJson(root["LoRa_Pins"].as<JsonObject>());
+        if (LoRa_bus.sck == GPIO_NUM_NC && def.sck != GPIO_NUM_NC) {
+            LoRa_bus = def;
+            count++;
+        }
+    } else {
+        count++;
+        log_e("Fail");
+    }
+
     if (!root["CC1101_Pins"].isNull()) {
+        SPIPins def = CC1101_bus;
         CC1101_bus.fromJson(root["CC1101_Pins"].as<JsonObject>());
+        if (CC1101_bus.sck == GPIO_NUM_NC && def.sck != GPIO_NUM_NC) {
+            CC1101_bus = def;
+            count++;
+        }
     } else {
         count++;
         log_e("Fail");
     }
 
     if (!root["NRF24_Pins"].isNull()) {
+        SPIPins def = NRF24_bus;
         NRF24_bus.fromJson(root["NRF24_Pins"].as<JsonObject>());
+        if (NRF24_bus.sck == GPIO_NUM_NC && def.sck != GPIO_NUM_NC) {
+            NRF24_bus = def;
+            count++;
+        }
     } else {
         count++;
         log_e("Fail");
     }
 
     if (!root["SDCard_Pins"].isNull()) {
+        SPIPins def = SDCARD_bus;
         SDCARD_bus.fromJson(root["SDCard_Pins"].as<JsonObject>());
+        if (SDCARD_bus.sck == GPIO_NUM_NC && def.sck != GPIO_NUM_NC) {
+            SDCARD_bus = def;
+            count++;
+        }
     } else {
         count++;
         log_e("Fail");
@@ -77,6 +104,9 @@ void BruceConfigPins::fromJson(JsonObject obj) {
 
 void BruceConfigPins::toJson(JsonObject obj) const {
     JsonObject root = obj[getMacAddress()].to<JsonObject>();
+
+    JsonObject _LoRa = root["LoRa_Pins"].to<JsonObject>();
+    LoRa_bus.toJson(_LoRa);
 
     JsonObject _CC1101 = root["CC1101_Pins"].to<JsonObject>();
     CC1101_bus.toJson(_CC1101);
@@ -191,12 +221,19 @@ void BruceConfigPins::factoryReset() {
 }
 
 void BruceConfigPins::validateConfig() {
+    validateSpiPins(LoRa_bus);
     validateSpiPins(CC1101_bus);
     validateSpiPins(NRF24_bus);
     validateSpiPins(SDCARD_bus);
     validateI2CPins(i2c_bus);
     validateUARTPins(uart_bus);
     validateUARTPins(gps_bus);
+}
+
+void BruceConfigPins::setLoRaPins(SPIPins value) {
+    LoRa_bus = value;
+    validateSpiPins(LoRa_bus);
+    saveFile();
 }
 
 void BruceConfigPins::setCC1101Pins(SPIPins value) {

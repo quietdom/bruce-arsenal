@@ -19,10 +19,12 @@ MainMenu::MainMenu() {
         &fileMenu,
         &gpsMenu,
         &nrf24Menu,
-#if !defined(LITE_VERSION) && !defined(DISABLE_INTERPRETER)
+#if !defined(LITE_VERSION)
+#if !defined(DISABLE_INTERPRETER)
         &scriptsMenu,
 #endif
         &loraMenu,
+#endif
         &othersMenu,
         &clockMenu,
 #if !defined(LITE_VERSION)

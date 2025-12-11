@@ -1,3 +1,4 @@
+#if !defined(LITE_VERSION)
 #include "LoRaRF.h"
 #include "WString.h"
 #include "core/config.h"
@@ -300,3 +301,4 @@ void chfreq() {
     serializeJson(doc, file);
     file.close();
 }
+#endif

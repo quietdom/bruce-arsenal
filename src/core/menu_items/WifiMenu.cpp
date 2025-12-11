@@ -132,18 +132,14 @@ void WifiMenu::configMenu() {
                                loopOptions(evilOptions, MENU_TYPE_SUBMENU, "Evil Wifi Settings");
                            }});
 
-    // NEW: Show Hidden Networks toggle
     {
-        // build the label showing current state
-        std::string label = std::string("Show Hidden Networks: ") + (showHiddenNetworks ? "ON" : "OFF");
+
+        String hidden__wifi_option = String("Hidden Networks:") + (showHiddenNetworks ? "ON" : "OFF");
 
         // construct Option explicitly using char* label
-        Option opt(label.c_str(), [this]() {
-            // toggle the global flag
+        Option opt(hidden__wifi_option.c_str(), [this]() {
             showHiddenNetworks = !showHiddenNetworks;
-            // immediate feedback
-            displayInfo(String("Show Hidden Networks: ") + (showHiddenNetworks ? "ON" : "OFF"), true);
-            // refresh menu so the label updates
+            displayInfo(String("Hidden Networks:") + (showHiddenNetworks ? "ON" : "OFF"), true);
             configMenu();
         });
 

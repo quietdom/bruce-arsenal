@@ -81,7 +81,6 @@ inline void mapRawKeyToPhysical(uint8_t keyvalue, uint8_t &row, uint8_t &col) {
 void _setup_gpio() {
     //    Keyboard.begin();
     pinMode(0, INPUT);
-    pinMode(10, INPUT); // Pin that reads the Battery voltage
     pinMode(5, OUTPUT);
     // Set GPIO5 HIGH for SD card compatibility (thx for the tip @bmorcelli & 7h30th3r0n3)
     digitalWrite(5, HIGH);
@@ -133,22 +132,6 @@ void _post_setup_gpio() {
     pinMode(11, INPUT);
     attachInterruptArg(digitalPinToInterrupt(11), gpio_isr_handler, &kb_interrupt, CHANGE);
     tca.enableInterrupts();
-}
-
-/***************************************************************************************
-** Function name: getBattery()
-** location: display.cpp
-** Description:   Delivers the battery value from 1-100
-***************************************************************************************/
-int getBattery() {
-    uint16_t adcReading = analogReadMilliVolts(GPIO_NUM_10);
-    float actualVoltage = adcReading * 2.0f;
-    const float MIN_VOLTAGE = 3300.0f;
-    const float MAX_VOLTAGE = 4150.0f;
-    float percent = ((actualVoltage - MIN_VOLTAGE) / (MAX_VOLTAGE - MIN_VOLTAGE)) * 100.0f;
-    if (percent < 0) percent = 0;
-    if (percent > 100) percent = 100;
-    return (int)percent;
 }
 
 /*********************************************************************

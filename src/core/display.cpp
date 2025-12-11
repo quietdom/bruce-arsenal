@@ -880,18 +880,8 @@ void printCenterFootnote(String text) {
 }
 
 /***************************************************************************************
-** Function name: getBattery()
-** Description:   Delivers the battery value from 1-100
-***************************************************************************************/
-int getBattery() {
-    int percent = 0;
-
-    return (percent < 0) ? 0 : (percent >= 100) ? 100 : percent;
-}
-
-/***************************************************************************************
 ** Function name: drawBatteryStatus()
-** Description:   Delivers the battery value from 1-100
+** Description:   Draws battery info into the Status bar
 ***************************************************************************************/
 void drawBatteryStatus(uint8_t bat) {
     if (bat == 0) return;
@@ -1778,9 +1768,8 @@ bool drawPNG(FS &fs, String filename, int x, int y, bool center) {
     // Allocate decoder only while drawing, then release to keep RAM available for Wi-Fi/AP usage
 #if defined(ESP32)
     bool usedHeapCaps = true;
-    void *mem =
-        psramFound() ? heap_caps_malloc(sizeof(PNG), MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT)
-                     : heap_caps_malloc(sizeof(PNG), MALLOC_CAP_8BIT);
+    void *mem = psramFound() ? heap_caps_malloc(sizeof(PNG), MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT)
+                             : heap_caps_malloc(sizeof(PNG), MALLOC_CAP_8BIT);
     if (!mem) {
         mem = malloc(sizeof(PNG));
         usedHeapCaps = false;
@@ -1848,10 +1837,8 @@ bool drawPNG(FS &fs, String filename, int x, int y, bool center) {
     // Destroy placement-new object and free memory so RAM is available after rendering
     png->~PNG();
 #if defined(ESP32)
-    if (usedHeapCaps)
-        heap_caps_free(mem);
-    else
-        free(mem);
+    if (usedHeapCaps) heap_caps_free(mem);
+    else free(mem);
 #else
     free(mem);
 #endif

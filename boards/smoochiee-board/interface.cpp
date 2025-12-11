@@ -50,17 +50,16 @@ void _setup_gpio() {
         PPM.enableCharge();
     }
 }
-	bool isCharging() {
-    //PPM.disableBatterPowerPath();
+bool isCharging() {
+    // PPM.disableBatterPowerPath();
     return PPM.isCharging();
 }
-
 
 int getBattery() {
     int voltage = PPM.getBattVoltage();
     int percent = (voltage - 3300) * 100 / (float)(4150 - 3350);
 
-    if (percent < 0) return 0;
+    if (percent < 0) return 1;
     if (percent > 100) percent = 100;
 
     if (PPM.isCharging() && percent >= 97) {
@@ -72,9 +71,6 @@ int getBattery() {
 
     return percent;
 }
-
-
-
 
 /*********************************************************************
 ** Function: setBrightness

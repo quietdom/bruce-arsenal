@@ -152,7 +152,7 @@ static const uint8_t MISO = SPI_SCK_PIN;
 
 // Battery PIN
 #define PIN_POWER_ON 15
-#define BAT_PIN 4
+#define ANALOG_BAT_PIN 4
 
 // Mic
 #define PIN_CLK 39

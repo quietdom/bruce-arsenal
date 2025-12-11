@@ -90,7 +90,7 @@ int getBattery() {
     int percent = 0;
     percent = (PMU.getSystemVoltage() - 3300) * 100 / (float)(4150 - 3350);
 
-    return (percent < 0) ? 0 : (percent >= 100) ? 100 : percent;
+    return (percent < 0) ? 1 : (percent >= 100) ? 100 : percent;
 }
 
 /*********************************************************************

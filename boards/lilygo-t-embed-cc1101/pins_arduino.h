@@ -270,7 +270,7 @@ static const uint8_t SCL = GROVE_SCL;
 #define SERIAL_TX 43
 #define SERIAL_RX 44
 
-#define BAT_PIN 4
+#define ANALOG_BAT_PIN 4
 
 // Encoder
 #define HAS_ENCODER

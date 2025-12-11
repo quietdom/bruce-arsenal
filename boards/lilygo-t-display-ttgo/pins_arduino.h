@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 #define ADC_EN 14 // ADC_EN is the ADC detection enable port
-#define ADC_PIN 34
+#define ANALOG_BAT_PIN 34
 
 // Lite Version
 // #define LITE_VERSION 1

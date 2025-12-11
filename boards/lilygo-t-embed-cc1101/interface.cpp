@@ -82,7 +82,6 @@ void _setup_gpio() {
     bruceConfig.rfidModule = PN532_I2C_MODULE;
     bruceConfig.irRx = 1;
 #else
-    pinMode(BAT_PIN, INPUT); // Battery value
     Wire.begin(GROVE_SDA, GROVE_SCL);
     Wire.beginTransmission(0x40);
     if (Wire.endTransmission() == 0) {
@@ -115,18 +114,13 @@ void _setup_gpio() {
 ** Function name: getBattery()
 ** Description:   Delivers the battery value from 1-100
 ***************************************************************************************/
+#if defined(USE_BQ27220_VIA_I2C)
 int getBattery() {
     int percent = 0;
-#if defined(USE_BQ27220_VIA_I2C)
     percent = bq.getChargePcnt();
-#elif defined(T_EMBED)
-    uint32_t volt = analogReadMilliVolts(GPIO_NUM_4);
-    float mv = volt;
-    percent = (mv - 3300) * 100 / (float)(4150 - 3350);
-#endif
-
-    return (percent < 0) ? 0 : (percent >= 100) ? 100 : percent;
+    return (percent < 0) ? 1 : (percent >= 100) ? 100 : percent;
 }
+#endif
 /*********************************************************************
 **  Function: setBrightness
 **  set brightness value

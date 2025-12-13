@@ -39,7 +39,7 @@ TagOMatic::~TagOMatic() {
 }
 
 void TagOMatic::set_rfid_module() {
-    switch (bruceConfig.rfidModule) {
+    switch (bruceConfigPins.rfidModule) {
         case PN532_I2C_MODULE: _rfid = new PN532(PN532::CONNECTION_TYPE::I2C); break;
 #ifdef M5STICK
         case PN532_I2C_SPI_MODULE: _rfid = new PN532(PN532::CONNECTION_TYPE::I2C_SPI); break;
@@ -222,7 +222,7 @@ void TagOMatic::read_card() {
     if (millis() - _lastReadTime < 2000) return;
 
     if (_rfid->read() != RFIDInterface::SUCCESS) {
-        if (bruceConfig.rfidModule != M5_RFID2_MODULE) { // Read felica if module is PN532
+        if (bruceConfigPins.rfidModule != M5_RFID2_MODULE) { // Read felica if module is PN532
             if (_rfid->read(1) != RFIDInterface::SUCCESS) return;
         } else {
             return;

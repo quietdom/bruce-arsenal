@@ -6,7 +6,7 @@
 
 void EMVReader::setup() {
     _cancelled = false;
-    switch (bruceConfig.rfidModule) {
+    switch (bruceConfigPins.rfidModule) {
         case PN532_I2C_MODULE: _rfid = new PN532(PN532::CONNECTION_TYPE::I2C); break;
 #ifdef M5STICK
         case PN532_I2C_SPI_MODULE: _rfid = new PN532(PN532::CONNECTION_TYPE::I2C_SPI); break;

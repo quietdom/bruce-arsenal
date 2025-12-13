@@ -125,7 +125,7 @@ void _post_setup_gpio() {
     }
     bruceConfigPins.gps_bus.rx = (gpio_num_t)15;
     bruceConfigPins.gps_bus.tx = (gpio_num_t)13;
-    bruceConfig.gpsBaudrate = 115200;
+    bruceConfigPins.gpsBaudrate = 115200;
 
     tca.matrix(7, 8);
     tca.flush();

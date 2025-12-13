@@ -4,9 +4,24 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <precompiler_flags.h>
+#include <set>
 #ifndef CC1101_GDO2_PIN
 #define CC1101_GDO2_PIN -1
 #endif
+
+enum RFIDModules {
+    M5_RFID2_MODULE = 0,
+    PN532_I2C_MODULE = 1,
+    PN532_SPI_MODULE = 2,
+    RC522_SPI_MODULE = 3,
+    ST25R3916_SPI_MODULE = 4,
+    PN532_I2C_SPI_MODULE = 5
+};
+
+enum RFModules {
+    M5_RF_MODULE = 0,
+    CC1101_SPI_MODULE = 1,
+};
 
 class BruceConfigPins {
 public:
@@ -159,6 +174,31 @@ public:
     UARTPins uart_bus = {(gpio_num_t)SERIAL_RX, (gpio_num_t)SERIAL_TX};
     UARTPins gps_bus = {(gpio_num_t)GPS_SERIAL_RX, (gpio_num_t)GPS_SERIAL_TX};
 
+    // BLE
+    String bleName = String("Keyboard_" + String((uint8_t)(ESP.getEfuseMac() >> 32), HEX));
+
+    // IR
+    int irTx = LED;
+    uint8_t irTxRepeats = 0;
+    int irRx = RXLED;
+
+    // RF
+    int rfTx = GROVE_SDA;
+    int rfRx = GROVE_SCL;
+    int rfModule = M5_RF_MODULE;
+    float rfFreq = 433.92;
+    int rfFxdFreq = 1;
+    int rfScanRange = 3;
+
+    // iButton Pin
+    int iButton = 0;
+
+    // RFID
+    int rfidModule = M5_RFID2_MODULE;
+
+    // GPS
+    int gpsBaudrate = 9600;
+
     /////////////////////////////////////////////////////////////////////////////////////
     // Constructor
     /////////////////////////////////////////////////////////////////////////////////////
@@ -187,4 +227,33 @@ public:
     void validateSpiPins(SPIPins value);
     void validateI2CPins(I2CPins value);
     void validateUARTPins(UARTPins value);
+
+    // BLE
+    void setBleName(const String name);
+
+    // IR
+    void setIrTxPin(int value);
+    void setIrTxRepeats(uint8_t value);
+    void setIrRxPin(int value);
+
+    // RF
+    void setRfTxPin(int value);
+    void setRfRxPin(int value);
+    void setRfModule(RFModules value);
+    void validateRfModuleValue();
+    void setRfFreq(float value, int fxdFreq = 2);
+    void setRfFxdFreq(float value);
+    void setRfScanRange(int value, int fxdFreq = 0);
+    void validateRfScanRangeValue();
+
+    // iButton
+    void setiButtonPin(int value);
+
+    // RFID
+    void setRfidModule(RFIDModules value);
+    void validateRfidModuleValue();
+
+    // GPS
+    void setGpsBaudrate(int value);
+    void validateGpsBaudrateValue();
 };

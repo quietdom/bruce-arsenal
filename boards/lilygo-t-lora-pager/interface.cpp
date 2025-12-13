@@ -213,10 +213,10 @@ void _setup_gpio() {
     keyboard->flush();
 
     // Start with default IR, RF, GPS and RFID Configs, replace old
-    bruceConfig.rfModule = CC1101_SPI_MODULE;
-    bruceConfig.rfidModule = ST25R3916_SPI_MODULE;
-    bruceConfig.irRx = 1;
-    bruceConfig.gpsBaudrate = 38400;
+    bruceConfigPins.rfModule = CC1101_SPI_MODULE;
+    bruceConfigPins.rfidModule = ST25R3916_SPI_MODULE;
+    bruceConfigPins.irRx = 1;
+    bruceConfigPins.gpsBaudrate = 38400;
 
     // Encoder
     pinMode(ENCODER_KEY, INPUT);
@@ -369,7 +369,6 @@ bool isCharging() { return bq.getIsCharging(); }
 #else
 bool isCharging() { return false; }
 #endif
-
 
 /*********************************************************************
 ** Function: _setup_codec_speaker

@@ -84,7 +84,7 @@ void rf_raw_record_draw(RawRecordingStatus status) {
 #define FREQUENCY_SCAN_MAX_TRIES 5
 float rf_freq_scan() {
     float frequency = 0;
-    int idx = range_limits[bruceConfig.rfScanRange][0];
+    int idx = range_limits[bruceConfigPins.rfScanRange][0];
     uint8_t attempt = 0;
     int rssi = -80, rssiThreshold = -65;
 
@@ -97,10 +97,10 @@ float rf_freq_scan() {
     while (frequency <= 0 && !check(EscPress)) { // FastScan
         sinewave_animation();
         previousMillis = millis();
-        if (bruceConfig.rfModule == CC1101_SPI_MODULE) {
-            if (idx < range_limits[bruceConfig.rfScanRange][0] ||
-                idx > range_limits[bruceConfig.rfScanRange][1]) {
-                idx = range_limits[bruceConfig.rfScanRange][0];
+        if (bruceConfigPins.rfModule == CC1101_SPI_MODULE) {
+            if (idx < range_limits[bruceConfigPins.rfScanRange][0] ||
+                idx > range_limits[bruceConfigPins.rfScanRange][1]) {
+                idx = range_limits[bruceConfigPins.rfScanRange][0];
             }
             float checkFrequency = subghz_frequency_list[idx];
             setMHZ(checkFrequency);
@@ -117,7 +117,7 @@ float rf_freq_scan() {
                         if (best_frequencies[i].rssi > best_frequencies[max_index].rssi) { max_index = i; }
                     }
 
-                    bruceConfig.setRfFreq(best_frequencies[max_index].freq, 0);
+                    bruceConfigPins.setRfFreq(best_frequencies[max_index].freq, 0);
                     frequency = best_frequencies[max_index].freq;
                     Serial.println("Frequency Found: " + String(frequency));
                 }
@@ -126,7 +126,7 @@ float rf_freq_scan() {
         } else {
 
             frequency = 433.92;
-            bruceConfig.setRfFreq(433.92, 2);
+            bruceConfigPins.setRfFreq(433.92, 2);
         }
     }
     return frequency;
@@ -136,13 +136,13 @@ float rf_freq_scan() {
 void rf_range_selection(float currentFrequency = 0.0) {
     int option = 0;
     options = {
-        {String("Fixed [" + String(bruceConfig.rfFreq) + "]").c_str(),
-         [=]() { bruceConfig.setRfFreq(bruceConfig.rfFreq, 2); }                                               },
-        {String("Choose Fixed").c_str(),                               [&]() { option = 1; }                   },
-        {subghz_frequency_ranges[0],                                   [=]() { bruceConfig.setRfScanRange(0); }},
-        {subghz_frequency_ranges[1],                                   [=]() { bruceConfig.setRfScanRange(1); }},
-        {subghz_frequency_ranges[2],                                   [=]() { bruceConfig.setRfScanRange(2); }},
-        {subghz_frequency_ranges[3],                                   [=]() { bruceConfig.setRfScanRange(3); }},
+        {String("Fixed [" + String(bruceConfigPins.rfFreq) + "]").c_str(),
+         [=]() { bruceConfigPins.setRfFreq(bruceConfigPins.rfFreq, 2); }                                               },
+        {String("Choose Fixed").c_str(),                                   [&]() { option = 1; }                       },
+        {subghz_frequency_ranges[0],                                       [=]() { bruceConfigPins.setRfScanRange(0); }},
+        {subghz_frequency_ranges[1],                                       [=]() { bruceConfigPins.setRfScanRange(1); }},
+        {subghz_frequency_ranges[2],                                       [=]() { bruceConfigPins.setRfScanRange(2); }},
+        {subghz_frequency_ranges[3],                                       [=]() { bruceConfigPins.setRfScanRange(3); }},
     };
 
     loopOptions(options);
@@ -154,15 +154,17 @@ void rf_range_selection(float currentFrequency = 0.0) {
         int arraySize = sizeof(subghz_frequency_list) / sizeof(subghz_frequency_list[0]);
         for (int i = 0; i < arraySize; i++) {
             String tmp = String(subghz_frequency_list[i], 2) + "Mhz";
-            options.push_back({tmp.c_str(), [=]() { bruceConfig.setRfFreq(subghz_frequency_list[i], 2); }});
+            options.push_back({tmp.c_str(), [=]() {
+                                   bruceConfigPins.setRfFreq(subghz_frequency_list[i], 2);
+                               }});
             if (int(currentFrequency * 100) == int(subghz_frequency_list[i] * 100)) ind = i;
         }
         loopOptions(options, ind);
         options.clear();
     }
 
-    if (bruceConfig.rfFxdFreq) displayTextLine("Scan freq set to " + String(bruceConfig.rfFreq));
-    else displayTextLine("Range set to " + String(subghz_frequency_ranges[bruceConfig.rfScanRange]));
+    if (bruceConfigPins.rfFxdFreq) displayTextLine("Scan freq set to " + String(bruceConfigPins.rfFreq));
+    else displayTextLine("Range set to " + String(subghz_frequency_ranges[bruceConfigPins.rfScanRange]));
 }
 
 void rf_raw_record_create(RawRecording &recorded, bool &returnToMenu) {
@@ -170,12 +172,12 @@ void rf_raw_record_create(RawRecording &recorded, bool &returnToMenu) {
 
     bool fakeRssiPresent = false;
     bool rssiFeature = false;
-    rssiFeature = bruceConfig.rfModule == CC1101_SPI_MODULE;
+    rssiFeature = bruceConfigPins.rfModule == CC1101_SPI_MODULE;
 
     tft.fillScreen(bruceConfig.bgColor);
     drawMainBorder();
 
-    if (rssiFeature) rf_range_selection(bruceConfig.rfFreq);
+    if (rssiFeature) rf_range_selection(bruceConfigPins.rfFreq);
 
     tft.fillScreen(bruceConfig.bgColor);
     drawMainBorder();
@@ -188,10 +190,10 @@ void rf_raw_record_create(RawRecording &recorded, bool &returnToMenu) {
     Serial.println("RF Module Initialized");
 
     // Set frequency if fixed frequency mode is enabled
-    if (bruceConfig.rfModule == CC1101_SPI_MODULE) {
-        if (bruceConfig.rfFxdFreq || !rssiFeature) status.frequency = bruceConfig.rfFreq;
+    if (bruceConfigPins.rfModule == CC1101_SPI_MODULE) {
+        if (bruceConfigPins.rfFxdFreq || !rssiFeature) status.frequency = bruceConfigPins.rfFreq;
         else status.frequency = rf_freq_scan();
-    } else status.frequency = bruceConfig.rfFreq;
+    } else status.frequency = bruceConfigPins.rfFreq;
 
     // Something went wrong with scan, probably it was cancelled
     if (status.frequency < 300) return;

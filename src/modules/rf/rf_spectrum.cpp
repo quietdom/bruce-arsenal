@@ -17,7 +17,7 @@ void draw_tf_spectrum_grid() {
     tft.setTextSize(1);
     tft.setCursor(3, 2);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.printf(" RF - Spectrum (%.2f Mhz)", bruceConfig.rfFreq);
+    tft.printf(" RF - Spectrum (%.2f Mhz)", bruceConfigPins.rfFreq);
     tft.fillRect(0, 20, tftWidth, tftHeight - 20, bruceConfig.bgColor);
     tft.drawFastHLine(0, 20 + tftHeight / 2, tftWidth, TFT_DARKGREY);
     tft.drawFastVLine((1 * tftWidth) / 4, 20, tftHeight - 20, TFT_DARKGREY);
@@ -90,10 +90,10 @@ void rf_spectrum() {
 //@Pirata
 void rf_SquareWave() {
     RCSwitch rcswitch;
-    if (!initRfModule("rx", bruceConfig.rfFreq)) return;
+    if (!initRfModule("rx", bruceConfigPins.rfFreq)) return;
 
-    if (bruceConfig.rfModule == CC1101_SPI_MODULE) rcswitch.enableReceive(bruceConfigPins.CC1101_bus.io0);
-    else rcswitch.enableReceive(bruceConfig.rfRx);
+    if (bruceConfigPins.rfModule == CC1101_SPI_MODULE) rcswitch.enableReceive(bruceConfigPins.CC1101_bus.io0);
+    else rcswitch.enableReceive(bruceConfigPins.rfRx);
     int line_w = 0;
     int line_h = 15;
     unsigned int *raw;
@@ -102,7 +102,7 @@ PRINT:
     tft.fillScreen(bruceConfig.bgColor);
     tft.setTextSize(1);
     tft.setCursor(3, 2);
-    tft.printf("  RF - SquareWave (%.2f Mhz)", bruceConfig.rfFreq);
+    tft.printf("  RF - SquareWave (%.2f Mhz)", bruceConfigPins.rfFreq);
 
     while (1) {
         if (rcswitch.RAWavailable()) {
@@ -146,11 +146,11 @@ PRINT:
 }
 
 void rf_CC1101_rssi() {
-    if (bruceConfig.rfModule != CC1101_SPI_MODULE) {
+    if (bruceConfigPins.rfModule != CC1101_SPI_MODULE) {
         displayError("only for CC1101 module", true);
         return;
     }
-    if (!initRfModule("rx", bruceConfig.rfFreq)) return;
+    if (!initRfModule("rx", bruceConfigPins.rfFreq)) return;
     int graph_size = tftWidth - 20;
     int signal[graph_size];
     memset(signal, -95, graph_size);
@@ -159,7 +159,7 @@ PRINT:
     tft.fillScreen(bruceConfig.bgColor);
     tft.setTextSize(1);
     tft.setCursor(3, 2);
-    tft.printf(" RF - RSSI spectrum (%.2f Mhz)", bruceConfig.rfFreq);
+    tft.printf(" RF - RSSI spectrum (%.2f Mhz)", bruceConfigPins.rfFreq);
     tft.drawFastVLine(20, 20, tftHeight, bruceConfig.priColor);
     tft.drawString("-95", 0, (tftHeight - 120) + 95);
     tft.drawString("-80", 0, (tftHeight - 120) + 80);

@@ -41,7 +41,7 @@ void GPSTracker::setup() {
 bool GPSTracker::begin_gps() {
     releasePins();
     GPSserial.begin(
-        bruceConfig.gpsBaudrate, SERIAL_8N1, bruceConfigPins.gps_bus.rx, bruceConfigPins.gps_bus.tx
+        bruceConfigPins.gpsBaudrate, SERIAL_8N1, bruceConfigPins.gps_bus.rx, bruceConfigPins.gps_bus.tx
     );
 
     int count = 0;

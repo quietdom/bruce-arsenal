@@ -78,10 +78,10 @@ void _setup_gpio() {
     }
     if (bq.getDesignCap() != BATTERY_DESIGN_CAPACITY) { bq.setDesignCap(BATTERY_DESIGN_CAPACITY); }
     // Start with default IR, RF and RFID Configs, replace old
-    bruceConfig.rfModule = CC1101_SPI_MODULE;
-    bruceConfig.rfidModule = PN532_I2C_MODULE;
-    bruceConfig.irRx = 1;
-    bruceConfig.irTx = 2;
+    bruceConfigPins.rfModule = CC1101_SPI_MODULE;
+    bruceConfigPins.rfidModule = PN532_I2C_MODULE;
+    bruceConfigPins.irRx = 1;
+    bruceConfigPins.irTx = 2;
 #else
     Wire.begin(GROVE_SDA, GROVE_SCL);
     Wire.beginTransmission(0x40);
@@ -92,13 +92,13 @@ void _setup_gpio() {
         Serial.println("Probably CC1101 exists");
         bruceConfigPins.CC1101_bus.cs = GPIO_NUM_17;
         bruceConfigPins.CC1101_bus.io0 = GPIO_NUM_18;
-        bruceConfig.rfModule = CC1101_SPI_MODULE;
+        bruceConfigPins.rfModule = CC1101_SPI_MODULE;
 
         //* If it does not exist, then the CC1101 shield may exist, so there is no need for Wire to exist.
         Wire.endTransmission();
         Wire.end();
     }
-    bruceConfig.rfidModule = PN532_SPI_MODULE;
+    bruceConfigPins.rfidModule = PN532_SPI_MODULE;
 
 #endif
 
@@ -215,7 +215,7 @@ void powerDownNFC() {
 }
 
 void powerDownCC1101() {
-    if (!initRfModule("rx", bruceConfig.rfFreq)) { Serial.println("Can't init CC1101"); }
+    if (!initRfModule("rx", bruceConfigPins.rfFreq)) { Serial.println("Can't init CC1101"); }
 
     ELECHOUSE_cc1101.goSleep();
 }

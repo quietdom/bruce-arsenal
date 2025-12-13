@@ -97,13 +97,12 @@ void _setup_gpio() {
     pinMode(PIN_POWER_ON, OUTPUT);
     digitalWrite(PIN_POWER_ON, HIGH);
 
-
     // Start with default IR, RF and RFID Configs, replace old
-    bruceConfig.rfModule = CC1101_SPI_MODULE;
-    bruceConfig.rfidModule = PN532_I2C_MODULE;
+    bruceConfigPins.rfModule = CC1101_SPI_MODULE;
+    bruceConfigPins.rfidModule = PN532_I2C_MODULE;
 
-    bruceConfig.irRx = RXLED;
-    bruceConfig.irTx = LED;
+    bruceConfigPins.irRx = RXLED;
+    bruceConfigPins.irTx = LED;
 
     Serial.begin(115200);
 }

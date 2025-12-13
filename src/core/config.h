@@ -5,6 +5,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <map>
+#include <precompiler_flags.h>
 #include <set>
 #include <vector>
 
@@ -91,7 +92,7 @@ public:
     // IR
     int irTx = LED;
     uint8_t irTxRepeats = 0;
-    int irRx = GROVE_SCL;
+    int irRx = RXLED;
 
     // RF
     int rfTx = GROVE_SDA;

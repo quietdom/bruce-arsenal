@@ -81,6 +81,7 @@ void _setup_gpio() {
     bruceConfig.rfModule = CC1101_SPI_MODULE;
     bruceConfig.rfidModule = PN532_I2C_MODULE;
     bruceConfig.irRx = 1;
+    bruceConfig.irTx = 2;
 #else
     Wire.begin(GROVE_SDA, GROVE_SCL);
     Wire.beginTransmission(0x40);

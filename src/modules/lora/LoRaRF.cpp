@@ -217,7 +217,7 @@ void lorachat() {
         Serial.println("creating lora settings .json file");
         StaticJsonDocument<128> doc;
         File file = LittleFS.open("/lora_settings.json", "w");
-        doc["LoRa_Frequency"] = 434500000.00;
+        doc["LoRa_Frequency"] = "434500000.00";
         doc["LoRa_Name"] = "BruceTest";
         serializeJson(doc, file);
         file.close();
@@ -226,7 +226,7 @@ void lorachat() {
     StaticJsonDocument<128> doc;
     deserializeJson(doc, file);
     displayName = doc["LoRa_Name"].as<String>();
-    double BAND = doc["LoRa_Frequency"];
+    double BAND = doc["LoRa_Frequency"].as<String>().toDouble();
     file.close();
     tft.fillScreen(TFT_BLACK);
     update = true;
@@ -248,17 +248,39 @@ void lorachat() {
         return;
     }
 
-    SPI.begin(
-        bruceConfigPins.LoRa_bus.sck,
-        bruceConfigPins.LoRa_bus.miso,
-        bruceConfigPins.LoRa_bus.mosi,
-        bruceConfigPins.LoRa_bus.cs
-    );
+    if (bruceConfigPins.LoRa_bus.mosi == TFT_MOSI) {
+#if TFT_MOSI > 0
+        LoRa.setSPI(tft.getSPIinstance());
+#endif
+        Serial.println("Using TFT SPI for LoRa");
+    } else if (bruceConfigPins.SDCARD_bus.mosi == bruceConfigPins.LoRa_bus.mosi) {
+        LoRa.setSPI(sdcardSPI);
+        Serial.println("Using SDCard SPI for LoRa");
+    } else if (bruceConfigPins.NRF24_bus.mosi == bruceConfigPins.LoRa_bus.mosi ||
+               bruceConfigPins.CC1101_bus.mosi == bruceConfigPins.LoRa_bus.mosi) {
+        LoRa.setSPI(CC_NRF_SPI);
+        CC_NRF_SPI.begin(
+            (int8_t)bruceConfigPins.LoRa_bus.sck,
+            (int8_t)bruceConfigPins.LoRa_bus.miso,
+            (int8_t)bruceConfigPins.LoRa_bus.mosi
+        );
+        Serial.println("Using CC/NRF SPI for LoRa");
+    } else {
+        SPI.begin(
+            bruceConfigPins.LoRa_bus.sck,
+            bruceConfigPins.LoRa_bus.miso,
+            bruceConfigPins.LoRa_bus.mosi,
+            bruceConfigPins.LoRa_bus.cs
+        );
+        Serial.println("Using dedicated SPI for LoRa");
+    }
     LoRa.setPins(bruceConfigPins.LoRa_bus.cs, bruceConfigPins.LoRa_bus.io0, bruceConfigPins.LoRa_bus.io2);
     // add return RETURN TO MENU THING **************
     if (!LoRa.begin(BAND)) {
         Serial.println("Starting LoRa failed!");
+        displayError("LoRa Init Failed (not SX127x)", true);
         intlora = false;
+        return;
     }
     LoRa.setSpreadingFactor(spreadingFactor);
     LoRa.setSignalBandwidth(SignalBandwidth);
@@ -289,15 +311,29 @@ void changeusername() {
 
 void chfreq() {
     tft.fillScreen(TFT_BLACK);
-    String freq = keyboard(freq, 12, "");
-    double dfreq = freq.toDouble();
-    if (dfreq == 0) return;
+    char buf[15];
     File file = LittleFS.open("/lora_settings.json", "r");
     StaticJsonDocument<128> doc;
     deserializeJson(doc, file);
     file.close();
+
+    double dfreq = doc["LoRa_Frequency"].as<String>().toDouble();
+    dfreq = dfreq / 1000000;
+    snprintf(buf, sizeof(buf), "%.3f", dfreq);
+    String freq = num_keyboard(buf, 12, "in Mhz");
+    dfreq = freq.toDouble();
+    if (dfreq == 0) {
+        displayError("Invalid value");
+        return;
+    } else if (dfreq > 1000) {
+        displayError("Invalid value, Exceeds 1Ghz");
+        return;
+    }
+    dfreq = dfreq * 1000000;
+    snprintf(buf, sizeof(buf), "%.2f", dfreq);
+    doc["LoRa_Frequency"] = buf;
+
     file = LittleFS.open("/lora_settings.json", "w");
-    doc["LoRa_Frequency"] = dfreq;
     serializeJson(doc, file);
     file.close();
 }

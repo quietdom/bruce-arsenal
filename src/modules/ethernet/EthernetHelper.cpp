@@ -91,6 +91,19 @@ void EthernetHelper::generate_mac() {
 }
 
 bool EthernetHelper::setup() {
+    if (bruceConfigPins.W5500_bus.cs == GPIO_NUM_NC || bruceConfigPins.W5500_bus.sck == GPIO_NUM_NC ||
+        bruceConfigPins.W5500_bus.miso == GPIO_NUM_NC || bruceConfigPins.W5500_bus.mosi == GPIO_NUM_NC ||
+        bruceConfigPins.W5500_bus.io0 == GPIO_NUM_NC) {
+        displayError("W5500 Pins not set", true);
+        Serial.println("W5500 pins not configured, skipping Ethernet setup.");
+        return false;
+    }
+    if (bruceConfigPins.W5500_bus.mosi == TFT_MOSI ||
+        bruceConfigPins.W5500_bus.mosi == bruceConfigPins.SDCARD_bus.mosi) {
+        displayError("W5500 can't share SPI bus", true);
+        Serial.println("W5500 pins can't be shared with tft or sdcard, skipping Ethernet setup.");
+        return false;
+    }
     generate_mac();
 
     // Initialize TCP/IP network interface

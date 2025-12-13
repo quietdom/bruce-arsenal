@@ -219,6 +219,7 @@ ScanHostMenu:
 
     options = {};
     for (auto host : hostslist_eth) {
+        Serial.println(host.ip.toString());
         String result = host.ip.toString();
         if (host.ip == gateway) result += "(GTW)";
         options.push_back({result.c_str(), [this, host]() { afterScanOptions(host); }});

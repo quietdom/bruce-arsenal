@@ -226,28 +226,28 @@
 #define CC1101_GDO0_PIN -1
 #endif
 
-#ifndef LORA_SCK
-#define LORA_SCK -1
+#ifndef W5500_SCK_PIN
+#define W5500_SCK_PIN -1
 #endif
 
-#ifndef LORA_MISO
-#define LORA_MISO -1
+#ifndef W5500_MISO_PIN
+#define W5500_MISO_PIN -1
 #endif
 
-#ifndef LORA_MOSI
-#define LORA_MOSI -1
+#ifndef W5500_MOSI_PIN
+#define W5500_MOSI_PIN -1
 #endif
 
-#ifndef LORA_CS
-#define LORA_CS -1
+#ifndef W5500_SS_PIN
+#define W5500_SS_PIN -1
 #endif
 
-#ifndef LORA_RST
-#define LORA_RST -1
+#ifndef W5500_INT_PIN
+#define W5500_INT_PIN -1
 #endif
 
-#ifndef LORA_DIO0
-#define LORA_DIO0 -1
+#ifndef W5500_RST_PIN
+#define W5500_RST_PIN -1
 #endif
 
 // Temporary, delete after finish Interfaces

@@ -147,7 +147,8 @@ public:
         (gpio_num_t)W5500_MISO_PIN,
         (gpio_num_t)W5500_MOSI_PIN,
         (gpio_num_t)W5500_SS_PIN,
-        (gpio_num_t)W5500_INT_PIN
+        (gpio_num_t)W5500_INT_PIN,
+        (gpio_num_t)W5500_RST_PIN,
     };
 #elif !defined(LITE_VERSION)
     SPIPins W5500_bus;

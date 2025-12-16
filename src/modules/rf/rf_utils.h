@@ -29,5 +29,6 @@ uint64_t crc64_ecma(const std::vector<int> &data);
 void addToRecentCodes(struct RfCodes rfcode);
 struct RfCodes selectRecentRfMenu();
 bool setMHZMenu();
+void rf_range_selection(float currentFrequency = 0.0);
 
 #endif

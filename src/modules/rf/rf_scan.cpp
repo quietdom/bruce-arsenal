@@ -109,6 +109,9 @@ bool RFScan::fast_scan() {
             setMHZ(frequency);
             Serial.println("Frequency Found: " + String(frequency));
             rcswitch.resetAvailable();
+            // When changing to fixed frequency, need to restart the module to reset the registers
+            // so we get good signal reception at this frequency
+            deinitRfModule();
 
             return true;
         }
@@ -293,7 +296,7 @@ void RFScan::set_option(RFMenuOption option) {
         case SAVE:
         case SAVE_RAW: save_signal(option == SAVE_RAW); break;
 
-        case RANGE: set_range(); break;
+        case RANGE: rf_range_selection(); break; // using a common function to other features
         case RESET: reset_signals(); break;
         case THRESHOLD: set_threshold(); break;
 
@@ -343,18 +346,20 @@ void RFScan::set_threshold() {
     };
     loopOptions(options);
 }
-
+/*
+// Using similar function from rf_utils.h
 void RFScan::set_range() {
     bool chooseFixedOpt = false;
 
     options = {
         {String("Fxd [" + String(bruceConfigPins.rfFreq) + "]").c_str(),
-         [=]() { bruceConfigPins.setRfScanRange(bruceConfigPins.rfScanRange, 1); }                                   },
-        {"Choose Fxd",                                                   [&]() { chooseFixedOpt = true; }            },
-        {subghz_frequency_ranges[0],                                     [=]() { bruceConfigPins.setRfScanRange(0); }},
-        {subghz_frequency_ranges[1],                                     [=]() { bruceConfigPins.setRfScanRange(1); }},
-        {subghz_frequency_ranges[2],                                     [=]() { bruceConfigPins.setRfScanRange(2); }},
-        {subghz_frequency_ranges[3],                                     [=]() { bruceConfigPins.setRfScanRange(3); }},
+         [=]() { bruceConfigPins.setRfScanRange(bruceConfigPins.rfScanRange, 1); } },
+        {"Choose Fxd",                                                   [&]() { chooseFixedOpt = true; } },
+        {subghz_frequency_ranges[0],                                     [=]() {
+bruceConfigPins.setRfScanRange(0); }}, {subghz_frequency_ranges[1],                                     [=]()
+{ bruceConfigPins.setRfScanRange(1); }}, {subghz_frequency_ranges[2], [=]() {
+bruceConfigPins.setRfScanRange(2); }}, {subghz_frequency_ranges[3],                                     [=]()
+{ bruceConfigPins.setRfScanRange(3); }},
     };
 
     loopOptions(options);
@@ -376,7 +381,7 @@ void RFScan::set_range() {
     if (bruceConfigPins.rfFxdFreq) displayTextLine("Scan freq set to " + String(bruceConfigPins.rfFreq));
     else displayTextLine("Range set to " + String(subghz_frequency_ranges[bruceConfigPins.rfScanRange]));
 }
-
+*/
 void display_info(RfCodes received, int signals, bool ReadRAW, bool codesOnly, bool autoSave, String title) {
     if (title != "") drawMainBorderWithTitle(title);
     else drawMainBorder();

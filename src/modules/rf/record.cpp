@@ -120,6 +120,8 @@ float rf_freq_scan() {
                     bruceConfigPins.setRfFreq(best_frequencies[max_index].freq, 0);
                     frequency = best_frequencies[max_index].freq;
                     Serial.println("Frequency Found: " + String(frequency));
+                    deinitRfModule();
+                    initRfModule("rx", frequency);
                 }
             }
             ++idx;
@@ -130,41 +132,6 @@ float rf_freq_scan() {
         }
     }
     return frequency;
-}
-
-// TODO: replace frequency selection throughout rf.cpp with this unified function
-void rf_range_selection(float currentFrequency = 0.0) {
-    int option = 0;
-    options = {
-        {String("Fixed [" + String(bruceConfigPins.rfFreq) + "]").c_str(),
-         [=]() { bruceConfigPins.setRfFreq(bruceConfigPins.rfFreq, 2); }                                               },
-        {String("Choose Fixed").c_str(),                                   [&]() { option = 1; }                       },
-        {subghz_frequency_ranges[0],                                       [=]() { bruceConfigPins.setRfScanRange(0); }},
-        {subghz_frequency_ranges[1],                                       [=]() { bruceConfigPins.setRfScanRange(1); }},
-        {subghz_frequency_ranges[2],                                       [=]() { bruceConfigPins.setRfScanRange(2); }},
-        {subghz_frequency_ranges[3],                                       [=]() { bruceConfigPins.setRfScanRange(3); }},
-    };
-
-    loopOptions(options);
-    options.clear();
-
-    if (option == 1) { // Fixed Frequency Selector
-        options = {};
-        int ind = 0;
-        int arraySize = sizeof(subghz_frequency_list) / sizeof(subghz_frequency_list[0]);
-        for (int i = 0; i < arraySize; i++) {
-            String tmp = String(subghz_frequency_list[i], 2) + "Mhz";
-            options.push_back({tmp.c_str(), [=]() {
-                                   bruceConfigPins.setRfFreq(subghz_frequency_list[i], 2);
-                               }});
-            if (int(currentFrequency * 100) == int(subghz_frequency_list[i] * 100)) ind = i;
-        }
-        loopOptions(options, ind);
-        options.clear();
-    }
-
-    if (bruceConfigPins.rfFxdFreq) displayTextLine("Scan freq set to " + String(bruceConfigPins.rfFreq));
-    else displayTextLine("Range set to " + String(subghz_frequency_ranges[bruceConfigPins.rfScanRange]));
 }
 
 void rf_raw_record_create(RawRecording &recorded, bool &returnToMenu) {

@@ -31,10 +31,8 @@ static SPIClass *selectEthernetSPIBus() {
 #else
         Serial.println("TFT SPI unavailable, falling back to default SPI for Ethernet");
 #endif
-    } else if (
-        bruceConfigPins.W5500_bus.mosi == bruceConfigPins.SDCARD_bus.mosi &&
-        bruceConfigPins.W5500_bus.mosi != GPIO_NUM_NC
-    ) {
+    } else if (bruceConfigPins.W5500_bus.mosi == bruceConfigPins.SDCARD_bus.mosi &&
+               bruceConfigPins.W5500_bus.mosi != GPIO_NUM_NC) {
         selectedSPI = &sdcardSPI;
         sdcardSPI.begin(
             (int8_t)bruceConfigPins.W5500_bus.sck,
@@ -43,11 +41,9 @@ static SPIClass *selectEthernetSPIBus() {
             (int8_t)bruceConfigPins.W5500_bus.cs
         );
         Serial.println("Using SDCard SPI for Ethernet");
-    } else if (
-        (bruceConfigPins.W5500_bus.mosi == bruceConfigPins.NRF24_bus.mosi ||
-         bruceConfigPins.W5500_bus.mosi == bruceConfigPins.CC1101_bus.mosi) &&
-        bruceConfigPins.W5500_bus.mosi != GPIO_NUM_NC
-    ) {
+    } else if ((bruceConfigPins.W5500_bus.mosi == bruceConfigPins.NRF24_bus.mosi ||
+                bruceConfigPins.W5500_bus.mosi == bruceConfigPins.CC1101_bus.mosi) &&
+               bruceConfigPins.W5500_bus.mosi != GPIO_NUM_NC) {
         selectedSPI = &CC_NRF_SPI;
         CC_NRF_SPI.begin(
             (int8_t)bruceConfigPins.W5500_bus.sck,
@@ -84,19 +80,23 @@ static void ethernet_event_handler(arduino_event_id_t event, arduino_event_info_
                 mac_addr[4],
                 mac_addr[5]
             );
+            displaySuccess("Ethernet Link Up");
             break;
         }
         case ARDUINO_EVENT_ETH_DISCONNECTED:
             Serial.println("Ethernet Link Down");
+            displayError("Ethernet Link Down");
             connected = false;
             break;
         case ARDUINO_EVENT_ETH_START: Serial.println("Ethernet Started"); break;
         case ARDUINO_EVENT_ETH_STOP:
             Serial.println("Ethernet Stopped");
+            displayError("Ethernet Stopped");
             connected = false;
             break;
         case ARDUINO_EVENT_ETH_LOST_IP:
             Serial.println("Ethernet Lost IP");
+            displayError("Ethernet Lost IP");
             connected = false;
             break;
         case ARDUINO_EVENT_ETH_GOT_IP: {
@@ -111,6 +111,7 @@ static void ethernet_event_handler(arduino_event_id_t event, arduino_event_info_
             Serial.print("ETHGW:");
             Serial.println(IPAddress(ip_info.gw.addr));
             Serial.println("~~~~~~~~~~~");
+            displaySuccess("Ethernet Got IP");
             break;
         }
         default: break;
@@ -155,8 +156,6 @@ bool EthernetHelper::setup() {
         Serial.println("ETH.begin failed");
         return false;
     }
-
-    if (ETH.handle() != nullptr) { esp_eth_ioctl(ETH.handle(), ETH_CMD_S_MAC_ADDR, mac); }
 
     ethNetif = ETH.netif();
 

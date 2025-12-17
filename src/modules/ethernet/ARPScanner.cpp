@@ -122,7 +122,20 @@ void ping_target(ip_addr_t target) {
 }
 
 void ARPScanner::setup() {
-    LOCK_TCPIP_CORE();
+    struct TcpipLockGuard {
+        bool active{true};
+        TcpipLockGuard() { LOCK_TCPIP_CORE(); }
+        ~TcpipLockGuard() {
+            if (active) UNLOCK_TCPIP_CORE();
+        }
+        void release() {
+            if (active) {
+                UNLOCK_TCPIP_CORE();
+                active = false;
+            }
+        }
+    } lockGuard;
+
     hostslist_eth.clear();
 
     // IPAddress uint32_t op returns number in big-endian
@@ -132,6 +145,12 @@ void ARPScanner::setup() {
 
     if (esp_netif_get_ip_info(esp_net_interface, &ip_info) != ESP_OK) {
         Serial.println("Can't get IP informations");
+        return;
+    }
+
+    if (ip_info.ip.addr == 0 || ip_info.netmask.addr == 0) {
+        Serial.println("Ethernet has no IP/netmask, aborting ARP scan");
+        displayError("Ethernet not ready", true);
         return;
     }
 
@@ -191,7 +210,7 @@ void ARPScanner::setup() {
         // Stops search on EscPress
         if (check(EscPress)) break;
     }
-    UNLOCK_TCPIP_CORE();
+    lockGuard.release();
     auto it = std::find_if(hostslist_eth.begin(), hostslist_eth.end(), [this](const Host &host) {
         return host.ip == gateway;
     });

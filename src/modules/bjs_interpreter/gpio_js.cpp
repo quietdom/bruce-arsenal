@@ -147,7 +147,7 @@ duk_ret_t native_pins(duk_context *ctx) {
     bduk_put_prop(ctx, obj_idx, "spi_mosi", duk_push_uint, SPI_MOSI_PIN);
     bduk_put_prop(ctx, obj_idx, "spi_miso", duk_push_uint, SPI_MISO_PIN);
     bduk_put_prop(ctx, obj_idx, "spi_ss", duk_push_uint, SPI_SS_PIN);
-    bduk_put_prop(ctx, obj_idx, "ir_tx", duk_push_uint, LED);
+    bduk_put_prop(ctx, obj_idx, "ir_tx", duk_push_uint, TXLED);
     bduk_put_prop(ctx, obj_idx, "ir_rx", duk_push_uint, RXLED);
 
     return 1;

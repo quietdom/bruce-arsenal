@@ -94,7 +94,7 @@ static const uint8_t SCL = GROVE_SCL;
 #define BTN_ACT LOW
 
 // IR pins
-#define LED 2
+#define TXLED 2
 #define RXLED 15
 
 #define LED_ON HIGH

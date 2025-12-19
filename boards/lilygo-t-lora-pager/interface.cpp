@@ -153,7 +153,7 @@ void _setup_gpio() {
     if (pmu_ret) {
         PPM.setSysPowerDownVoltage(3300);
         PPM.setInputCurrentLimit(3250);
-        Serial.printf("getInputCurrentLimit: %d mA\n", PPM.getInputCurrentLimit());
+        Serial.printf("getInputCurrentLimit: %ld mA\n", PPM.getInputCurrentLimit());
         PPM.disableCurrentLimitPin();
         PPM.setChargeTargetVoltage(4208);
         PPM.setPrechargeCurr(64);

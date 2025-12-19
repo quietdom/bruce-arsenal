@@ -343,6 +343,7 @@ void otherIRcodes() {
 // IR commands
 
 void sendIRCommand(IRCode *code, bool hideDefaultUI) {
+    setup_ir_pin(bruceConfigPins.irTx, OUTPUT);
     // https://developer.flipper.net/flipperzero/doxygen/infrared_file_format.html
     if (code->type.equalsIgnoreCase("raw")) sendRawCommand(code->frequency, code->data, hideDefaultUI);
     else if (code->protocol.equalsIgnoreCase("NEC"))

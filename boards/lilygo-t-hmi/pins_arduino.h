@@ -50,7 +50,7 @@ static const uint8_t SCL = GROVE_SCL;
 #define SERIAL_TX 44
 #define SERIAL_RX 43
 
-#define LED 17
+#define TXLED 17
 #define RXLED 18
 
 static const uint8_t SS = SPI_SS_PIN;

@@ -149,7 +149,7 @@ static const uint8_t RX = SERIAL_RX;
 #define BTN_ACT LOW
 
 // IR
-#define LED -1
+#define TXLED -1
 #define TXLED -1
 #define RXLED -1
 #define LED_ON HIGH

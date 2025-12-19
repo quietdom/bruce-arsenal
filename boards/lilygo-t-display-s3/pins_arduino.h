@@ -55,7 +55,7 @@ static const uint8_t SCL = GROVE_SCL;
 #define SERIAL_TX 12
 #define SERIAL_RX 13
 
-#define LED 10
+#define TXLED 10
 #define RXLED 11
 
 #else
@@ -101,7 +101,7 @@ static const uint8_t SCL = GROVE_SCL;
 #define SERIAL_TX 44
 #define SERIAL_RX 43
 
-#define LED 17
+#define TXLED 17
 #define RXLED 18
 #endif
 

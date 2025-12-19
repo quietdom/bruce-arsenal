@@ -178,7 +178,7 @@ public:
     String bleName = String("Keyboard_" + String((uint8_t)(ESP.getEfuseMac() >> 32), HEX));
 
     // IR
-    int irTx = LED;
+    int irTx = TXLED;
     uint8_t irTxRepeats = 0;
     int irRx = RXLED;
 

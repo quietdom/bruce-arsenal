@@ -51,10 +51,10 @@
 #ifndef RXLED               // Default RX Infrared LED
   #define RXLED GROVE_SCL
 #endif
-#ifndef LED                 // Default TC Infrared Led
-  #define LED GROVE_SDA
+#ifndef TXLED                 // Default TX Infrared Led
+  #define TXLED GROVE_SDA
 #endif
-#ifndef LED_ON              // Infrared LED On state
+#ifndef LED_ON              // Infrared TXLED On state
   #define LED_ON 1
 #endif
 #ifndef LED_OFF             // Infrared LED Off state

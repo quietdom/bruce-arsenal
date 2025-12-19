@@ -111,7 +111,7 @@ void showDeviceInfo() {
     area.addLine("SPI_MOSI_PIN: " + String(SPI_MOSI_PIN));
     area.addLine("SPI_MISO_PIN: " + String(SPI_MISO_PIN));
     area.addLine("SPI_SS_PIN: " + String(SPI_SS_PIN));
-    area.addLine("IR TX: " + String(LED));
+    area.addLine("IR TX: " + String(TXLED));
     area.addLine("IR RX: " + String(RXLED));
     area.addLine("");
 

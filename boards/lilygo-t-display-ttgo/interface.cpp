@@ -65,7 +65,7 @@ void _setup_gpio() {
     bruceConfigPins.rfidModule = PN532_I2C_MODULE;
 
     bruceConfigPins.irRx = RXLED;
-    bruceConfigPins.irTx = LED;
+    bruceConfigPins.irTx = TXLED;
 
     Serial.begin(115200);
 }

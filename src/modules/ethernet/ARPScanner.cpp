@@ -122,20 +122,6 @@ void ping_target(ip_addr_t target) {
 }
 
 void ARPScanner::setup() {
-    struct TcpipLockGuard {
-        bool active{true};
-        TcpipLockGuard() { LOCK_TCPIP_CORE(); }
-        ~TcpipLockGuard() {
-            if (active) UNLOCK_TCPIP_CORE();
-        }
-        void release() {
-            if (active) {
-                UNLOCK_TCPIP_CORE();
-                active = false;
-            }
-        }
-    } lockGuard;
-
     hostslist_eth.clear();
 
     // IPAddress uint32_t op returns number in big-endian
@@ -210,7 +196,7 @@ void ARPScanner::setup() {
         // Stops search on EscPress
         if (check(EscPress)) break;
     }
-    lockGuard.release();
+    UNLOCK_TCPIP_CORE();
     auto it = std::find_if(hostslist_eth.begin(), hostslist_eth.end(), [this](const Host &host) {
         return host.ip == gateway;
     });
@@ -245,9 +231,11 @@ ScanHostMenu:
     }
 
     options = {
+#if !defined(LITE_VERSION)
         {"ARP Poisoning",   [this]() { ARPoisoner{gateway}; }},
         {"DHCP Starvation", [=]() { DHCPStarvation(); }      },
         {"MAC Flooding",    [=]() { MACFlooding(); }         },
+#endif
     };
     for (auto host : hostslist_eth) {
         Serial.println(host.ip.toString());

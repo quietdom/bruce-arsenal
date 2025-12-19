@@ -956,7 +956,7 @@ void runClockLoop() {
 int gsetIrTxPin(bool set) {
     int result = bruceConfigPins.irTx;
 
-    if (result > 50) bruceConfigPins.setIrTxPin(LED);
+    if (result > 50) bruceConfigPins.setIrTxPin(TXLED);
     if (set) {
         options.clear();
         std::vector<std::pair<const char *, int>> pins;

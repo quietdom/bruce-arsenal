@@ -21,6 +21,8 @@ void panelSleep(bool on) {
         delay(120);
     }
 #endif
+    // Disables tft writings on the display
+    tft.setSleepMode(on);
 }
 
 bool __attribute__((weak)) isCharging() { return false; }

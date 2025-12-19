@@ -8,6 +8,10 @@ XPowersAXP2101 axp192;
 #include <TouchDrvFT6X36.hpp>
 TouchDrvFT6X36 touch;
 
+// Haptic
+#include "SensorDRV2605.hpp"
+SensorDRV2605 drv;
+
 /***************************************************************************************
 ** Function name: _setup_gpio()
 ** Location: main.cpp
@@ -42,8 +46,8 @@ void _setup_gpio() {
     axp192.enableALDO1(); //! RTC VBAT
     axp192.enableALDO2(); //! TFT BACKLIGHT   VDD
     axp192.enableALDO3(); //! Screen touch VDD
-    // axp192.enableALDO4();  //! Radio VDD
-    // axp192.enableBLDO2();  //! drv2605 enable
+    axp192.enableALDO4(); //! Radio VDD
+    axp192.enableBLDO2(); //! drv2605 enable
     //  Set the time of pressing the button to turn off
     axp192.setPowerKeyPressOffTime(XPOWERS_POWEROFF_4S);
     // Set the button power-on press time
@@ -88,6 +92,21 @@ void _setup_gpio() {
     // Disable RF and NRF Menus for default
     bruceConfig.disabledMenus.push_back("RF");
     bruceConfig.disabledMenus.push_back("NRF24");
+
+    // Haptic driver
+    if (!drv.begin(Wire, 10, 11)) {
+        Serial.println("Failed to find DRV2605.");
+    } else {
+        Serial.println("Init DRV2605 Sensor success!");
+        drv.selectLibrary(1);
+        drv.setMode(SensorDRV2605::MODE_INTTRIG);
+        drv.useERM();
+
+        // Startup buzz
+        drv.setWaveform(0, 70);
+        drv.setWaveform(1, 0);
+        drv.run();
+    }
 }
 
 /***************************************************************************************
@@ -174,6 +193,9 @@ void InputHandler(void) {
             touchHeatMap(touchPoint);
 
             tm = millis();
+            drv.setWaveform(0, 75);
+            drv.setWaveform(1, 0); // end waveform
+            drv.run();
         }
     }
 }

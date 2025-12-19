@@ -245,7 +245,8 @@ void BruceConfig::fromFile(bool checkFS) {
 
     if (!setting["webUISessions"].isNull()) {
         webUISessions.clear();
-        for (JsonPair kv : setting["webUISessions"].as<JsonObject>()) {
+        JsonObject webUISessionsObj = setting["webUISessions"].as<JsonObject>();
+        for (JsonPair kv : webUISessionsObj) {
             webUISessions.push_back(kv.value().as<String>());
         }
     } else {
@@ -274,7 +275,8 @@ void BruceConfig::fromFile(bool checkFS) {
     // Wifi List
     if (!setting["wifi"].isNull()) {
         wifi.clear();
-        for (JsonPair kv : setting["wifi"].as<JsonObject>()) wifi[kv.key().c_str()] = kv.value().as<String>();
+        JsonObject wifiObj = setting["wifi"].as<JsonObject>();
+        for (JsonPair kv : wifiObj) wifi[kv.key().c_str()] = kv.value().as<String>();
     } else {
         count++;
         log_e("Fail");

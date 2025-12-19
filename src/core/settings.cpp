@@ -1552,7 +1552,7 @@ void setTheme() {
         bruceConfig.saveFile();
     }
 }
-
+#if !defined(LITE_VERSION)
 BLE_API bleApi;
 static bool ble_api_enabled = false;
 
@@ -1569,3 +1569,4 @@ void enableBLEAPI() {
 
     ble_api_enabled = !ble_api_enabled;
 }
+#endif

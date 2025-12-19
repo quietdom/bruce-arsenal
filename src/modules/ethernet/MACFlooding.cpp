@@ -7,7 +7,7 @@
  * @version 0.1
  * @date 2025-07-15
  */
-
+#if !defined(LITE_VERSION)
 #include "MACFlooding.h"
 #include "Arduino.h"
 #include "core/display.h"
@@ -167,3 +167,4 @@ void MACFlooding::send_packet() {
     // Send packet
     netif->linkoutput(netif, p);
 }
+#endif

@@ -146,6 +146,7 @@ PRINT:
 }
 
 void rf_CC1101_rssi() {
+#if !defined(LITE_VERSION)
     if (bruceConfigPins.rfModule != CC1101_SPI_MODULE) {
         displayError("only for CC1101 module", true);
         return;
@@ -264,4 +265,7 @@ void rf_CC1101_rssi() {
         }
     }
     deinitRfModule();
+#else
+    displayError("Not available on Launcher version");
+#endif
 }

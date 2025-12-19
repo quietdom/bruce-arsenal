@@ -46,7 +46,9 @@ void ConfigMenu::optionsMenu() {
         {"Startup WiFi", setWifiStartupConfig},
         {"Startup App", setStartupApp},
         {"Hide/Show Apps", []() { mainMenu.hideAppsMenu(); }},
+#if !defined(LITE_VERSION)
         {"Toggle BLE API", []() { enableBLEAPI(); }},
+#endif
         {"Network Creds", setNetworkCredsMenu},
         {"BadUSB/BLE", setBadUSBBLEMenu},
         {"Clock", setClock},

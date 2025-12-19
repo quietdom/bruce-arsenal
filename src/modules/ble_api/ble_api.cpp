@@ -1,3 +1,4 @@
+#if !defined(LITE_VERSION)
 #include "ble_api.hpp"
 #include <NimBLEDevice.h>
 #include <core/USBSerial/USBSerial.h>
@@ -51,3 +52,4 @@ void BLE_API::end() {
 #endif
     serialDevice = &USBserial;
 }
+#endif

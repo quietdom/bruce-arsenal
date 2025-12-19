@@ -6,7 +6,7 @@
  * @version 0.1
  * @date 2025-07-07
  */
-
+#if !defined(LITE_VERSION)
 #include "DHCPStarvation.h"
 #include "Arduino.h"
 #include "core/display.h"
@@ -172,3 +172,4 @@ void DHCPStarvation::send_DHCP_packet() {
     // Send packet
     netif->linkoutput(netif, p);
 }
+#endif

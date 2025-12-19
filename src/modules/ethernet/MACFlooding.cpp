@@ -45,38 +45,14 @@ MACFlooding::~MACFlooding() { pbuf_free(p); }
 void MACFlooding::show_gui() {
     drawMainBorderWithTitle("MAC Flooding");
 
-    displayTextLine("Press prev to stop");
+    displayTextLine("Press Any key to stop");
 }
 
 void MACFlooding::loop() {
+    AnyKeyPress = false;
     while (true) {
         send_packet();
-        if (PrevPress) {
-#if !defined(HAS_KEYBOARD) && !defined(HAS_ENCODER)
-            LongPress = true;
-            long _tmp = millis();
-            while (PrevPress) {
-                if (millis() - _tmp > 150)
-                    tft.drawArc(
-                        tftWidth / 2,
-                        tftHeight / 2,
-                        25,
-                        15,
-                        0,
-                        360 * (millis() - _tmp) / 700,
-                        getColorVariation(bruceConfig.priColor),
-                        bruceConfig.bgColor
-                    );
-                vTaskDelay(10 / portTICK_RATE_MS);
-            }
-            LongPress = false;
-            if (millis() - _tmp > 700) { // longpress detected to exit
-                returnToMenu = true;
-                break;
-            }
-#endif
-            check(PrevPress);
-        }
+        if (check(AnyKeyPress)) { break; }
     }
 }
 

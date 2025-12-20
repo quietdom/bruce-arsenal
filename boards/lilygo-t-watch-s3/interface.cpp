@@ -166,21 +166,21 @@ void InputHandler(void) {
         if (getTouched()) {
             touch.getPoint(t.x, t.y, 1);
             // Serial.printf("\nRAW: Touch Pressed on x=%d, y=%d",t.x, t.y);
-            if (bruceConfig.rotation == 3) {
+            if (bruceConfigPins.rotation == 3) {
                 t.y[0] = (tftHeight + 20) - t.y[0];
                 t.x[0] = t.x[0];
             }
-            if (bruceConfig.rotation == 0) {
+            if (bruceConfigPins.rotation == 0) {
                 int tmp = t.x[0];
                 t.x[0] = tftWidth - t.y[0];
                 t.y[0] = tftHeight - tmp;
             }
-            if (bruceConfig.rotation == 2) {
+            if (bruceConfigPins.rotation == 2) {
                 int tmp = t.x[0];
                 t.x[0] = t.y[0];
                 t.y[0] = tmp;
             }
-            if (bruceConfig.rotation == 1) { t.x[0] = tftWidth - t.x[0]; }
+            if (bruceConfigPins.rotation == 1) { t.x[0] = tftWidth - t.x[0]; }
             // Serial.printf("\nROT: Touch Pressed on x=%d, y=%d\n",t.x[0], t.y[0]);
 
             if (!wakeUpScreen()) AnyKeyPress = true;

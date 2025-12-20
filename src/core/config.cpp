@@ -11,7 +11,6 @@ JsonDocument BruceConfig::toJson() const {
     setting["themeFile"] = themePath;
     setting["themeOnSd"] = theme.fs;
 
-    setting["rot"] = rotation;
     setting["dimmerSet"] = dimmerSet;
     setting["bright"] = bright;
     setting["tmz"] = tmz;
@@ -146,12 +145,6 @@ void BruceConfig::fromFile(bool checkFS) {
         log_e("Fail");
     }
 
-    if (!setting["rot"].isNull()) {
-        rotation = setting["rot"].as<int>();
-    } else {
-        count++;
-        log_e("Fail");
-    }
     if (!setting["dimmerSet"].isNull()) {
         dimmerSet = setting["dimmerSet"].as<int>();
     } else {
@@ -246,9 +239,7 @@ void BruceConfig::fromFile(bool checkFS) {
     if (!setting["webUISessions"].isNull()) {
         webUISessions.clear();
         JsonObject webUISessionsObj = setting["webUISessions"].as<JsonObject>();
-        for (JsonPair kv : webUISessionsObj) {
-            webUISessions.push_back(kv.value().as<String>());
-        }
+        for (JsonPair kv : webUISessionsObj) { webUISessions.push_back(kv.value().as<String>()); }
     } else {
         count++;
         log_e("Fail");
@@ -422,7 +413,6 @@ void BruceConfig::factoryReset() {
 }
 
 void BruceConfig::validateConfig() {
-    validateRotationValue();
     validateDimmerValue();
     validateBrightValue();
     validateTmzValue();
@@ -450,16 +440,6 @@ void BruceConfig::validateConfig() {
 void BruceConfig::setUiColor(uint16_t primary, uint16_t *secondary, uint16_t *background) {
     BruceTheme::_setUiColor(primary, secondary, background);
     saveFile();
-}
-
-void BruceConfig::setRotation(int value) {
-    rotation = value;
-    validateRotationValue();
-    saveFile();
-}
-
-void BruceConfig::validateRotationValue() {
-    if (rotation < 0 || rotation > 3) rotation = 1;
 }
 
 void BruceConfig::setDimmer(int value) {

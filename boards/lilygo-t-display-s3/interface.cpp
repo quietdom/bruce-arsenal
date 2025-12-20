@@ -136,28 +136,28 @@ void InputHandler(void) {
         if (touch.read()) {
             auto t = touch.getPoint(0);
             tm = millis();
-            if (bruceConfig.rotation == 1) {
+            if (bruceConfigPins.rotation == 1) {
                 t.y = (tftHeight + 20) - t.y;
                 // t.x = tftWidth-t.x;
             }
-            if (bruceConfig.rotation == 3) {
+            if (bruceConfigPins.rotation == 3) {
                 // t.y = (tftHeight+20)-t.y;
                 t.x = tftWidth - t.x;
             }
             // Need to test the other orientations
 
-            if (bruceConfig.rotation == 0) {
+            if (bruceConfigPins.rotation == 0) {
                 int tmp = t.x;
                 t.x = tftWidth - t.y;
                 t.y = tmp;
             }
-            if (bruceConfig.rotation == 2) {
+            if (bruceConfigPins.rotation == 2) {
                 int tmp = t.x;
                 t.x = t.y;
                 t.y = (tftHeight + 20) - tmp;
             }
 
-            // Serial.printf("\nPressed x=%d , y=%d, rot: %d",t.x, t.y, bruceConfig.rotation);
+            // Serial.printf("\nPressed x=%d , y=%d, rot: %d",t.x, t.y, bruceConfigPins.rotation);
 
             if (!wakeUpScreen()) AnyKeyPress = true;
             else return;

@@ -54,7 +54,7 @@ void getBrightness() {
 **  get/set rotation value
 **********************************************************************/
 int gsetRotation(bool set) {
-    int getRot = bruceConfig.rotation;
+    int getRot = bruceConfigPins.rotation;
     int result = ROTATION;
     int mask = ROTATION > 1 ? -2 : 2;
 

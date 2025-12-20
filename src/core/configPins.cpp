@@ -19,6 +19,13 @@ void BruceConfigPins::fromJson(JsonObject obj) {
 
     JsonObject root = obj[mac].as<JsonObject>();
 
+    if (!root["rot"].isNull()) {
+        rotation = root["rot"].as<int>();
+    } else {
+        count++;
+        log_e("Fail");
+    }
+
     if (!root["bleName"].isNull()) {
         bleName = root["bleName"].as<String>();
     } else {
@@ -105,18 +112,6 @@ void BruceConfigPins::fromJson(JsonObject obj) {
         log_e("Fail");
     }
 
-    if (!root["LoRa_Pins"].isNull()) {
-        SPIPins def = LoRa_bus;
-        LoRa_bus.fromJson(root["LoRa_Pins"].as<JsonObject>());
-        if (LoRa_bus.sck == GPIO_NUM_NC && def.sck != GPIO_NUM_NC) {
-            LoRa_bus = def;
-            count++;
-        }
-    } else {
-        count++;
-        log_e("Fail");
-    }
-
     if (!root["CC1101_Pins"].isNull()) {
         SPIPins def = CC1101_bus;
         CC1101_bus.fromJson(root["CC1101_Pins"].as<JsonObject>());
@@ -159,6 +154,18 @@ void BruceConfigPins::fromJson(JsonObject obj) {
         count++;
         log_e("Fail");
     }
+
+    if (!root["LoRa_Pins"].isNull()) {
+        SPIPins def = LoRa_bus;
+        LoRa_bus.fromJson(root["LoRa_Pins"].as<JsonObject>());
+        if (LoRa_bus.sck == GPIO_NUM_NC && def.sck != GPIO_NUM_NC) {
+            LoRa_bus = def;
+            count++;
+        }
+    } else {
+        count++;
+        log_e("Fail");
+    }
 #endif
     // if (!root["sys_i2c"].isNull()) {
     //     sys_i2c.fromJson(root["sys_i2c"].as<JsonObject>());
@@ -191,6 +198,7 @@ void BruceConfigPins::fromJson(JsonObject obj) {
 void BruceConfigPins::toJson(JsonObject obj) const {
     JsonObject root = obj[getMacAddress()].to<JsonObject>();
 
+    root["rot"] = rotation;
     root["irTx"] = irTx;
     root["irTxRepeats"] = irTxRepeats;
     root["irRx"] = irRx;
@@ -205,9 +213,6 @@ void BruceConfigPins::toJson(JsonObject obj) const {
     root["gpsBaudrate"] = gpsBaudrate;
     root["iButton"] = iButton;
 
-    JsonObject _LoRa = root["LoRa_Pins"].to<JsonObject>();
-    LoRa_bus.toJson(_LoRa);
-
     JsonObject _CC1101 = root["CC1101_Pins"].to<JsonObject>();
     CC1101_bus.toJson(_CC1101);
 
@@ -216,9 +221,13 @@ void BruceConfigPins::toJson(JsonObject obj) const {
 
     JsonObject _SD = root["SDCard_Pins"].to<JsonObject>();
     SDCARD_bus.toJson(_SD);
+
 #if !defined(LITE_VERSION)
     JsonObject _W5500 = root["W5500_Pins"].to<JsonObject>();
     W5500_bus.toJson(_W5500);
+
+    JsonObject _LoRa = root["LoRa_Pins"].to<JsonObject>();
+    LoRa_bus.toJson(_LoRa);
 #endif
     // JsonObject _si2c = root["sys_i2c"].as<JsonObject>();
     // sys_i2c.toJson(_si2c);
@@ -321,11 +330,15 @@ void BruceConfigPins::factoryReset() {
 }
 
 void BruceConfigPins::validateConfig() {
+    validateRotationValue();
     validateRfScanRangeValue();
     validateRfModuleValue();
     validateRfidModuleValue();
     validateGpsBaudrateValue();
+#if !defined(LITE_VERSION)
     validateSpiPins(LoRa_bus);
+    validateSpiPins(W5500_bus);
+#endif
     validateSpiPins(CC1101_bus);
     validateSpiPins(NRF24_bus);
     validateSpiPins(SDCARD_bus);
@@ -333,13 +346,18 @@ void BruceConfigPins::validateConfig() {
     validateUARTPins(uart_bus);
     validateUARTPins(gps_bus);
 }
-
+#if !defined(LITE_VERSION)
 void BruceConfigPins::setLoRaPins(SPIPins value) {
     LoRa_bus = value;
     validateSpiPins(LoRa_bus);
     saveFile();
 }
-
+void BruceConfigPins::setW5500Pins(SPIPins value) {
+    LoRa_bus = value;
+    validateSpiPins(W5500_bus);
+    saveFile();
+}
+#endif
 void BruceConfigPins::setCC1101Pins(SPIPins value) {
     CC1101_bus = value;
     validateSpiPins(CC1101_bus);
@@ -389,6 +407,16 @@ void BruceConfigPins::validateI2CPins(I2CPins value) {
 void BruceConfigPins::validateUARTPins(UARTPins value) {
     if (value.rx < 0 || value.rx > GPIO_PIN_COUNT) value.rx = GPIO_NUM_NC;
     if (value.tx < 0 || value.tx > GPIO_PIN_COUNT) value.tx = GPIO_NUM_NC;
+}
+
+void BruceConfigPins::setRotation(int value) {
+    rotation = value;
+    validateRotationValue();
+    saveFile();
+}
+
+void BruceConfigPins::validateRotationValue() {
+    if (rotation < 0 || rotation > 3) rotation = 1;
 }
 
 void BruceConfigPins::setBleName(String value) {

@@ -36,7 +36,6 @@ public:
     const char *filepath = "/bruce.conf";
 
     // Settings
-    int rotation = ROTATION > 1 ? 3 : 1;
     int dimmerSet = 10;
     int bright = 100;
     float tmz = 0;
@@ -111,8 +110,6 @@ public:
     void setUiColor(uint16_t primary, uint16_t *secondary = nullptr, uint16_t *background = nullptr);
 
     // Settings
-    void setRotation(int value);
-    void validateRotationValue();
     void setDimmer(int value);
     void validateDimmerValue();
     void setBright(uint8_t value);

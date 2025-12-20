@@ -76,7 +76,7 @@ int gsetRotation(bool set) {
         set = true;
     }
     if (set) {
-        bruceConfig.setRotation(result);
+        bruceConfigPins.setRotation(result);
         tft.setRotation(result);
         tft.setRotation(result); // must repeat, sometimes ESP32S3 miss one SPI command and it just
                                  // jumps this step and don't rotate

@@ -141,6 +141,9 @@ uint32_t helpCallback(cmd *c) {
         "  wifi on  (Connects to a known Wifi network. if there's no known network, starts in AP Mode)"
     );
     serialDevice->println("  wifi add \"SSID\" \"Password\" (adds a network to the list)");
+    serialDevice->println("  scanhosts  - Starts Scan Hosts ARP Scanner");
+    serialDevice->println("  listen   - Starts listening TCP default port");
+    serialDevice->println("  sniffer - Starts Raw Sniffer");
     serialDevice->println("\nWebUI Commands:");
     serialDevice->println("  webui      - WebUI Webserver start");
     serialDevice->println("\nIR Commands:");

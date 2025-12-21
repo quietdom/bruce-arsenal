@@ -5,6 +5,8 @@
 #include <modules/ethernet/ARPScanner.h>
 #include "esp_netif.h"          
 #include "esp_netif_net_stack.h"
+#include "modules/wifi/tcp_utils.h"
+#include "modules/wifi/sniffer.h"
 
 uint32_t wifiCallback(cmd *c) {
     Command cmd(c);
@@ -74,6 +76,20 @@ uint32_t scanHostsCallback(cmd *c) {
     return true;
 }
 
+uint32_t snifferCallback(cmd *c) {
+    sniffer_setup();
+
+    return true;
+}
+
+uint32_t listenTCPCallback(cmd *c) {
+    if (!wifiConnected) Serial.println("Connect to a WiFi first."); return false;
+
+    listenTcpPort();
+
+    return true;
+}
+
 void createWifiCommands(SimpleCLI *cli) {
     Command webuiCmd = cli->addCommand("webui", webuiCallback);
     webuiCmd.addFlagArg("noAp");
@@ -84,4 +100,8 @@ void createWifiCommands(SimpleCLI *cli) {
     wifiCmd.addPosArg("pwd", "");
 
     Command ScanHostsCmd = cli->addCommand("scanhosts", scanHostsCallback);
+
+    Command listenTCPCmd = cli->addCommand("listen", listenTCPCallback); //TODO: make possible to select port to open via Serial
+    
+    Command snifferCmd = cli->addCommand("sniffer", snifferCallback); //TODO: be able to exit from it from Serial
 }

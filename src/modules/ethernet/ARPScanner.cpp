@@ -126,6 +126,7 @@ void ping_target(ip_addr_t target) {
 }
 
 void ARPScanner::setup() {
+    LOCK_TCPIP_CORE();
     hostslist_eth.clear();
 
     // IPAddress uint32_t op returns number in big-endian

@@ -110,11 +110,14 @@ void createWifiCommands(SimpleCLI *cli) {
     wifiCmd.addPosArg("ssid", "");
     wifiCmd.addPosArg("pwd", "");
 
+    #if !defined(LITE_VERSION)
+
     Command ScanHostsCmd = cli->addCommand("arp", scanHostsCallback);
 
     Command listenTCPCmd = cli->addCommand("listen", listenTCPCallback); //TODO: make possible to select port to open via Serial
     
     Command snifferCmd = cli->addCommand("sniffer", snifferCallback); //TODO: be able to exit from it from Serial
     
+    #endif
     //Command responderCmd = cli->addCommand("responder", responderCallback); TODO
 }

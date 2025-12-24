@@ -316,9 +316,11 @@ void ARPScanner::afterScanOptions(const Host &host) {
                  ESP_LOGE("MAC Address", "Failed to get MAC address: %s", esp_err_to_name(err));
              }
          }},
+#if !defined(LITE_VERSION)
         {"ARP Poisoning", [this]() { ARPoisoner{gateway}; }},
         {"DHCP Starvation", [=]() { DHCPStarvation(); }      },
         {"MAC Flooding",    [=]() { MACFlooding(); }         },
+#endif
     };
     // if(sdcardMounted && bruceConfig.devMode) options.push_back({"ARP MITM (WIP)",  [&](){ opt=5;  }});
     loopOptions(options);

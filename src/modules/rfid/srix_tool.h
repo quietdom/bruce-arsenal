@@ -2,6 +2,7 @@
  * @file srix_tool.cpp
  * @brief SRIX4K/SRIX512 Reader/Writer Tool v1.0
  * @author Senape3000
+ * @info https://github.com/Senape3000/firmware/blob/main/docs_custom/SRIX/SRIX_Tool_README.md
  * @date 2026-01-01
  */
 

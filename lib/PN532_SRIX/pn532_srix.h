@@ -14,7 +14,7 @@
  *
  * @author Lilz
  * @license  GNU Lesser General Public License v3.0 (see license.txt)
- * @Some small mod from Senape3000
+ *  Refactored by Senape3000 to reuse Adafruit_PN532 constants only
  *  This is a library for the communication with an I2C PN532 NFC/RFID breakout board.
  *  adapted from Adafruit's library.
  *  This library supports only I2C to communicate.
@@ -23,29 +23,11 @@
 #ifndef PN532_SRIX_H
 #define PN532_SRIX_H
 
-#include "Arduino.h" // Arduino header
+#include <Adafruit_PN532.h> // Only for constants (#define)
+#include <Arduino.h>
+#include <Wire.h>
 
-// Settings
-// Uncomment/comment to enable/disable debug
-// #define PN532DEBUG
-#define PN532DEBUGPRINT Serial // If debug is enabled, specify the serial
-
-// PN532 Commands
-#define PN532_COMMAND_GETFIRMWAREVERSION (0x02)
-#define PN532_COMMAND_SAMCONFIGURATION (0x14)
-#define PN532_COMMAND_RFCONFIGURATION (0x32)
-#define PN532_COMMAND_INLISTPASSIVETARGET (0x4A)
-#define PN532_COMMAND_INCOMMUNICATETHRU (0x42)
-
-// PN532 I2C
-#define PN532_I2C_ADDRESS (0x48 >> 1)
-#define PN532_PREAMBLE (0x00)
-#define PN532_POSTAMBLE (0x00)
-#define PN532_STARTCODE (0xFF)
-#define PN532_HOSTTOPN532 (0xD4)
-#define PN532_PN532TOHOST (0xD5)
-
-// SRIX4K
+// SRIX4K-specific commands
 #define SRIX4K_INITIATE (0x06)
 #define SRIX4K_SELECT (0x0E)
 #define SRIX4K_READBLOCK (0x08)
@@ -54,36 +36,31 @@
 
 class Arduino_PN532_SRIX {
 public:
-    Arduino_PN532_SRIX(uint8_t irq, uint8_t reset); // Hardware I2C
+    Arduino_PN532_SRIX(uint8_t irq, uint8_t reset);
     Arduino_PN532_SRIX();
-    bool init(void);
 
-    // Generic PN532 functions
-    uint32_t getFirmwareVersion(void);
+    bool init();
+    uint32_t getFirmwareVersion();
     bool setPassiveActivationRetries(uint8_t maxRetries);
 
-    // SRIX functions
-    bool SRIX_init(void);
-    bool SRIX_initiate_select(void);
+    bool SRIX_init();
+    bool SRIX_initiate_select();
     bool SRIX_read_block(uint8_t address, uint8_t *block);
     bool SRIX_write_block(uint8_t address, uint8_t *block);
-    bool SRIX_get_uid(uint8_t *block);
+    bool SRIX_get_uid(uint8_t *buffer);
 
 private:
-    uint8_t _irq = 0, _reset = 0;
+    uint8_t _irq, _reset;
+    uint8_t _packetbuffer[64];
 
-    // PN532 Init (called by init function)
-    bool SAMConfig(void);
-
-    // High level communication functions that handle I2C.
+    // Low-level I2C functions (reimplemented from original)
+    bool SAMConfig();
     void readData(uint8_t *buffer, uint8_t n);
     bool readACK();
     bool isReady();
     bool waitReady(uint16_t timeout);
-
-    // Send command to PN532 over I2C
     void writeCommand(uint8_t *command, uint8_t commandLength);
     bool sendCommandCheckAck(uint8_t *command, uint8_t commandLength, uint16_t timeout = 100);
 };
 
-#endif // PN532_SRIX_H
+#endif

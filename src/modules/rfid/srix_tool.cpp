@@ -1,6 +1,6 @@
 /**
  * @file srix_tool.cpp
- * @brief SRIX4K/SRIX512 Reader/Writer Tool v1.0
+ * @brief SRIX4K/SRIX512 Reader/Writer Tool v1.2
  * @author Senape3000
  * @info https://github.com/Senape3000/firmware/blob/main/docs_custom/SRIX/SRIX_Tool_README.md
  * @date 2026-01-01
@@ -55,13 +55,20 @@ void SRIXTool::setup() {
         return;
     }
 
+    padprintln("Init OK, testing retries...");
+
     // Configure for SRIX
-    nfc->setPassiveActivationRetries(0xFF);
+    if (!nfc->setPassiveActivationRetries(0xFF)) {
+        displayError("Retry config failed!", true);
+        delay(500);
+        return;
+    }
+
+    padprintln("Testing SRIX init...");
     if (!nfc->SRIX_init()) {
         displayError("SRIX init failed!", true);
         return;
     }
-
     uint32_t ver = nfc->getFirmwareVersion();
     if (ver) {
         uint8_t chip = (ver >> 24) & 0xFF;
@@ -71,6 +78,7 @@ void SRIXTool::setup() {
         padprintln("Chip: PN5" + String(chip, HEX));
         padprintln("FW: " + String(fw_major) + "." + String(fw_minor));
     }
+    delay(2000);
     displaySuccess("PN532-SRIX ready!");
     delay(2500);
 
@@ -161,7 +169,7 @@ void SRIXTool::show_main_menu() {
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.setTextSize(FP);
 
-    padprintln("SRIX Tool for SRIX4K/512 v1.1");
+    padprintln("SRIX Tool for SRIX4K/512 v1.2");
     padprintln("");
     padprintln("Features:");
     padprintln("- Read/Clone complete tag (512B)");
@@ -279,8 +287,8 @@ void SRIXTool::read_tag() {
         _dump[off + 2] = block[2];
         _dump[off + 3] = block[3];
 
-        // Progress indicator every 16 blocks
-        if ((b + 1) % 16 == 0) { tft.print("."); }
+        // Progress indicator
+        progressHandler(b + 1, 128, "Reading data blocks");
     }
 
     _dump_valid_from_read = true;
@@ -379,7 +387,7 @@ void SRIXTool::write_tag() {
             blocks_written++;
         }
 
-        if ((b + 1) % 16 == 0) { tft.print("."); }
+        progressHandler(b + 1, 128, "Writing data blocks");
     }
 
     padprintln("");
@@ -387,11 +395,10 @@ void SRIXTool::write_tag() {
 
     // Final report
     if (blocks_failed == 0) {
-        displaySuccess("Write complete!");
-        padprintln("All 128 blocks written");
+        displaySuccess("Write complete!", true);
 
     } else if (blocks_written > 0) {
-        displayWarning("Partial write!");
+        displayWarning("Partial write!", true);
         padprintln("");
         padprintln("Written: " + String(blocks_written) + "/128");
         padprintln("Failed: " + String(blocks_failed));
@@ -406,7 +413,7 @@ void SRIXTool::write_tag() {
         }
 
     } else {
-        displayError("Write failed!");
+        displayError("Write failed!", true);
         padprintln("No blocks written");
     }
 
@@ -537,6 +544,14 @@ void SRIXTool::save_file() {
     // Ask the user for the file name
     String filename = keyboard(uid_str, 30, "File name:");
     filename.trim();
+
+    if (filename == "\x1B") {
+        // User cancelled the operation
+        padprintln("Operation cancelled.");
+        delay(2000);
+        set_state(IDLE_MODE); // O torna allo stato precedente
+        return;
+    }
 
     if (filename.isEmpty()) {
         displayError("Invalid filename!");

@@ -112,22 +112,22 @@ public:
         if (pin >= 0 && pin <= 15) { setPinDirection(pin, INPUT); }
     }
 
-    bool enableGPIOInterrupts() {
-        if (!_started) return false;
+  bool enableGPIOInterrupts() {
+    if (!_started) return false;
 
-        uint16_t mask = 0x0000;
+    // Start with ALL interrupts DISABLED (bits = 1 = disable)
+    uint16_t mask = 0xFFFF;
 
-        // Add all declared pins that are likely used as inputs
-        if (IO_EXP_UP >= 0) mask |= (1 << IO_EXP_UP);
-        if (IO_EXP_DOWN >= 0) mask |= (1 << IO_EXP_DOWN);
-        if (IO_EXP_ESC >= 0) mask |= (1 << IO_EXP_ESC);
-        if (IO_EXP_LEFT >= 0) mask |= (1 << IO_EXP_LEFT);
-        if (IO_EXP_RIGHT >= 0) mask |= (1 << IO_EXP_RIGHT);
-        if (IO_EXP_SEL >= 0) mask |= (1 << IO_EXP_SEL);
+    // Clear bits (set to 0 = enable) for the input/button pins
+    if (IO_EXP_UP    >= 0 && IO_EXP_UP    <= 15) mask &= ~(1 << IO_EXP_UP);
+    if (IO_EXP_DOWN  >= 0 && IO_EXP_DOWN  <= 15) mask &= ~(1 << IO_EXP_DOWN);
+    if (IO_EXP_ESC   >= 0 && IO_EXP_ESC   <= 15) mask &= ~(1 << IO_EXP_ESC);
+    if (IO_EXP_LEFT  >= 0 && IO_EXP_LEFT  <= 15) mask &= ~(1 << IO_EXP_LEFT);
+    if (IO_EXP_RIGHT >= 0 && IO_EXP_RIGHT <= 15) mask &= ~(1 << IO_EXP_RIGHT);
+    if (IO_EXP_SEL   >= 0 && IO_EXP_SEL   <= 15) mask &= ~(1 << IO_EXP_SEL);
 
-        return interruptEnableGPIO(mask);
-    }
-
+    return interruptEnableGPIO(mask);
+}
     // Optional: turn off all interrupts
     void disableGPIOInterrupts() {
         if (_started) interruptEnableGPIO(0x0000);

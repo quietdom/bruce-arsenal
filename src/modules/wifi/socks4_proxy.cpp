@@ -1,6 +1,11 @@
 /**
- * SOCKS4 / SOCKS4a proxy server for Bruce firmware.
- * Protocol ref: https://www.openssh.com/txt/socks4.protocol
+ * SOCKS4 / SOCKS4a proxy **server** for Bruce (ESP32 as proxy).
+ *
+ * Protocol: https://www.openssh.com/txt/socks4.protocol
+ *
+ * Asio: espressif/asio is archived; Asio lives in esp-protocols (upstream Asio).
+ * Official socks4 example is a **client** (connect to proxy). We implement the server.
+ * See socks4_proxy.h for links.
  */
 #include "modules/wifi/socks4_proxy.h"
 #include "core/display.h"
@@ -79,12 +84,12 @@ void socks4Proxy(uint16_t port) {
     WiFiServer server(port);
     server.begin();
 
-    tft.fillScreen(TFT_BLACK);
+    tft.fillScreen(bruceConfig.bgColor);
     tft.setTextSize(2);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.drawCentreString("SOCKS4 Proxy", tftWidth / 2, 10, 1);
-    tft.setTextSize(1);
     tft.setCursor(0, 28);
+    tft.setTextSize(1);
     tft.println("Port: " + String(port));
     tft.println("IP: " + WiFi.localIP().toString());
     tft.println("Esc: exit");

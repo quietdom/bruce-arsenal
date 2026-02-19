@@ -122,7 +122,7 @@ uint32_t rfTxFileCallback(cmd *c) {
 
     RfCodes data{};
 
-    return readSubFile(&PSRamFS, filepath, data) && txSubFile(data, hideDefaultUI);
+    return readSubFile(fs, filepath, data) && txSubFile(data, hideDefaultUI);
 }
 
 uint32_t rfTxBufferCallback(cmd *c) {

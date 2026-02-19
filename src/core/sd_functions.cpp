@@ -753,7 +753,10 @@ String loopSD(FS &fs, bool filePicker, String allowed_ext, String rootPath) {
                     if (filepath.endsWith(".sub"))
                         options.insert(options.begin(), {"Subghz Tx", [&]() {
                                                              delay(200);
-                                                             txSubFile(&fs, filepath);
+                                                             RfCodes data{};
+
+                                                             if (readSubFile(&fs, filepath, data))
+                                                                txSubFile(data);
                                                          }});
                     if (filepath.endsWith(".csv")) {
                         options.insert(options.begin(), {"Wigle Upload", [&]() {

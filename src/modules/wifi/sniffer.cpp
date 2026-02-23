@@ -1297,7 +1297,7 @@ Exit:
     esp_wifi_set_promiscuous(false);
     esp_wifi_stop();
     esp_wifi_set_promiscuous_rx_cb(NULL);
-    esp_wifi_deinit();
+    // DO NOT call esp_wifi_deinit() here - let wifi_common.h handle it
     sniffer_wait_for_flush(1000);
     closeRawFile();
     closeDeauthFile();

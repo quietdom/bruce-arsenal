@@ -18,13 +18,28 @@ class EvilPortal {
     };
 
 public:
-    EvilPortal(String tssid = "", uint8_t channel = 6, bool deauth = false, bool verifyPwd = false, bool autoMode = false);
+    // Constructor with background mode support
+    EvilPortal(String tssid = "", uint8_t channel = 6, bool deauth = false, 
+               bool verifyPwd = false, bool autoMode = false, bool backgroundMode = false);
     ~EvilPortal();
 
     bool setup(void);
     void beginAP(void);
     void setupRoutes(void);
-    void loop(void);
+    void loop(void);                    // Full UI loop (foreground mode)
+    void processRequests(void);         // Lightweight heartbeat (background mode)
+
+    // Karma Integration Methods
+    bool hasCredentials();
+    String getCapturedSSID();
+    String getCapturedPassword();
+    
+    // Background mode accessors
+    DNSServer& getDNSServer() { return dnsServer; }
+    AsyncWebServer& getWebServer() { return webServer; }
+    String getApName() { return apName; }
+    uint8_t getChannel() { return _channel; }
+    bool isBackgroundMode() { return _backgroundMode; }
 
 private:
     String apName = "Free Wifi";
@@ -33,6 +48,7 @@ private:
     bool isDeauthHeld = false;
     bool _verifyPwd;
     bool _autoMode;
+    bool _backgroundMode;               // New flag for background operation
     AsyncWebServer webServer;
 
     DNSServer dnsServer;

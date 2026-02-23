@@ -712,7 +712,7 @@ String rf_scan(float start_freq, float stop_freq, int max_loops) {
     return out;
 }
 
-String RCSwitch_Read(float frequency, int max_loops, bool raw) {
+String RCSwitch_Read(float frequency, int max_loops, bool raw, bool headless) {
     RCSwitch rcswitch = RCSwitch();
     RfCodes received;
 
@@ -721,10 +721,12 @@ String RCSwitch_Read(float frequency, int max_loops, bool raw) {
     char hexString[64];
 
 RestartRec:
-    drawMainBorder();
-    tft.setCursor(10, 28);
-    tft.setTextSize(FP);
-    tft.println("Waiting for a " + String(frequency) + " MHz " + "signal.");
+    if (!headless) {
+        drawMainBorder();
+        tft.setCursor(10, 28);
+        tft.setTextSize(FP);
+        tft.println("Waiting for a " + String(frequency) + " MHz " + "signal.");
+    }
 
     // init receive
     if (!initRfModule("rx", frequency)) return "";
@@ -765,7 +767,7 @@ RestartRec:
                 // Serial.println(received.data);
                 decimalToHexString(received.key, hexString);
 
-                display_info(received, 1, raw);
+                if (!headless) display_info(received, 1, raw);
             }
             rcswitch.resetAvailable();
         }
@@ -790,7 +792,7 @@ RestartRec:
                 received.filepath = "unsaved";
                 received.data = "";
 
-                display_info(received, 1, raw);
+                if (!headless) display_info(received, 1, raw);
             }
             // ResetSignal:
             rcswitch.resetAvailable();

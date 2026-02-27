@@ -302,26 +302,50 @@ void EvilPortal::loop() {
                 displayTextLine("Shutting down...");
                 vTaskDelay(100 / portTICK_PERIOD_MS);
                 
-                webServer.end();
+                // Step 1: Stop DNS
+                drawMainBorderWithTitle("DEBUG STEP 1/5");
+                padprintln("Stopping DNS server...");
+                padprintln("");
+                padprintln("Press SEL to continue");
                 dnsServer.stop();
+                while(!check(SelPress)) { vTaskDelay(50); }
+                
+                // Step 2: End web server
+                drawMainBorderWithTitle("DEBUG STEP 2/5");
+                padprintln("Ending web server...");
+                padprintln("");
+                padprintln("Press SEL to continue");
+                webServer.end();
+                while(!check(SelPress)) { vTaskDelay(50); }
                 vTaskDelay(200 / portTICK_PERIOD_MS);
                 
+                // Step 3: Remove handler
+                drawMainBorderWithTitle("DEBUG STEP 3/5");
+                padprintln("Removing handler...");
+                padprintln("");
+                padprintln("Press SEL to continue");
                 if (_captiveHandler) {
                     webServer.removeHandler(_captiveHandler);
                     delete _captiveHandler;
                     _captiveHandler = nullptr;
                 }
-                vTaskDelay(100 / portTICK_PERIOD_MS);
+                while(!check(SelPress)) { vTaskDelay(50); }
                 
-                // Full WiFi deinit like sniffer
-                esp_wifi_set_promiscuous(false);
-                esp_wifi_stop();
-                esp_wifi_set_promiscuous_rx_cb(NULL);
-                esp_wifi_deinit();
+                // Step 4: Disconnect WiFi
+                drawMainBorderWithTitle("DEBUG STEP 4/5");
+                padprintln("Disconnecting WiFi...");
+                padprintln("");
+                padprintln("Press SEL to continue");
+                wifiDisconnect();
+                while(!check(SelPress)) { vTaskDelay(50); }
                 vTaskDelay(200 / portTICK_PERIOD_MS);
                 
-                WiFi.mode(WIFI_OFF);
-                vTaskDelay(100 / portTICK_PERIOD_MS);
+                // Step 5: Return
+                drawMainBorderWithTitle("DEBUG STEP 5/5");
+                padprintln("Returning to menu...");
+                padprintln("");
+                padprintln("Press SEL to exit");
+                while(!check(SelPress)) { vTaskDelay(50); }
                 
                 return;
             }

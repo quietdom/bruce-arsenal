@@ -25,14 +25,7 @@ EvilPortal::EvilPortal(
     // In background mode, caller manages heartbeat via processRequests()
 }
 
-EvilPortal::~EvilPortal() {
-    // Minimal destructor - cleanup done in loop if needed
-    if (_captiveHandler) {
-        webServer.removeHandler(_captiveHandler);
-        delete _captiveHandler;
-        _captiveHandler = nullptr;
-    }
-}
+// No destructor needed - all cleanup done in loop()
 
 void EvilPortal::CaptiveRequestHandler::handleRequest(AsyncWebServerRequest *request) {
     AsyncResponseStream *response = request->beginResponseStream("text/html");

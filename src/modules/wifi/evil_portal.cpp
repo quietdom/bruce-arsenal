@@ -298,7 +298,18 @@ void EvilPortal::loop() {
             shouldRedraw = true;
         }
 
-        if (check(EscPress)) break;
+        if (check(EscPress)) {
+            // Clean up portal services
+            if (_captiveHandler) {
+                webServer.removeHandler(_captiveHandler);
+                delete _captiveHandler;
+                _captiveHandler = nullptr;
+            }
+            webServer.end();
+            dnsServer.stop();
+            vTaskDelay(100 / portTICK_PERIOD_MS);
+            return;
+        }
 
         if (verifyPass) {
             wifiDisconnect();

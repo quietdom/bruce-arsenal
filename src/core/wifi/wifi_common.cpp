@@ -124,7 +124,6 @@ void wifiDisconnect() {
     WiFi.disconnect(true, true); // turn off STA mode
     WiFi.mode(WIFI_OFF);         // enforces WIFI_OFF mode
     wifiConnected = false;
-    returnToMenu = true;
 }
 
 bool wifiConnectMenu(wifi_mode_t mode) {

@@ -300,7 +300,39 @@ void EvilPortal::loop() {
         }
 
         if (check(EscPress)) {
-            return;
+            options = {
+                {"Exit Portal", [this]() { 
+                    displayTextLine("Shutting down...");
+                    vTaskDelay(100 / portTICK_PERIOD_MS);
+                    
+                    // Stop accepting new connections
+                    webServer.end();
+                    dnsServer.stop();
+                    vTaskDelay(200 / portTICK_PERIOD_MS);
+                    
+                    // Clean up handler
+                    if (_captiveHandler) {
+                        webServer.removeHandler(_captiveHandler);
+                        delete _captiveHandler;
+                        _captiveHandler = nullptr;
+                    }
+                    vTaskDelay(100 / portTICK_PERIOD_MS);
+                    
+                    // Turn off WiFi
+                    wifiDisconnect();
+                    vTaskDelay(200 / portTICK_PERIOD_MS);
+                    
+                    returnToMenu = true;
+                }},
+                {"Resume", [this]() {
+                    // Just continue
+                    shouldRedraw = true;
+                }}
+            };
+            
+            loopOptions(options);
+            if (returnToMenu) return;
+            shouldRedraw = true;
         }
 
         if (verifyPass) {

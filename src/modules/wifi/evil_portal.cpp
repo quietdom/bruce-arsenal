@@ -313,8 +313,15 @@ void EvilPortal::loop() {
                 }
                 vTaskDelay(100 / portTICK_PERIOD_MS);
                 
-                wifiDisconnect();
+                // Full WiFi deinit like sniffer
+                esp_wifi_set_promiscuous(false);
+                esp_wifi_stop();
+                esp_wifi_set_promiscuous_rx_cb(NULL);
+                esp_wifi_deinit();
                 vTaskDelay(200 / portTICK_PERIOD_MS);
+                
+                WiFi.mode(WIFI_OFF);
+                vTaskDelay(100 / portTICK_PERIOD_MS);
                 
                 return;
             }

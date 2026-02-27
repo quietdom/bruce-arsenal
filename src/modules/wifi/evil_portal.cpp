@@ -407,8 +407,12 @@ void EvilPortal::loadCustomHtml() {
     if (htmlFile) {
         String firstLine = htmlFile.readStringUntil('\n');
         htmlFile.close();
-        int apStart = firstLine.indexOf("", apStart);
-            if (apEnd != -1) { apName = firstLine.substring(apStart + 9, apEnd); }
+        int apStart = firstLine.indexOf("<!-- AP=\"");
+        if (apStart != -1) {
+            int apEnd = firstLine.indexOf("\" -->", apStart);
+            if (apEnd != -1) {
+                apName = firstLine.substring(apStart + 9, apEnd);
+            }
         }
     }
 }

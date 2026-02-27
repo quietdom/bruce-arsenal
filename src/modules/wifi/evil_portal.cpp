@@ -35,7 +35,6 @@ EvilPortal::~EvilPortal() {
     webServer.end();
     dnsServer.stop();
     vTaskDelay(100 / portTICK_PERIOD_MS);
-    wifiDisconnect();
 }
 
 void EvilPortal::CaptiveRequestHandler::handleRequest(AsyncWebServerRequest *request) {

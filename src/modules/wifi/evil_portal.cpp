@@ -324,8 +324,7 @@ void EvilPortal::loop() {
                     
                     returnToMenu = true;
                 }},
-                {"Resume", [this]() {
-                    // Just continue
+                {"Resume", [this, &shouldRedraw]() {
                     shouldRedraw = true;
                 }}
             };

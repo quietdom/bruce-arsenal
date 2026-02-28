@@ -310,17 +310,8 @@ void EvilPortal::loop() {
                 dnsServer.stop();
                 while(!check(SelPress)) { vTaskDelay(50); }
                 
-                // Step 2: End web server
+                // Step 2: Remove handler FIRST (before ending server)
                 drawMainBorderWithTitle("DEBUG STEP 2/5");
-                padprintln("Ending web server...");
-                padprintln("");
-                padprintln("Press SEL to continue");
-                webServer.end();
-                while(!check(SelPress)) { vTaskDelay(50); }
-                vTaskDelay(200 / portTICK_PERIOD_MS);
-                
-                // Step 3: Remove handler
-                drawMainBorderWithTitle("DEBUG STEP 3/5");
                 padprintln("Removing handler...");
                 padprintln("");
                 padprintln("Press SEL to continue");
@@ -330,6 +321,15 @@ void EvilPortal::loop() {
                     _captiveHandler = nullptr;
                 }
                 while(!check(SelPress)) { vTaskDelay(50); }
+                
+                // Step 3: THEN end web server
+                drawMainBorderWithTitle("DEBUG STEP 3/5");
+                padprintln("Ending web server...");
+                padprintln("");
+                padprintln("Press SEL to continue");
+                webServer.end();
+                while(!check(SelPress)) { vTaskDelay(50); }
+                vTaskDelay(200 / portTICK_PERIOD_MS);
                 
                 // Step 4: Disconnect WiFi
                 drawMainBorderWithTitle("DEBUG STEP 4/5");

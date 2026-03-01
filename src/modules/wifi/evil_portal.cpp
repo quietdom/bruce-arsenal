@@ -295,11 +295,11 @@ void EvilPortal::loop() {
         if (check(EscPress)) {
             options = {
                 {"Exit Portal (Placeholder)", [&exitPortal]() { exitPortal = true; }},
-                {"Debug Menu", [this, &shouldRedraw, &debugChoice]() {
+                {"Debug Menu", [this, &shouldRedraw, &debugChoice, &exitPortal]() {
                     std::vector<Option> debugOptions = {
-                        {"Handler First", [&debugChoice]() { debugChoice = 1; }},
-                        {"Handler Last", [&debugChoice]() { debugChoice = 2; }},
-                        {"WiFi First", [&debugChoice]() { debugChoice = 3; }},
+                        {"Handler First", [&debugChoice, &exitPortal]() { debugChoice = 1; }},
+                        {"Handler Last", [&debugChoice, &exitPortal]() { debugChoice = 2; }},
+                        {"WiFi First", [&debugChoice, &exitPortal]() { debugChoice = 3; }},
                         {"Back", [&debugChoice]() { debugChoice = 0; }}
                     };
                     loopOptions(debugOptions);
@@ -366,7 +366,7 @@ void EvilPortal::loop() {
                         exitPortal = true;
                     }
                     else if (debugChoice == 3) {
-                        // WiFi disconnected first (your brilliant idea!)
+                        // WiFi disconnected first
                         drawMainBorderWithTitle("DEBUG: WIFI FIRST");
                         padprintln("Step 1: Disconnect WiFi");
                         wifiDisconnect();

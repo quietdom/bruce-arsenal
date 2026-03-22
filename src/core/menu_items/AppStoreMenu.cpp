@@ -302,8 +302,8 @@ void AppStoreMenu::optionsMenu() {
 void AppStoreMenu::drawIcon(float scale) {
     clearIconArea();
 
-    int iconW = scale * 50;
-    int iconH = scale * 50;
+    int iconW = scale * 60;
+    int iconH = scale * 60;
     if (iconW % 2 != 0) iconW++;
     if (iconH % 2 != 0) iconH++;
 

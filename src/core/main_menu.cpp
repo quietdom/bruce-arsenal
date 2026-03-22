@@ -26,6 +26,9 @@ MainMenu::MainMenu() {
 #endif
         &loraMenu,
 #endif
+#if !defined(LITE_VERSION) && !defined(DISABLE_INTERPRETER)
+        &appStoreMenu,
+#endif
         &othersMenu,
         &clockMenu,
 #if !defined(LITE_VERSION)

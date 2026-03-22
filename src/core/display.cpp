@@ -774,38 +774,8 @@ void drawSubmenu(int index, std::vector<Option> &options, const char *title) {
 }
 
 void drawStatusBar() {
-    int i = 0;
     uint8_t bat = getBattery();
-    uint8_t bat_margin = 85;
-    if (bat > 0) {
-        drawBatteryStatus(bat);
-    } else bat_margin = 26;
-    if (sdcardMounted) {
-        tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
-        tft.drawString("SD", tftWidth - (bat_margin), 12);
-        i++;
-    } // Indication for SD card on screen
-    if (gpsConnected) {
-        drawGpsSmall(tftWidth - (bat_margin + 23 * i), 7);
-        i++;
-    }
-    if (WiFi.getMode()) {
-        drawWifiSmall(tftWidth - (bat_margin + 23 * i), 7);
-        i++;
-    } // Draw Wifi Symbol beside battery
-    if (isWebUIActive) {
-        drawWebUISmall(tftWidth - (bat_margin + 23 * i), 7);
-        i++;
-    } // Draw Wifi Symbol beside battery
-    if (BLEConnected) {
-        drawBLESmall(tftWidth - (bat_margin + 23 * i), 7);
-        i++;
-    } // Draw BLE beside Wifi
-    if (isConnectedWireguard) {
-        drawWireguardStatus(tftWidth - (bat_margin + 24 * i), 7);
-        i++;
-    } // Draw Wg bedide BLE, if the others exist, if not, beside battery
+    if (bat > 0) drawBatteryStatus(bat);
 
     if (bruceConfig.theme.border) {
         tft.drawRoundRect(5, 5, tftWidth - 10, tftHeight - 10, 5, bruceConfig.priColor);
@@ -813,9 +783,8 @@ void drawStatusBar() {
     }
 
     if (clock_set) {
-        int clock_fontsize = 1; // Font size of the clock / BRUCE + BRUCE_VERSION
-        setTftDisplay(12, 12, bruceConfig.priColor, clock_fontsize, bruceConfig.bgColor);
-        tft.fillRect(12, 12, 100, clock_fontsize * LH, bruceConfig.bgColor);
+        setTftDisplay(12, 12, bruceConfig.priColor, 1, bruceConfig.bgColor);
+        tft.fillRect(12, 12, 60, LH, bruceConfig.bgColor);
 #if defined(HAS_RTC)
         updateTimeStr(_rtc.getTimeStruct());
 #else
@@ -825,6 +794,71 @@ void drawStatusBar() {
     } else {
         setTftDisplay(12, 12, bruceConfig.priColor, 1, bruceConfig.bgColor);
         tft.print("BRUCE " + String(BRUCE_VERSION));
+    }
+
+    int iconCount = 0;
+    bool showSD   = sdcardMounted;
+    bool showGPS  = gpsConnected;
+    bool showWifi = (WiFi.getMode() != 0);
+    bool showWeb  = isWebUIActive;
+    bool showBLE  = BLEConnected;
+    bool showWG   = isConnectedWireguard;
+    if (showSD)   iconCount++;
+    if (showGPS)  iconCount++;
+    if (showWifi) iconCount++;
+    if (showWeb)  iconCount++;
+    if (showBLE)  iconCount++;
+    if (showWG)   iconCount++;
+
+    if (iconCount > 0) {
+        const int IW  = 16;
+        const int IH  = 16;
+        const int GAP = 6;
+        int totalW = iconCount * IW + (iconCount - 1) * GAP;
+        int sx = (tftWidth - totalW) / 2;
+        int iy = 7;
+        int idx = 0;
+
+        if (showSD) {
+            int x = sx + idx * (IW + GAP);
+            tft.fillRect(x, iy, IW, IH, bruceConfig.bgColor);
+            tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
+            tft.setTextSize(FP);
+            tft.setTextDatum(MC_DATUM);
+            tft.drawString("SD", x + IW / 2, iy + IH / 2);
+            tft.setTextDatum(TL_DATUM);
+            idx++;
+        }
+        if (showGPS) {
+            int x = sx + idx * (IW + GAP);
+            tft.fillRect(x, iy, IW, IH, bruceConfig.bgColor);
+            drawGpsSmall(x, iy);
+            idx++;
+        }
+        if (showWifi) {
+            int x = sx + idx * (IW + GAP);
+            tft.fillRect(x, iy, IW, IH, bruceConfig.bgColor);
+            drawWifiSmall(x, iy);
+            idx++;
+        }
+        if (showWeb) {
+            int x = sx + idx * (IW + GAP);
+            tft.fillRect(x, iy, IW, IH, bruceConfig.bgColor);
+            drawWebUISmall(x, iy);
+            idx++;
+        }
+        if (showBLE) {
+            int x = sx + idx * (IW + GAP);
+            tft.fillRect(x, iy, IW, IH, bruceConfig.bgColor);
+            drawBLESmall(x, iy);
+            idx++;
+        }
+        if (showWG) {
+            int x = sx + idx * (IW + GAP);
+            tft.fillRect(x, iy, IW, IH, bruceConfig.bgColor);
+            drawWireguardStatus(x, iy);
+            idx++;
+        }
     }
 }
 
@@ -889,10 +923,6 @@ void printCenterFootnote(String text) {
     tft.drawCentreString(text, tftWidth / 2, tftHeight - BORDER_PAD_X - FP * LH, SMOOTH_FONT);
 }
 
-/***************************************************************************************
-** Function name: drawBatteryStatus()
-** Description:   Draws battery info into the Status bar
-***************************************************************************************/
 void drawBatteryStatus(uint8_t bat) {
     if (bat == 0) return;
 
@@ -901,31 +931,30 @@ void drawBatteryStatus(uint8_t bat) {
     uint16_t color = bruceConfig.priColor;
     uint16_t barcolor = bruceConfig.priColor;
     if (bat < 16) barcolor = color = TFT_RED;
-    else if (bat < 34) barcolor = color = TFT_YELLOW;
-    if (charging) color = TFT_GREEN;
 
-    tft.drawRoundRect(tftWidth - 43, 6, 36, 19, 2, charging ? color : bruceConfig.bgColor); // (bolder border)
     tft.drawRoundRect(tftWidth - 42, 7, 34, 17, 2, color);
     tft.setTextSize(FP);
-    tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.drawRightString((bat == 100 ? "" : " ") + String(bat) + "%", tftWidth - 45, 12, 1);
+    tft.fillRect(tftWidth - 85, 7, 42, 18, bruceConfig.bgColor);
+    if (charging) {
+        tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
+        tft.drawRightString("CHG", tftWidth - 44, 12, 1);
+    } else {
+        tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
+        tft.drawRightString((bat == 100 ? "" : " ") + String(bat) + "%", tftWidth - 44, 12, 1);
+    }
     tft.fillRoundRect(tftWidth - 40, 9, 30 * bat / 100, 13, 2, barcolor);
     tft.drawLine(tftWidth - 30, 9, tftWidth - 30, 9 + 13, bruceConfig.bgColor);
     tft.drawLine(tftWidth - 20, 9, tftWidth - 20, 9 + 13, bruceConfig.bgColor);
 }
-/***************************************************************************************
-** Function name: drawWireguardStatus()
-** Description:   Draws a padlock when connected
-***************************************************************************************/
+
 void drawWireguardStatus(int x, int y) {
     tft.fillRect(x, y, 20, 17, bruceConfig.bgColor);
     if (isConnectedWireguard) {
-        tft.drawRoundRect(11 + x, 0 + y, 8, 12, 5, TFT_GREEN);
-        tft.fillRoundRect(10 + x, 8 + y, 10, 8, 0, TFT_GREEN);
+        tft.drawRoundRect(4 + x, 0 + y, 8, 10, 4, bruceConfig.priColor);
+        tft.fillRoundRect(3 + x, 7 + y, 10, 8, 0, bruceConfig.priColor);
     } else {
-        tft.drawRoundRect(1 + x, 0 + y, 8, 12, 5, bruceConfig.priColor);
-        tft.fillRoundRect(0 + x, 8 + y, 10, 8, 0, bruceConfig.bgColor);
-        tft.fillRoundRect(6 + x, 8 + y, 10, 10, 0, bruceConfig.priColor);
+        tft.drawRoundRect(4 + x, 0 + y, 8, 10, 4, bruceConfig.priColor);
+        tft.fillRoundRect(3 + x, 7 + y, 10, 8, 0, bruceConfig.priColor);
     }
 }
 

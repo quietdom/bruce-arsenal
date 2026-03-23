@@ -61,62 +61,63 @@ void EthernetMenu::optionsMenu() {
 void EthernetMenu::drawIcon(float scale) {
     clearIconArea();
 
-    int iconW = scale * 30;
-    int iconH = scale * 40;
+    int cx = iconCenterX;
+    int cy = iconCenterY;
 
-    int Y = iconCenterY - 25;
+    // Dimensions
+    int w = 48 * scale;
+    int h = 40 * scale;
+    // Make sure they remain even for absolute symmetry
+    if (w % 2 != 0) w++;
+    if (h % 2 != 0) h++;
 
-    int smallerH = scale * 16;
+    int x1 = cx - w / 2;
+    int x2 = cx + w / 2;
+    int y1 = cy - h / 2;
+    int y2 = cy + h / 2;
 
-    int starterX = iconCenterX - iconW; // X of the first side
-    int finalX = iconCenterX + iconW;
+    int t = 3 * scale; // Thickness of the connector walls
+    if (t < 2) t = 2;
 
-    int lineWidth = 2;
+    int nw = 20 * scale; // Notch width
+    if (nw % 2 != 0) nw++;
+    int nh = 12 * scale; // Notch height
 
-    // Draw the main socket structure
-    /*
-    |-----|
-    |     |
-    |     |
-    */
-    tft.drawRect(starterX, Y, lineWidth, iconH, bruceConfig.priColor);
+    // --- Outer Frame ---
+    // Top border
+    tft.fillRect(x1, y1, w, t, bruceConfig.priColor);
+    // Left border
+    tft.fillRect(x1, y1, t, h, bruceConfig.priColor);
+    // Right border
+    tft.fillRect(x2 - t, y1, t, h, bruceConfig.priColor);
+    
+    // Bottom Left piece
+    int sideW = (w - nw) / 2 + t;
+    tft.fillRect(x1, y2 - t, sideW, t, bruceConfig.priColor);
+    // Bottom Right piece
+    tft.fillRect(x2 - sideW, y2 - t, sideW, t, bruceConfig.priColor);
 
-    tft.drawRect(finalX, Y, lineWidth, iconH, bruceConfig.priColor);
+    // Notch Vertical Left
+    tft.fillRect(cx - nw / 2, y2 - nh - t, t, nh + t, bruceConfig.priColor);
+    // Notch Vertical Right
+    tft.fillRect(cx + nw / 2 - t, y2 - nh - t, t, nh + t, bruceConfig.priColor);
+    // Notch Top Horizontal
+    tft.fillRect(cx - nw / 2, y2 - nh - t, nw, t, bruceConfig.priColor);
 
-    tft.drawRect(starterX, Y, iconW * 2, lineWidth, bruceConfig.priColor);
+    // --- 8 Pins ---
+    int pinW = 2 * scale;
+    if (pinW < 1) pinW = 1;
+    int pinH = (h / 2) - t; // Make pins hang down halfway inside
 
-    // Draw the shorter side to close the first part of socket
-    /*
-    |-----|
-    |     |
-    |-   -|
-    */
-    tft.drawRect(starterX, Y + iconH, smallerH, lineWidth, bruceConfig.priColor);
-
-    tft.drawRect(finalX - smallerH + lineWidth, Y + iconH, smallerH, lineWidth, bruceConfig.priColor);
-
-    // Draw the final enclosure
-    /*
-    |------|
-    |      |
-    |-    -|
-      |  |
-    */
-    tft.drawRect(starterX + smallerH, Y + iconH, lineWidth, smallerH, bruceConfig.priColor);
-    tft.drawRect(finalX - smallerH + lineWidth, Y + iconH, lineWidth, smallerH, bruceConfig.priColor);
-
-    // Draw the four cable pin at a distance of 15 pixel
-    for (size_t i = 0; i < 4; i++) {
-        tft.drawRect(starterX + 15 + (i * 15), Y, lineWidth, 16, bruceConfig.priColor);
+    int step = (28 * scale) / 7; // Distribute 8 pins over 7 gaps
+    if (step < 2) step = 2;
+    int totalSpread = step * 7; 
+    int firstPinX = cx - (totalSpread / 2);
+    
+    for (int i = 0; i < 8; i++) {
+        int px = firstPinX + (i * step) - (pinW / 2);
+        // Draw pins clearly separated
+        tft.fillRect(px, y1 + t, pinW, pinH, bruceConfig.priColor);
     }
-
-    // Close the socket calculating width of this side removing from total width, the size of the smaller size
-    tft.drawRect(
-        starterX + smallerH,
-        Y + iconH + smallerH,
-        (iconW * 2) - (smallerH * 2) + 4,
-        lineWidth,
-        bruceConfig.priColor
-    );
 }
 #endif

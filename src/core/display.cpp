@@ -948,7 +948,7 @@ void drawBatteryStatus(uint8_t bat) {
 }
 
 void drawWireguardStatus(int x, int y) {
-    tft.fillRect(x, y, 20, 17, bruceConfig.bgColor);
+    tft.fillRect(x, y, 16, 16, bruceConfig.bgColor);
     if (isConnectedWireguard) {
         tft.drawRoundRect(4 + x, 0 + y, 8, 10, 4, bruceConfig.priColor);
         tft.fillRoundRect(3 + x, 7 + y, 10, 8, 0, bruceConfig.priColor);
@@ -1027,7 +1027,7 @@ void drawWebUISmall(int x, int y) {
 }
 
 void drawBLESmall(int x, int y) {
-    tft.fillRect(x, 2 + y, 17, 13, bruceConfig.bgColor);
+    tft.fillRect(x, y, 16, 16, bruceConfig.bgColor);
     tft.drawWideLine(8 + x, 8 + y, 4 + x, 5 + y, 2, bruceConfig.priColor, bruceConfig.bgColor);
     tft.drawWideLine(8 + x, 8 + y, 4 + x, 13 + y, 2, bruceConfig.priColor, bruceConfig.bgColor);
     tft.drawTriangle(8 + x, 8 + y, 8 + x, 2 + y, 13 + x, 5 + y, bruceConfig.priColor);
@@ -1053,7 +1053,7 @@ void drawGPS(int x, int y) {
 }
 
 void drawGpsSmall(int x, int y) {
-    tft.fillRect(x, y, 17, 17, bruceConfig.bgColor);
+    tft.fillRect(x, y, 16, 16, bruceConfig.bgColor);
     tft.drawEllipse(9 + x, 14 + y, 4, 3, bruceConfig.priColor);
     tft.drawArc(9 + x, 6 + y, 5, 2, 0, 340, bruceConfig.priColor, bruceConfig.bgColor);
     tft.fillTriangle(9 + x, 15 + y, 5 + x, 9 + y, 13 + x, 9 + y, bruceConfig.priColor);

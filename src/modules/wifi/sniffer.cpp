@@ -979,9 +979,10 @@ void sniffer_setup() {
     SnifferMode startMode = sniffer_full_mode_available() ? SnifferMode::Full : SnifferMode::HandshakesOnly;
     sniffer_set_mode(startMode);
 
-    displayTextLine("Sniffing Started");
     tft.setTextSize(FP);
-    tft.setCursor(80, 100);
+    tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
+    tft.setCursor(10, BORDER_PAD_Y + FM * LH);
+    tft.println("Sniffing Started");
 
     sniffer_reset_handshake_cache(); // Need to clear to restart HS count
     registeredBeacons.clear();

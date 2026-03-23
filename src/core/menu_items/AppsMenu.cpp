@@ -33,16 +33,26 @@ void AppsMenu::optionsMenu() {
 void AppsMenu::drawIcon(float scale) {
     clearIconArea();
 
-    int size = scale * 14;
-    int gap = scale * 4;
-    int totalW = size * 2 + gap;
+    int iconW = scale * 56;
+    int iconH = scale * 56;
+    if (iconW % 2 != 0) iconW++;
+    if (iconH % 2 != 0) iconH++;
 
-    int startX = iconCenterX - totalW / 2;
-    int startY = iconCenterY - totalW / 2;
+    int cx = iconCenterX;
+    int cy = iconCenterY + (scale * 12);
 
-    // Draw a 2x2 grid of rounded squares (app grid icon)
-    tft.drawRoundRect(startX, startY, size, size, 2, bruceConfig.priColor);
-    tft.drawRoundRect(startX + size + gap, startY, size, size, 2, bruceConfig.priColor);
-    tft.drawRoundRect(startX, startY + size + gap, size, size, 2, bruceConfig.priColor);
-    tft.drawRoundRect(startX + size + gap, startY + size + gap, size, size, 2, bruceConfig.priColor);
+    int gap = scale * 6;
+    int sq = (iconW - gap) / 2;
+
+    int x1 = cx - sq - gap / 2;
+    int y1 = cy - sq - gap / 2;
+    int x2 = cx + gap / 2;
+    int y2 = cy + gap / 2;
+
+    int r = scale * 5;
+
+    tft.drawRoundRect(x1, y1, sq, sq, r, bruceConfig.priColor);
+    tft.fillRoundRect(x2, y1, sq, sq, r, bruceConfig.priColor);
+    tft.fillRoundRect(x1, y2, sq, sq, r, bruceConfig.priColor);
+    tft.drawRoundRect(x2, y2, sq, sq, r, bruceConfig.priColor);
 }

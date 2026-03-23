@@ -16,13 +16,13 @@
 #define AS_INST "/BruceAppStore/installed.json"
 #define AS_CACHE "/BruceAppStore/cache/"
 
+static int _destFs = 0;
 static FS *_afs = nullptr;
 
 static void _initFs() {
-    if (_afs) return;
     setupSdCard();
-    _afs = sdcardMounted ? (FS *)&SD : (FS *)&LittleFS;
-    const char *dirs[] = {"/BruceAppStore", AS_CACHE, "/BruceJS"};
+    _afs = (_destFs == 1 && sdcardMounted) ? (FS *)&SD : (FS *)&LittleFS;
+    const char *dirs[] = {"/BruceAppStore", AS_CACHE};
     for (auto d : dirs)
         if (!_afs->exists(d)) _afs->mkdir(d);
 }
@@ -37,9 +37,21 @@ static bool _needWifi() {
     return true;
 }
 
+static void _mkDirRecursive(String path) {
+    int start = 0;
+    while (true) {
+        int idx = path.indexOf('/', start + 1);
+        if (idx < 0) break;
+        String p = path.substring(0, idx);
+        if (!_afs->exists(p)) _afs->mkdir(p);
+        start = idx;
+    }
+}
+
 static String _httpGet(const String &url) {
     HTTPClient http;
     http.begin(url);
+    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
     http.setTimeout(10000);
     String r;
     if (http.GET() == 200) r = http.getString();
@@ -50,6 +62,7 @@ static String _httpGet(const String &url) {
 static bool _httpSave(const String &url, const String &path) {
     HTTPClient http;
     http.begin(url);
+    http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
     http.setTimeout(15000);
     if (http.GET() != 200) {
         http.end();
@@ -58,7 +71,7 @@ static bool _httpSave(const String &url, const String &path) {
     int sl = path.lastIndexOf('/');
     if (sl > 0) {
         String d = path.substring(0, sl);
-        if (!_afs->exists(d)) _afs->mkdir(d);
+        _mkDirRecursive(d + "/");
     }
     File f = _afs->open(path, FILE_WRITE);
     if (!f) {
@@ -104,7 +117,7 @@ static void _doInstall(String slug, String appName) {
     String repo = meta["repo"].as<String>();
     String commit = meta["commit"].as<String>();
     String ver = meta["version"].as<String>();
-    String dest = (cat == "Themes") ? "/Themes/" + appName + "/" : "/BruceJS/" + cat + "/";
+    String dest = (cat == "Themes") ? "/Themes/" + appName + "/" : "/" + cat + "/";
     int total = files.size(), ok = 0;
 
     for (int i = 0; i < total; i++) {
@@ -164,7 +177,7 @@ static void _doDelete(String slug, String appName) {
 
     JsonArray files = meta["files"].as<JsonArray>();
     String cat = meta["category"].as<String>();
-    String dest = (cat == "Themes") ? "/Themes/" + appName + "/" : "/BruceJS/" + cat + "/";
+    String dest = (cat == "Themes") ? "/Themes/" + appName + "/" : "/" + cat + "/";
 
     for (int i = 0; i < (int)files.size(); i++) {
         String fn;
@@ -295,6 +308,24 @@ void AppStoreMenu::optionsMenu() {
         String slug = c.slug, name = c.name;
         options.push_back({lbl, [slug, name]() { _catMenu(slug, name); }});
     }
+
+    options.push_back({"Config", []() {
+        bool inConfig = true;
+        while(inConfig && !returnToMenu) {
+            std::vector<Option> cfgOpts;
+            if (sdcardMounted) {
+                cfgOpts.push_back({String("Dest: ") + (_destFs == 1 ? "SD Card" : "LittleFS"), []() {
+                    _destFs = (_destFs == 0) ? 1 : 0;
+                    _afs = nullptr;
+                }});
+            } else {
+                cfgOpts.push_back({"Dest: LittleFS (No SD)", []() {}});
+            }
+            cfgOpts.push_back({"Back", [&inConfig]() { inConfig = false; }});
+            loopOptions(cfgOpts, MENU_TYPE_SUBMENU, "App Store Config");
+        }
+    }});
+
     addOptionToMainMenu();
     loopOptions(options, MENU_TYPE_SUBMENU, "App Store");
 }

@@ -33,26 +33,29 @@ void AppsMenu::optionsMenu() {
 void AppsMenu::drawIcon(float scale) {
     clearIconArea();
 
-    int iconW = scale * 56;
-    int iconH = scale * 56;
+    int iconW = scale * 60;
+    int iconH = scale * 60;
     if (iconW % 2 != 0) iconW++;
     if (iconH % 2 != 0) iconH++;
 
     int cx = iconCenterX;
-    int cy = iconCenterY + (scale * 12);
+    int cy = iconCenterY;
+    int half = iconW / 2;
 
-    int gap = scale * 6;
-    int sq = (iconW - gap) / 2;
+    tft.drawRoundRect(cx - half, cy - half, iconW, iconH, half / 4, bruceConfig.priColor);
+    tft.drawLine(cx - half, cy - half + iconH / 4, cx + half, cy - half + iconH / 4, bruceConfig.priColor);
 
-    int x1 = cx - sq - gap / 2;
-    int y1 = cy - sq - gap / 2;
-    int x2 = cx + gap / 2;
-    int y2 = cy + gap / 2;
+    int gridW = iconW / 5;
+    int gridGap = iconW / 8;
 
-    int r = scale * 5;
+    int gridCenterY = cy + iconH / 8;
+    int gx1 = cx - gridW - gridGap / 2;
+    int gy1 = gridCenterY - gridW - gridGap / 2;
+    int gx2 = cx + gridGap / 2;
+    int gy2 = gridCenterY + gridGap / 2;
 
-    tft.drawRoundRect(x1, y1, sq, sq, r, bruceConfig.priColor);
-    tft.fillRoundRect(x2, y1, sq, sq, r, bruceConfig.priColor);
-    tft.fillRoundRect(x1, y2, sq, sq, r, bruceConfig.priColor);
-    tft.drawRoundRect(x2, y2, sq, sq, r, bruceConfig.priColor);
+    tft.fillRect(gx1, gy1, gridW, gridW, bruceConfig.priColor);
+    tft.drawRect(gx2, gy1, gridW, gridW, bruceConfig.priColor);
+    tft.drawRect(gx1, gy2, gridW, gridW, bruceConfig.priColor);
+    tft.fillRect(gx2, gy2, gridW, gridW, bruceConfig.priColor);
 }

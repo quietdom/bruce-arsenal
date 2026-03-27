@@ -20,7 +20,6 @@
 #include "menu_items/ScriptsMenu.h"
 #include "menu_items/WifiMenu.h"
 #include "menu_items/AppsMenu.h"
-#include "menu_items/AppStoreMenu.h"
 class MainMenu {
 public:
     AppsMenu appsMenu;
@@ -38,9 +37,6 @@ public:
     RFMenu rfMenu;
     ScriptsMenu scriptsMenu;
     WifiMenu wifiMenu;
-#if !defined(LITE_VERSION) && !defined(DISABLE_INTERPRETER)
-    AppStoreMenu appStoreMenu;
-#endif
 #if !defined(LITE_VERSION)
     LoRaMenu loraMenu;
     EthernetMenu ethernetMenu;

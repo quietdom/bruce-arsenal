@@ -29,7 +29,6 @@ MainMenu::MainMenu() {
         &othersMenu,
 #if !defined(LITE_VERSION) && !defined(DISABLE_INTERPRETER)
         &appsMenu,
-        &appStoreMenu,
 #endif
         &configMenu,
     };

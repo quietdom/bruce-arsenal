@@ -54,10 +54,8 @@ bool setupSdCard() {
         // Serial.println("Task not activated");
     }
     // SDCard in the same Bus as TFT, in this case we call the SPI TFT Instance
-    else if (
-        bruceConfigPins.SDCARD_bus.mosi == (gpio_num_t)TFT_MOSI &&
-        bruceConfigPins.SDCARD_bus.mosi != GPIO_NUM_NC
-    ) {
+    else if (bruceConfigPins.SDCARD_bus.mosi == (gpio_num_t)TFT_MOSI &&
+             bruceConfigPins.SDCARD_bus.mosi != GPIO_NUM_NC) {
         Serial.println("SDCard in the same Bus as TFT, using TFT SPI instance");
 #if TFT_MOSI > 0 // condition for Headless and 8bit displays (no SPI bus)
         if (!SD.begin(bruceConfigPins.SDCARD_bus.cs, tft.getSPIinstance())) {
@@ -338,21 +336,6 @@ bool createFolder(FS fs, String path) {
     return true;
 }
 
-/***************************************************************************************
-** Function name: folderExists
-** Description:   check if a folder exists
-***************************************************************************************/
-bool folderExists(FS fs, String path) {
-    if (path == "" || path == "/") return true;
-
-    File dir = fs.open(path);
-    if (!dir) return false;
-
-    bool isDir = dir.isDirectory();
-    dir.close();
-    return isDir;
-}
-
 /**********************************************************************
 **  Function: readLineFromFile
 **  Read the line of the config file until the ';'
@@ -367,6 +350,21 @@ String readLineFromFile(File myFile) {
         line += character;
     }
     return line;
+}
+
+/***************************************************************************************
+** Function name: folderExists
+** Description:   check if a folder exists
+***************************************************************************************/
+bool folderExists(FS fs, String path) {
+    if (path == "" || path == "/") return true;
+
+    File dir = fs.open(path);
+    if (!dir) return false;
+
+    bool isDir = dir.isDirectory();
+    dir.close();
+    return isDir;
 }
 
 /***************************************************************************************
@@ -776,7 +774,7 @@ String loopSD(FS &fs, bool filePicker, String allowed_ext, String rootPath) {
                                                              RfCodes data{};
 
                                                              if (readSubFile(&fs, filepath, data))
-                                                                 txSubFile(data);
+                                                                txSubFile(data);
                                                          }});
                     if (filepath.endsWith(".csv")) {
                         options.insert(options.begin(), {"Wigle Upload", [&]() {

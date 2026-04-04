@@ -26,6 +26,21 @@ conflicts = [
         r'\binit\(\);',
         'picojpeg_init();'
     ),
+    (
+        ".pio/libdeps/*/ESP Amiibolink/src/amiibolink.h",
+        r'#include <NimBLEDevice.h>',
+        '#include <Arduino.h>\n#include <NimBLEDevice.h>'
+    ),
+    (
+        ".pio/libdeps/*/ESP Chameleon Ultra/src/chameleonUltra.h",
+        r'#include <NimBLEDevice.h>',
+        '#include <Arduino.h>\n#include <NimBLEDevice.h>'
+    ),
+    (
+        ".pio/libdeps/*/ESP PN32BLE/src/pn532_ble.h",
+        r'#include <NimBLEDevice.h>',
+        '#include <Arduino.h>\n#include <NimBLEDevice.h>'
+    ),
 ]
 
 for file_pattern, search, replace in conflicts:

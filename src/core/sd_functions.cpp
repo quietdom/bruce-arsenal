@@ -353,6 +353,21 @@ String readLineFromFile(File myFile) {
 }
 
 /***************************************************************************************
+** Function name: folderExists
+** Description:   check if a folder exists
+***************************************************************************************/
+bool folderExists(FS fs, String path) {
+    if (path == "" || path == "/") return true;
+
+    File dir = fs.open(path);
+    if (!dir) return false;
+
+    bool isDir = dir.isDirectory();
+    dir.close();
+    return isDir;
+}
+
+/***************************************************************************************
 ** Function name: readSmallFile
 ** Description:   read a small (<3KB) file and return its contents as a single string
 **                on any error returns an empty string

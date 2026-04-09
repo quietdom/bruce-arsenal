@@ -17,8 +17,8 @@ WDGoWars::WDGoWars() {}
 WDGoWars::~WDGoWars() {}
 
 bool WDGoWars::_check_api_key() {
-    if (bruceConfig.wdgwarsApiKey == "") {
-        displayError("WDGoWars API key not found", true);
+    if (bruceConfig.wdgwarsApiKey.length() != 64) {
+        displayError("Set API key in bruce.conf\nGet it at wdgwars.pl", true);
         return false;
     }
 

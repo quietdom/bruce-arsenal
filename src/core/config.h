@@ -82,6 +82,7 @@ public:
     String startupApp = "";
     String startupAppJSInterpreterFile = "";
     String wigleBasicToken = "";
+    String wdgwarsApiKey = "your 64-char hex key from wdgwars.pl/profile";
     int devMode = 0;
     int colorInverted = 1;
     int badUSBBLEKeyboardLayout = 0;
@@ -175,6 +176,7 @@ public:
     void setStartupApp(String value);
     void setStartupAppJSInterpreterFile(String value);
     void setWigleBasicToken(String value);
+    void setWdgwarsApiKey(String value);
     void setDevMode(int value);
     void validateDevModeValue();
     void setColorInverted(int value);

@@ -56,8 +56,9 @@ bool filterAnsiSequences = true; // Set to false to disable ANSI sequence filter
 void ssh_setup(String host) {
     if (!wifiConnected) wifiConnectMenu();
 
-    tft.fillScreen(bruceConfig.bgColor);
-    tft.setCursor(0, 0);
+    drawMainBorderWithTitle("SSH");
+    tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
+    tft.setCursor(10, BORDER_PAD_Y + FM * LH);
     if (host != "") ssh_host = host;
     else {
         String my_net =
@@ -104,8 +105,9 @@ void ssh_setup(String host) {
 void ssh_loop(void *pvParameters) {
     String message = "";
     tft.setTextSize(FP);
-    tft.fillScreen(bruceConfig.bgColor);
-    tft.setCursor(0, 0);
+    drawMainBorderWithTitle("SSH");
+    tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
+    tft.setCursor(10, BORDER_PAD_Y + FM * LH);
     cursorY = tft.getCursorY();
     log_d("BEFORE SSH");
     my_ssh_session = ssh_new();
@@ -193,9 +195,10 @@ void ssh_loop(void *pvParameters) {
     }
 
     log_d("SSH setup completed.");
-    tft.fillScreen(bruceConfig.bgColor);
-    tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
+    drawMainBorderWithTitle("SSH");
+    tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.setTextSize(FP);
+    tft.setCursor(10, BORDER_PAD_Y + FM * LH);
     char buffer[1024];
     int nbytes;
     keyStroke key;
@@ -222,8 +225,9 @@ void ssh_loop(void *pvParameters) {
                     tft.setTextColor(TFT_GREEN);
                     commandBuffer.trim();
                     if (commandBuffer.substring(2) == "cls") {
-                        tft.fillScreen(bruceConfig.bgColor);
-                        tft.setCursor(0, 0);
+                        drawMainBorderWithTitle("SSH");
+                        tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
+                        tft.setCursor(10, BORDER_PAD_Y + FM * LH);
                         tft.print("> ");
                         commandBuffer = "> ";
                     } else {
@@ -247,8 +251,9 @@ void ssh_loop(void *pvParameters) {
             message = keyboard("cls", 76, "SSH Command: ");
             while (check(SelPress)) { yield(); } // timerless debounce
             if (message == "cls") {
-                tft.fillScreen(bruceConfig.bgColor);
-                tft.setCursor(0, 0);
+                drawMainBorderWithTitle("SSH");
+                tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
+                tft.setCursor(10, BORDER_PAD_Y + FM * LH);
                 tft.print("> ");
             } else {
                 message += "\r";
@@ -257,7 +262,7 @@ void ssh_loop(void *pvParameters) {
             }
 
             commandBuffer = "> " + message;
-            tft.setCursor(0, 0);
+            tft.setCursor(10, tft.getCursorY());
             tft.setTextSize(FP);
         }
 
@@ -273,13 +278,15 @@ void ssh_loop(void *pvParameters) {
                 msg += char(buffer[i]);
                 if (buffer[i] == '\r') continue; // Ignore carriage return
                 tft.write(buffer[i]);
-                if (tft.getCursorY() > tftHeight) {
-                    tft.fillScreen(bruceConfig.bgColor);
-                    tft.setCursor(0, 0);
-                    tft.setTextColor(TFT_GREEN);
+                if (tft.getCursorY() > tftHeight - 20) {
+                    drawMainBorderWithTitle("SSH");
+                    tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
+                    tft.setCursor(10, BORDER_PAD_Y + FM * LH);
+                    tft.setTextColor(bruceConfig.secColor);
                     tft.print(commandBuffer); // Move to the next line on display
                     tft.setTextColor(TFT_WHITE);
                 }
+                if (tft.getCursorX() == 0) tft.setCursor(10, tft.getCursorY());
                 cursorY = tft.getCursorY();
             }
             log_d("%s", msg);
@@ -351,18 +358,21 @@ void telnet_loop() {
     }
 
     Serial.println("Connected to TELNET server");
-    tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-    displayTextLine("Connected to TELNET server");
+    drawMainBorderWithTitle("TELNET");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.fillScreen(bruceConfig.bgColor);
-    tft.setCursor(0, 0);
+    tft.setCursor(10, BORDER_PAD_Y + FM * LH);
 
     String commandInput;
 
     while (1) {
+        tft.setCursor(10, tft.getCursorY());
         tft.print("> ");
         // waitForInput(commandInput);
         commandInput = keyboard("", 76, "COMMAND");
+        drawMainBorderWithTitle("TELNET");
+        tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
+        tft.setCursor(10, BORDER_PAD_Y + FM * LH);
+        tft.println("> " + commandInput);
         const char *command = commandInput.c_str();
         send(sock, command, strlen(command), 0);
 
@@ -382,6 +392,7 @@ if (buffer[0] == 0xFF) {
             Serial.printf("Received from server %s\n", buffer);
             // tft.printf("Received from server %s\n", buffer);
             for (int i = 0; i < len; i++) { Serial.printf("%02X ", buffer[i]); }
+            tft.setCursor(10, tft.getCursorY());
             tft.printf("%s\n", buffer);
 
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
@@ -394,19 +405,20 @@ if (buffer[0] == 0xFF) {
 void telnet_setup() {
     if (!wifiConnected) wifiConnectMenu();
 
-    tft.fillScreen(bruceConfig.bgColor);
-    tft.setCursor(0, 0);
+    drawMainBorderWithTitle("TELNET");
+    tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
+    tft.setCursor(10, BORDER_PAD_Y + FM * LH);
     Serial.begin(115200); // Initialize serial communication for debugging
     Serial.println("Starting Setup");
 
     // auto cfg = M5.config();
     // M5Cardputer.begin(cfg, true);
     tft.setRotation(bruceConfigPins.rotation);
-    tft.setTextSize(1); // Set text size
+    tft.setTextSize(FP); // Set text size
 
     cursorY = tft.getCursorY();
 
-    tft.setCursor(0, 0);
+    tft.setCursor(10, tft.getCursorY());
     // tft.print("TELNET Host: \n");
 
     // Here the telnet_server_ip needs to be a char*, thats why the stringTochar()

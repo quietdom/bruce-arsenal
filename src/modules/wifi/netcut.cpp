@@ -48,7 +48,6 @@ static struct netif *s_hookedNetif = nullptr;
 // INTERNAL: SNI Parser for TLS ClientHello
 // ============================================
 
-
 // ============================================
 // INTERNAL: Layer 2 Forwarding & DNS Sniper Hook
 // ============================================
@@ -77,7 +76,6 @@ static struct netif *_getStaNetif() {
     if (!sta) return nullptr;
     return (struct netif *)esp_netif_get_netif_impl(sta);
 }
-
 
 // ============================================
 // INTERNAL: Send a single ARP packet via LwIP
@@ -411,11 +409,13 @@ void netcutResumeAll() {
     s_cutAllActive = false;   // DISABLE auto-cut
     s_trollAllActive = false; // DISABLE auto-troll
     for (int i = 0; i < s_deviceCount; i++) {
-        s_devices[i].isCut = false;
-        s_devices[i].isTroll = false;
-        s_devices[i].isTrollOffline = false;
-        s_devices[i].restoreUntil = millis() + 5000; // 5s forced restore
-        netcutRestoreDevice(i);
+        if (s_devices[i].isCut || s_devices[i].isTroll) {
+            s_devices[i].isCut = false;
+            s_devices[i].isTroll = false;
+            s_devices[i].isTrollOffline = false;
+            s_devices[i].restoreUntil = millis() + 5000;
+            netcutRestoreDevice(i);
+        }
     }
 }
 
@@ -607,11 +607,8 @@ static void _activeLoop() {
             );
 
             // Draw SNIPER count
-            for (int i = 0; i < s_deviceCount; i++)
-            tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-            tft.drawString(
-                "Pkts:" + String(packetCount), 10, tftHeight - 24, 1
-            );
+            for (int i = 0; i < s_deviceCount; i++) tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
+            tft.drawString("Pkts:" + String(packetCount), 10, tftHeight - 24, 1);
 
             tft.setTextColor(TFT_DARKGREY, bruceConfig.bgColor);
             tft.drawString("Esc=Stop", 10, tftHeight - 12, 1);
@@ -629,16 +626,18 @@ static void _activeLoop() {
     }
 
     // Aggressive restore ALL on exit
+    // Aggressive restore only affected devices on exit
     s_cutAllActive = false;
     s_trollAllActive = false;
     int restoreCount = 0;
     for (int i = 0; i < s_deviceCount; i++) {
         if (s_devices[i].isCut || s_devices[i].isTroll) {
             restoreCount++;
-            netcutRestoreDevice(i);
             s_devices[i].isCut = false;
             s_devices[i].isTroll = false;
             s_devices[i].isTrollOffline = false;
+            s_devices[i].restoreUntil = millis() + 5000;
+            netcutRestoreDevice(i);
         }
     }
 
@@ -684,7 +683,6 @@ void netcutTrollAll() {
     }
     _activeLoop();
 }
-
 
 // ============================================
 // TROLL TIMING MENU

@@ -628,36 +628,17 @@ static void _activeLoop() {
         Serial.println("[NetCut] L2 Bridge Hook uninstalled.");
     }
 
-    // Cleanup: aggressive restore ALL on exit
+    // Aggressive restore ALL on exit
     s_cutAllActive = false;
     s_trollAllActive = false;
     int restoreCount = 0;
     for (int i = 0; i < s_deviceCount; i++) {
-        if (s_devices[i].isCut || s_devices[i].isTroll) { restoreCount++; }
-    }
-
-    if (restoreCount > 0) {
-        drawMainBorderWithTitle("RESTORING...");
-        padprintln("");
-        padprintln("Resuming " + String(restoreCount) + " devices...");
-        padprintln("Please wait 5s...");
-
-        unsigned long restoreEnd = millis() + 5000;
-        while (millis() < restoreEnd) {
-            for (int i = 0; i < s_deviceCount; i++) {
-                if (s_devices[i].isCut || s_devices[i].isTroll) {
-                    netcutRestoreDevice(i);
-                }
-            }
-            vTaskDelay(pdMS_TO_TICKS(200));
-        }
-
-        // Clear all flags after restore
-        for (int i = 0; i < s_deviceCount; i++) {
+        if (s_devices[i].isCut || s_devices[i].isTroll) {
+            restoreCount++;
+            netcutRestoreDevice(i);
             s_devices[i].isCut = false;
             s_devices[i].isTroll = false;
             s_devices[i].isTrollOffline = false;
-            s_devices[i].restoreUntil = 0;
         }
     }
 

@@ -3,8 +3,15 @@
 #include "core/utils.h"
 #include "modules/arsenal/arsenal.h"
 #include "modules/arsenal/arsenal_background.h"
+#include "modules/arsenal/arsenal_config.h"
 
 void ArsenalMenu::optionsMenu() {
+    if (!arsenal_pin_check()) {
+        displayRedStripe("Access denied");
+        delay(1500);
+        return;
+    }
+
     options = {
         {"WiFi Arsenal",   [this]() { wifiArsenalMenu(); }  },
         {"BLE Arsenal",    [this]() { bleArsenalMenu(); }   },

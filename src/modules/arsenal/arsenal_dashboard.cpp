@@ -1,5 +1,6 @@
 #include "arsenal_dashboard.h"
 #include "arsenal.h"
+#include "arsenal_config.h"
 #include "core/display.h"
 #include "core/mykeyboard.h"
 #include "core/sd_functions.h"
@@ -13,8 +14,8 @@
 
 static AsyncWebServer *arsenalServer = nullptr;
 static bool dashboardActive = false;
-static const char *AP_SSID = "ArsenalNet";
-static const char *AP_PASS = "arsenal32";
+static char AP_SSID[33] = "ArsenalNet";
+static char AP_PASS[64] = "arsenal32";
 static String uploadPath = "/arsenal";
 
 
@@ -549,6 +550,16 @@ static void setupArsenalRoutes() {
 void arsenal_dashboard_start(void) {
     if (dashboardActive) return;
 
+    arsenal_config_load();
+    if (strlen(arsenal_config().apSsid) > 0) {
+        strncpy(AP_SSID, arsenal_config().apSsid, sizeof(AP_SSID) - 1);
+        AP_SSID[sizeof(AP_SSID) - 1] = '\0';
+    }
+    if (strlen(arsenal_config().apPass) >= 8) {
+        strncpy(AP_PASS, arsenal_config().apPass, sizeof(AP_PASS) - 1);
+        AP_PASS[sizeof(AP_PASS) - 1] = '\0';
+    }
+
     WiFi.mode(WIFI_AP);
     WiFi.softAP(AP_SSID, AP_PASS);
     delay(100);
@@ -567,6 +578,9 @@ void arsenal_dashboard_start(void) {
     }
 
     arsenalServer = new AsyncWebServer(80);
+    if (strlen(arsenal_config().dashUser) > 0 && strlen(arsenal_config().dashPass) > 0) {
+        arsenalServer->setAuthentication(arsenal_config().dashUser, arsenal_config().dashPass);
+    }
     setupArsenalRoutes();
     arsenalServer->begin();
     dashboardActive = true;

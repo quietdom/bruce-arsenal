@@ -15,10 +15,7 @@
         delay(1500); \
     }
 
-// Config / QoL
-ARSENAL_NEW_STUB(arsenal_config_ap, "AP Config")
-ARSENAL_NEW_STUB(arsenal_config_dashboard, "Dashboard Config")
-ARSENAL_NEW_STUB(arsenal_pin_lock, "PIN Lock")
+// Config / QoL (implemented in arsenal_config.cpp)
 
 // WiFi Attacks
 ARSENAL_NEW_STUB(arsenal_wpa_handshake_grabber, "WPA Grabber")
@@ -53,7 +50,7 @@ ARSENAL_NEW_STUB(arsenal_phish_oauth, "Phish OAuth")
 ARSENAL_NEW_STUB(arsenal_phish_device_found, "Phish DevFound")
 
 // Intelligence / Recon
-ARSENAL_NEW_STUB(arsenal_wifi_probe_log, "Probe Logger")
+// arsenal_wifi_probe_log implemented in arsenal_probe_log.cpp
 ARSENAL_NEW_STUB(arsenal_ssid_history_logger, "SSID History")
 ARSENAL_NEW_STUB(arsenal_service_banner_grabber, "Banner Grabber")
 ARSENAL_NEW_STUB(arsenal_smart_home_scanner, "SmartHome Scan")
@@ -76,7 +73,5 @@ ARSENAL_NEW_STUB(arsenal_multi_device_sync, "Multi-Device Sync")
 // Evasion
 ARSENAL_NEW_STUB(arsenal_time_based_randomizer, "Time Randomizer")
 
-// Utility
-ARSENAL_NEW_STUB(arsenal_password_generator, "Password Gen")
+// Utility (password gen + attack stats implemented)
 ARSENAL_NEW_STUB(arsenal_nfc_business_card, "NFC Biz Card")
-ARSENAL_NEW_STUB(arsenal_attack_stats, "Attack Stats")

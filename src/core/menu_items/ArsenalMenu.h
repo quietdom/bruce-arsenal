@@ -15,6 +15,14 @@ public:
     void bleArsenalMenu(void);
     void intelligenceMenu(void);
     void evasionMenu(void);
+    
+    // New submenus
+    void rfMenu(void);
+    void phishingMenu(void);
+    void detectionMenu(void);
+    void commsMenu(void);
+    void utilityMenu(void);
+
     void jamAllMenu(void);
     void dashboardMenu(void);
 

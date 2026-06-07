@@ -5,9 +5,7 @@
     },
     "editor.detectIndentation": true,
     "editor.guides.bracketPairs": "active",
-
     "idf.portWin": "COM4",
-
     "files.associations": {
         "Jenkinsfile": "groovy",
         "*.toml": "properties",
@@ -88,17 +86,16 @@
     },
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,
-
     "githubPullRequests.ignoredPullRequestBranches": [
         "main"
     ],
-
     "cmake.ignoreCMakeListsMissing": true,
     "cmake.sourceDirectory": "C:/Projetos/Bruce/lib/M5GFX",
-
     "[cpp]": {
         "editor.defaultFormatter": "ms-vscode.cpptools",
-        "editor.rulers": [120],
+        "editor.rulers": [
+            120
+        ],
         "editor.tabSize": 4,
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
@@ -106,4 +103,8 @@
         },
         "editor.formatOnType": true,
     },
+    "clangd.arguments": [
+        "--compile-commands-dir=c:/Users/admin/Downloads/firmware-main/firmware-main/.cache/clangd",
+        "--query-driver=C:/Users/admin/.platformio/packages/toolchain-*/bin/*,C:/Users/admin/.platformio/packages/tool-*/bin/*"
+    ],
 }

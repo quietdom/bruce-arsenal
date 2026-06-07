@@ -21,6 +21,11 @@ static int fobCount = 0;
 
 void arsenal_car_keyfob_logger(void) {
     ARSENAL_HEAP_CHECK();
+    if (bruceConfigPins.rfModule != CC1101_SPI_MODULE) {
+        displayRedStripe("CC1101 module not found");
+        delay(1500);
+        return;
+    }
     memset(fobRing, 0, sizeof(fobRing));
     fobIdx = 0;
     fobCount = 0;

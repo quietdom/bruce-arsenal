@@ -52,9 +52,9 @@ void arsenal_nfc_business_card(void) {
     y += 14;
     tft.setCursor(12, y);
     tft.print("Connected via I2C/SPI");
-    y += 16;
+    y += 14;
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
-    tft.drawCentreString("Esc:done  Sel:edit", tftWidth / 2, tftHeight - 20, 1);
+    tft.drawCentreString("Place tag near reader", tftWidth / 2, tftHeight - 20, 1);
 
     while (true) {
         if (check(EscPress)) break;

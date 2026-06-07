@@ -65,6 +65,11 @@ static bool parseFlipperSub(const char *path, uint16_t **durations, int *count) 
 
 void arsenal_flipper_import(void) {
     ARSENAL_HEAP_CHECK();
+    if (bruceConfigPins.rfModule != CC1101_SPI_MODULE) {
+        displayRedStripe("CC1101 module not found");
+        delay(1500);
+        return;
+    }
     if (!setupSdCard()) {
         displayRedStripe("SD card required");
         delay(1500);

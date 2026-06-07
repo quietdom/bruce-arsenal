@@ -7,6 +7,11 @@
 
 void arsenal_garage_brute_force(void) {
     ARSENAL_HEAP_CHECK();
+    if (bruceConfigPins.rfModule != CC1101_SPI_MODULE) {
+        displayRedStripe("CC1101 module not found");
+        delay(1500);
+        return;
+    }
     drawMainBorderWithTitle("Garage Brute");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.setTextSize(FP);

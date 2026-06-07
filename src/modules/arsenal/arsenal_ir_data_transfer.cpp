@@ -117,6 +117,11 @@ static void sendFileViaIR(const String &path) {
 
 void arsenal_ir_data_transfer(void) {
     ARSENAL_HEAP_CHECK();
+    if (bruceConfigPins.irTx < 0) {
+        displayRedStripe("IR LED not configured");
+        delay(1500);
+        return;
+    }
     if (!setupSdCard()) {
         displayRedStripe("SD card required");
         delay(1500);

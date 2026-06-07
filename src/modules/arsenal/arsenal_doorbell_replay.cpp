@@ -7,6 +7,11 @@
 
 void arsenal_doorbell_replay(void) {
     ARSENAL_HEAP_CHECK();
+    if (bruceConfigPins.rfModule != CC1101_SPI_MODULE) {
+        displayRedStripe("CC1101 module not found");
+        delay(1500);
+        return;
+    }
     drawMainBorderWithTitle("Doorbell Replay");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.setTextSize(FP);

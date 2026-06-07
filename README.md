@@ -1,3 +1,5 @@
+🌐 [English](README.md) | [Português](docs/README_PT.md) | [Italiano](docs/README_IT.md) | [Français](docs/README_FR.md) | [Русский](docs/README_RU.md) | [中文](docs/README_ZH.md) | [Polski](docs/README_PL.md) | [Nederlands](docs/README_NL.md) | [Türkçe](docs/README_TR.md) | [Deutsch](docs/README_DE.md) | [Tiếng Việt](docs/README_VN.md) | [Español](docs/README_ES.md) | [Indonesia](docs/README_ID.md) | [العربية](docs/README_AR.md)
+
 <p align="center">
   <img src="media/bruce_banner.jpg" alt="Bruce Arsenal" width="700">
 </p>

@@ -20,6 +20,8 @@ lib/mquickjs_headers/mqjs_stdlib_generator
 lib/mquickjs_headers/mqjs_stdlib_generator.exe
 build_log.txt
 build_log.zip
+build_log_*.txt
+Build *.txt
 .github/agents/Bruce-AI.agent.md
 .idea
 .aifirmware-main.zip 

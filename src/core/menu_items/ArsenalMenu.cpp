@@ -27,7 +27,9 @@ void ArsenalMenu::optionsMenu() {
         {"Scripts",        arsenal_script_browser           },
         {"Session Log",    arsenal_session_log_menu         },
         {"Jam All",        arsenal_jam_all                  },
+#if !LITE_VERSION
         {"Dashboard",      arsenal_remote_dashboard         },
+#endif
         {"Config AP",      arsenal_config_ap                },
         {"Config Dash",    arsenal_config_dashboard         },
         {"PIN Lock",       arsenal_pin_lock                 },
@@ -177,7 +179,9 @@ void ArsenalMenu::jamAllMenu() {
 }
 
 void ArsenalMenu::dashboardMenu() {
+#if !LITE_VERSION
     arsenal_remote_dashboard();
+#endif
 }
 
 void ArsenalMenu::drawIcon(float scale) {

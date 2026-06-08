@@ -25,7 +25,9 @@ struct SchedulableFeature {
 static const SchedulableFeature FEATURES[] = {
     {"DHCP Starvation",  arsenal_dhcp_starvation},
     {"DNS Spoofer",      arsenal_dns_spoofer},
+#ifndef LITE_VERSION
     {"Karma Attack",     arsenal_karma_attack},
+#endif
     {"BT Name Spam",     arsenal_bt_name_spammer},
     {"AirTag Spoofer",   arsenal_airtag_spoofer},
     {"Decoy Traffic",    arsenal_decoy_traffic},

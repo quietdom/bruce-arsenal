@@ -172,7 +172,7 @@ void arsenal_ble_tracker(void) {
 
 
                 String info = d->type.substring(0, 8) + " " + String(d->rssi) + "dB x" + String(d->seenCount);
-                tft.setCursor(padX + 44, y, 1);
+                tft.setCursor(padX + 44, y);
                 tft.print(info.substring(0, 26));
                 y += 13;
             }

@@ -44,7 +44,7 @@ void arsenal_bt_audio_rickroll(void) {
         FoundDevice *list;
         int *count;
         RickScanCb(FoundDevice *d, int *c) : list(d), count(c) {}
-        void onResult(NimBLEAdvertisedDevice *dev) override {
+        void onResult(NimBLEAdvertisedDevice *dev) {
             if (*count >= 8) return;
             String name = dev->getName().c_str();
             String addr = dev->getAddress().toString().c_str();

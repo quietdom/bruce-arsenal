@@ -70,6 +70,8 @@ void arsenal_config_load(void) {
 void arsenal_config_save(void) {
     if (!setupSdCard()) return;
     if (!SD.exists("/arsenal")) SD.mkdir("/arsenal");
+
+    File f = SD.open("/arsenal/config.txt", FILE_WRITE);
     if (!f) return;
 
     f.println("# Arsenal configuration");

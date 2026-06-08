@@ -17,7 +17,7 @@ static ProfiledDevice profiledDevices[8];
 static int profiledCount = 0;
 
 class ProfilerCallbacks : public NimBLEScanCallbacks {
-    void onResult(NimBLEAdvertisedDevice *dev) override {
+    void onResult(NimBLEAdvertisedDevice *dev) {
         if (profiledCount >= 8) return;
         String addr = dev->getAddress().toString().c_str();
         for (int i = 0; i < profiledCount; i++) {

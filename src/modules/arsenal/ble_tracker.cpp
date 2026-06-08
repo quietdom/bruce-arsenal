@@ -62,10 +62,10 @@ static bool isTile(NimBLEAdvertisedDevice &dev) {
     return false;
 }
 
-static String identifyDevice(const NimBLEAdvertisedDevice &dev) {
-    if (isAirTag(dev)) return "AirTag";
-    if (isSmartTag(dev)) return "SmartTag";
-    if (isTile(dev)) return "Tile";
+static String identifyDevice(const NimBLEAdvertisedDevice *dev) {
+    if (isAirTag(*dev)) return "AirTag";
+    if (isSmartTag(*dev)) return "SmartTag";
+    if (isTile(*dev)) return "Tile";
     return "";
 }
 
@@ -74,7 +74,7 @@ class ArsenalBLECallbacks : public NimBLEScanCallbacks {
         String addr = advertisedDevice->getAddress().toString().c_str();
         int rssi = advertisedDevice->getRSSI();
         String name = advertisedDevice->haveName() ? advertisedDevice->getName().c_str() : "";
-        String type = identifyDevice(*advertisedDevice);
+        String type = identifyDevice(advertisedDevice);
 
 
         bool found = false;

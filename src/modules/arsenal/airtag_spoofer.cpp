@@ -56,9 +56,8 @@ void arsenal_airtag_spoofer(void) {
         delay(100);
         if (!NimBLEDevice::init("")) {
             displayError("BLE init failed", true);
-return;
-}
-#endif
+            return;
+        }
         NimBLEAdvertising *pAdvertising = NimBLEDevice::getAdvertising();
 
         while (spoofRunning) {

@@ -1,3 +1,4 @@
+#if !LITE_VERSION
 #include "arsenal.h"
 #include "core/display.h"
 #include "core/mykeyboard.h"
@@ -109,3 +110,4 @@ void arsenal_ssl_strip(void) {
     stripServer = nullptr;
     stripActive = false;
 }
+#endif

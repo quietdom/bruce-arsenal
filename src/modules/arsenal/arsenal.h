@@ -35,10 +35,14 @@ void arsenal_network_scanner(void);
 void arsenal_dhcp_starvation(void);
 void arsenal_karma_attack(void);
 void arsenal_dns_spoofer(void);
+#if !LITE_VERSION
 void arsenal_captive_portal_templates(void);
 void arsenal_captive_portal_autophish(void);
+#endif
 void arsenal_wifi_bruteforce(void);
+#if !LITE_VERSION
 void arsenal_cred_forward(void);
+#endif
 
 
 void arsenal_ble_tracker(void);
@@ -94,7 +98,9 @@ void arsenal_selective_deauth(void);
 void arsenal_auth_flood(void);
 void arsenal_ap_clone_flood(void);
 void arsenal_arp_poisoner(void);
+#if !LITE_VERSION
 void arsenal_ssl_strip(void);
+#endif
 void arsenal_upnp_port_opener(void);
 void arsenal_default_cred_scanner(void);
 void arsenal_dns_tunnel(void);

@@ -1,3 +1,4 @@
+#if !LITE_VERSION
 #include "arsenal_dashboard.h"
 #include "arsenal.h"
 #include "arsenal_config.h"
@@ -668,3 +669,4 @@ void arsenal_remote_dashboard(void) {
 
     arsenal_dashboard_stop();
 }
+#endif

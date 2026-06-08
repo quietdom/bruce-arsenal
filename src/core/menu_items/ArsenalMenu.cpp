@@ -45,11 +45,15 @@ void ArsenalMenu::optionsMenu() {
 void ArsenalMenu::wifiArsenalMenu() {
     options = {
         {"DNS Spoofer",        arsenal_dns_spoofer              },
+#if !LITE_VERSION
         {"Auto-Phish Portal",  arsenal_captive_portal_autophish },
         {"Cred Forward",       arsenal_cred_forward             },
+#endif
         {"Auth Flood",         arsenal_auth_flood               },
         {"AP Clone Flood",     arsenal_ap_clone_flood           },
+#if !LITE_VERSION
         {"SSL Strip Lite",     arsenal_ssl_strip                },
+#endif
         {"UPnP Port Opener",   arsenal_upnp_port_opener         },
         {"Default Creds",      arsenal_default_cred_scanner     },
         {"DNS Tunnel",         arsenal_dns_tunnel               },

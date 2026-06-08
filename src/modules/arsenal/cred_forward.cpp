@@ -1,3 +1,4 @@
+#if !LITE_VERSION
 #include "arsenal.h"
 #include "core/display.h"
 #include "core/mykeyboard.h"
@@ -288,3 +289,4 @@ void arsenal_cred_forward(void) {
         WiFi.mode(WIFI_OFF);
     });
 }
+#endif

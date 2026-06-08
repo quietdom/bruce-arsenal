@@ -1,3 +1,4 @@
+#if !LITE_VERSION
 #include "arsenal.h"
 #include "core/display.h"
 #include "core/mykeyboard.h"
@@ -228,3 +229,4 @@ void arsenal_captive_portal_templates(void) {
         delay(1500);
     });
 }
+#endif

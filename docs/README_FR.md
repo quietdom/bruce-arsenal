@@ -1,90 +1,130 @@
-?? [English](../README.md) | [Portugues](README_PT.md) | [Italiano](README_IT.md) | [Francais](README_FR.md) | [Russian](README_RU.md) | [Chinese](README_ZH.md) | [Polski](README_PL.md) | [Nederlands](README_NL.md) | [Turkce](README_TR.md) | [Deutsch](README_DE.md) | [Vietnamese](README_VN.md) | [Espanol](README_ES.md) | [Indonesia](README_ID.md) | [Arabic](README_AR.md)
-
-<h1 align="center">?? Bruce Arsenal</h1>
+🌐 [English](../README.md) | [Portugues](README_PT.md) | [Italiano](README_IT.md) | **Francais** | 🇷🇺 [Русский](README_RU.md) | 🇨🇳 [中文](README_ZH.md) | [Polski](README_PL.md) | [Nederlands](README_NL.md) | [Turkce](README_TR.md) | [Deutsch](README_DE.md) | Tiếng Việt [Tiếng Việt](README_VN.md) | [Espanol](README_ES.md) | [Indonesia](README_ID.md) | 🇸🇦 [العربية](README_AR.md)
 
 <p align="center">
-  <b>Firmware de securite offensive personnalise pour appareils ESP32</b><br>
-  <i>72 outils - Un firmware - Appareils multiples</i>
+  <img src="../media/bruce_banner.jpg" alt="Bruce Arsenal" width="700">
+</p>
+
+<h1 align="center">🎯 Bruce Arsenal</h1>
+
+<p align="center">
+  <b>Firmware de sécurité offensive personnalisé pour les appareils ESP32</b><br>
+  <i>72 outils Full / 55 outils LITE - Un firmware - Plusieurs appareils</i>
 </p>
 
 ---
 
-## Qu'Est-Ce
-
-Une version modifiee de Bruce Firmware avec un module Arsenal personnalise - 72 outils de securite offensive accessibles depuis un seul menu.
-
----
+Une modification du [Bruce Firmware](https://github.com/pr3y/Bruce) avec un module **Arsenal** personnalisé. Toutes les fonctionnalités originales de Bruce restent intactes.
 
 ## Installation
 
-1. Telechargez le .bin depuis les Releases
-2. Flash via ESP Web Flasher (Chrome/Edge) ou OTA via Arsenal Dashboard
+1. Téléchargez le `.bin` depuis [Releases](../../releases)
+2. Flash via [ESP Web Flasher](https://espressif.github.io/esptool-js/) (Chrome/Edge) ou OTA via Arsenal Dashboard
 
 ---
 
-## Outils Arsenal (72)
+## Outils Arsenal (72 Full / 55 LITE)
 
-### WiFi Arsenal (11)
-Network Scanner, DHCP Starvation, Karma Attack, DNS Spoofer, Auto-Phish Portal, Cred Forward, Auth Flood, AP Clone Flood, SSL Strip Lite, DNS Tunnel, WPS PIN Attack
-
-### BLE Arsenal (6)
-BLE Tracker, BT Name Spammer, AirTag Spoofer, Audio Jammer, Notification Spoofer, BT Rickroll
-
-### Intelligence (8)
-Device Fingerprinter, OPSEC Monitor, OUI Lookup, Probe Log, Banner Grabber, SmartHome Scan, Channel Chart, People Counter
-
-### Evasion (5)
-MAC Rotator, Channel Hopper, Decoy Traffic, Identity Cloner, Time Randomizer
-
-### Phishing (4)
-Win Update Phish, WiFi Speed Phish, OAuth Phish, Device Found Phish
-
-### Sub-GHz / RF (6)
-NRF24 MouseJack, Doorbell Replay, Garage Brute Force, Keyfob Logger, Frequency Scanner, Flipper Import
-
-### Detection (3)
-Flipper Detector, Hacker Detector, RF Silence Enforcer
-
-### Communications (5)
-ESP-NOW Chat, ESP-NOW C2, Dead Drop Mesh, IR Data Transfer, Multi-Device Sync
-
-### Utilitaires (2)
-NFC Biz Card, Attack Stats
-
----
-
-## Compatibilite des Cartes
-
-### ESP32-S3 (Complet - 72 outils)
-LilyGo T-Embed CC1101, T-Deck Pro, T-Deck, T-Display S3, T-HMI, T-LoRa Pager, T-Watch S3, M5Stack Cardputer, CoreS3, StickS3
-
-### ESP32 (LITE - 31 outils)
-M5Stack Core 4MB/16MB, CPlus 1.1, CYD (all variants), Elecrow, Marauder, Awok, WaveSentry, Phantom
-
-### Limitations Connues
-M5Stack CPlus2, M5Stack Core2 - Debordement DRAM (variables globales firmware core)
-
----
-
-## Services en Arriere-Plan
-
-- **OPSEC Dot** - Cercle colore sur la barre d'etat
-- **Always-On Evasion** - Rotation MAC + saut de canaux + trafiege leurre
-- **Auto-Dim** - Luminosite ecran diminue pendant les attaques
+| # | Outil | Full | LITE | | # | Outil | Full | LITE |
+|---|------|:----:|:----:|-|---|------|:----:|:----:|
+| 1 | Network Scanner | ✅ | ✅ | | 37 | Keyfob Logger | ✅ | ❌ |
+| 2 | DHCP Starvation | ✅ | ✅ | | 38 | Frequency Scanner | ✅ | ✅ |
+| 3 | Karma Attack | ✅ | ✅ | | 39 | Flipper Import | ✅ | ✅ |
+| 4 | DNS Spoofer | ✅ | ✅ | | 40 | Flipper Detector | ✅ | ❌ |
+| 5 | Auto-Phish Portal | ✅ | ❌ | | 41 | Hacker Detector | ✅ | ❌ |
+| 6 | Cred Forward | ✅ | ❌ | | 42 | RF Silence Enforcer | ✅ | ❌ |
+| 7 | Auth Flood | ✅ | ✅ | | 43 | ESP-NOW Chat | ✅ | ❌ |
+| 8 | AP Clone Flood | ✅ | ✅ | | 44 | ESP-NOW C2 | ✅ | ❌ |
+| 9 | SSL Strip Lite | ✅ | ❌ | | 45 | Dead Drop Mesh | ✅ | ❌ |
+| 10 | DNS Tunnel | ✅ | ✅ | | 46 | IR Data Transfer | ✅ | ❌ |
+| 11 | WPS PIN Attack | ✅ | ✅ | | 47 | Multi-Device Sync | ✅ | ❌ |
+| 12 | UPnP Port Opener | ✅ | ❌ | | 48 | NFC Biz Card | ✅ | ❌ |
+| 13 | Default Cred Scanner | ✅ | ❌ | | 49 | Attack Stats | ✅ | ✅ |
+| 14 | Rogue AP Detector | ✅ | ✅ | | 50 | Password Generator | ✅ | ✅ |
+| 15 | WiFi Bruteforce | ✅ | ❌ | | 51 | Jam All | ✅ | ✅ |
+| 16 | WPA Handshake Grabber | ✅ | ❌ | | 52 | Combos | ✅ | ✅ |
+| 17 | Beacon Flood | ✅ | ❌ | | 53 | Scheduler | ✅ | ✅ |
+| 18 | Selective Deauth | ✅ | ❌ | | 54 | Scripts | ✅ | ✅ |
+| 19 | ARP Poisoner | ✅ | ❌ | | 55 | Session Log | ✅ | ✅ |
+| 20 | BLE Tracker | ✅ | ❌ | | 56 | Config AP | ✅ | ✅ |
+| 21 | BT Name Spammer | ✅ | ❌ | | 57 | Config Dashboard | ✅ | ✅ |
+| 22 | AirTag Spoofer | ✅ | ❌ | | 58 | PIN Lock | ✅ | ✅ |
+| 23 | Audio Jammer | ✅ | ❌ | | 59 | Remote Dashboard | ✅ | ❌ |
+| 24 | Notification Spoofer | ✅ | ❌ | | 60 | SSID History Logger | ✅ | ✅ |
+| 25 | BT Rickroll | ✅ | ❌ | | 61 | QR Poisoner | ✅ | ✅ |
+| 26 | BT Device Profiler | ✅ | ❌ | | 62 | Auto-Dim | ✅ | ✅ |
+| 27 | Device Fingerprinter | ✅ | ✅ | | 63 | OPSEC Background | ✅ | ✅ |
+| 28 | OPSEC Monitor | ✅ | ✅ | | 64 | Network Scanner (Full) | ✅ | ✅ |
+| 29 | OUI Lookup | ✅ | ✅ | | 65 | DHCP Starvation (Full) | ✅ | ✅ |
+| 30 | Probe Log | ✅ | ✅ | | 66 | Karma Attack (Full) | ✅ | ✅ |
+| 31 | Banner Grabber | ✅ | ✅ | | 67 | DNS Spoofer (Full) | ✅ | ✅ |
+| 32 | SmartHome Scan | ✅ | ❌ | | 68 | Auth Flood (Full) | ✅ | ✅ |
+| 33 | Channel Chart | ✅ | ✅ | | 69 | AP Clone Flood (Full) | ✅ | ✅ |
+| 34 | People Counter | ✅ | ❌ | | 70 | DNS Tunnel (Full) | ✅ | ✅ |
+| 35 | MAC Rotator | ✅ | ✅ | | 71 | WPS PIN Attack (Full) | ✅ | ✅ |
+| 36 | Channel Hopper | ✅ | ✅ | | 72 | Rogue AP Detector (Full) | ✅ | ✅ |
 
 ---
 
-## Tableau de Bord a Distance
+## Compatibilité des Cartes
 
-Arsenal > Dashboard. Connectez le telephone a ArsenalNet (mot de passe: arsenal32). Ouvrez 192.168.4.1.
+| Carte | Flash | Version |
+|-------|-------|---------|
+| **ESP32-S3** | | |
+| LilyGo T-Embed CC1101 | 16MB | Full |
+| LilyGo T-Deck Pro | 16MB | Full |
+| LilyGo T-Deck | 16MB | Full |
+| LilyGo T-Display S3 | 16MB | Full |
+| LilyGo T-Display S3 Touch | 16MB | Full |
+| LilyGo T-Display S3 MMC | 16MB | Full |
+| LilyGo T-Display S3 Touch MMC | 16MB | Full |
+| LilyGo T-HMI | 16MB | Full |
+| LilyGo T-LoRa Pager | 16MB | Full |
+| LilyGo T-Watch S3 | 16MB | Full |
+| M5Stack Cardputer | 8MB | Full |
+| M5Stack CoreS3 | 16MB | Full |
+| M5Stack StickS3 | 16MB | Full |
+| ESP32-S3 DevKitC-1 | 16MB | Full |
+| Smoochiee Board | 16MB | Full |
+| **ESP32-C5** | | |
+| ESP32-C5 | 4MB | Full |
+| ESP32-C5 TFT | 4MB | Full |
+| **ESP32** | | |
+| M5Stack Core 4MB | 4MB | LITE |
+| M5Stack Core 16MB | 16MB | LITE |
+| M5Stack CPlus 1.1 | 4MB | LITE |
+| CYD-2432S028 | 4MB | LITE |
+| CYD-2USB | 4MB | LITE |
+| CYD-2432W328C | 4MB | LITE |
+| CYD-2432W328R | 4MB | LITE |
+| CYD-3248S035R | 4MB | LITE |
+| CYD-3248S035C | 4MB | LITE |
+| Elecrow 2.4B | 4MB | LITE |
+| Elecrow 2.8B | 4MB | LITE |
+| Elecrow 3.5B | 4MB | LITE |
+| LilyGo T-Display TTGO | 4MB | LITE |
+| Marauder Mini | 4MB | LITE |
+| Marauder V4-V6 | 4MB | LITE |
+| Marauder V7 | 4MB | LITE |
+| Marauder V6.1 | 4MB | LITE |
+| Awok Mini | 4MB | LITE |
+| Awok Touch | 4MB | LITE |
+| WaveSentry R1 | 4MB | LITE |
+| Phantom S024R | 4MB | LITE |
+| **Problèmes Connus** | | |
+| M5Stack CPlus2 | - | DRAM overflow |
+| M5Stack Core2 | - | DRAM overflow |
 
 ---
 
-## Credits
+## Tableau de Bord à Distance
 
-- [Bruce Firmware](https://github.com/pr3y/Bruce) by pr3y
-- Arsenal module by quietdom
+Arsenal > Dashboard. Connectez-vous à `ArsenalNet` (mot de passe : `arsenal32`). Ouvrez `192.168.4.1`.
 
----
+## Crédits
 
-## Uniquement pour les tests de securite autorises et les fins educatives.
+- [Bruce Firmware](https://github.com/pr3y/Bruce) par pr3y
+- Module Arsenal par quietdom
+
+## Avertissement
+
+Uniquement pour les tests de sécurité autorisés et les fins éducatives.

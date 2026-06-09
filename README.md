@@ -8,14 +8,12 @@
 
 <p align="center">
   <b>Custom offensive security firmware for ESP32 devices</b><br>
-  <i>72 tools - One firmware - Multiple devices</i>
+  <i>72 tools Full / 55 tools LITE - One firmware - Multiple devices</i>
 </p>
 
 ---
 
-## What Is This
-
-A modified [Bruce Firmware](https://github.com/pr3y/Bruce) with a custom **Arsenal** module - 72 offensive security tools accessible from a single menu. All original Bruce features remain intact.
+A modified [Bruce Firmware](https://github.com/pr3y/Bruce) with a custom **Arsenal** module. All original Bruce features remain intact.
 
 ## Installation
 
@@ -24,166 +22,103 @@ A modified [Bruce Firmware](https://github.com/pr3y/Bruce) with a custom **Arsen
 
 ---
 
-## Arsenal Tools (72)
+## Arsenal Tools (72 Full / 55 LITE)
 
-| # | Tool | Full | LITE |
-|---|------|------|------|
-| | **WiFi Arsenal** | | |
-| 1 | Network Scanner | ✅ | ✅ |
-| 2 | DHCP Starvation | ✅ | ✅ |
-| 3 | Karma Attack | ✅ | ✅ |
-| 4 | DNS Spoofer | ✅ | ✅ |
-| 5 | Auto-Phish Portal | ✅ | ✅ |
-| 6 | Cred Forward | ✅ | ✅ |
-| 7 | Auth Flood | ✅ | ✅ |
-| 8 | AP Clone Flood | ✅ | ✅ |
-| 9 | SSL Strip Lite | ✅ | ✅ |
-| 10 | DNS Tunnel | ✅ | ✅ |
-| 11 | WPS PIN Attack | ✅ | ✅ |
-| | **BLE Arsenal** | | |
-| 12 | BLE Tracker | ✅ | ✅ |
-| 13 | BT Name Spammer | ✅ | ✅ |
-| 14 | AirTag Spoofer | ✅ | ✅ |
-| 15 | Audio Jammer | ✅ | ✅ |
-| 16 | Notification Spoofer | ✅ | ✅ |
-| 17 | BT Rickroll | ✅ | ✅ |
-| | **Intelligence** | | |
-| 18 | Device Fingerprinter | ✅ | ✅ |
-| 19 | OPSEC Monitor | ✅ | ✅ |
-| 20 | OUI Lookup | ✅ | ✅ |
-| 21 | Probe Log | ✅ | ✅ |
-| 22 | Banner Grabber | ✅ | ✅ |
-| 23 | SmartHome Scan | ✅ | ✅ |
-| 24 | Channel Chart | ✅ | ✅ |
-| 25 | People Counter | ✅ | ✅ |
-| | **Evasion** | | |
-| 26 | MAC Rotator | ✅ | ✅ |
-| 27 | Channel Hopper | ✅ | ✅ |
-| 28 | Decoy Traffic | ✅ | ✅ |
-| 29 | Identity Cloner | ✅ | ✅ |
-| 30 | Time Randomizer | ✅ | ✅ |
-| | **Phishing** | | |
-| 31 | Win Update Phish | ✅ | ✅ |
-| 32 | WiFi Speed Phish | ✅ | ✅ |
-| 33 | OAuth Phish | ✅ | ✅ |
-| 34 | Device Found Phish | ✅ | ✅ |
-| | **Sub-GHz / RF** | | |
-| 35 | NRF24 MouseJack | ✅ | ✅ |
-| 36 | Doorbell Replay | ✅ | ✅ |
-| 37 | Garage Brute Force | ✅ | ✅ |
-| 38 | Keyfob Logger | ✅ | ✅ |
-| 39 | Frequency Scanner | ✅ | ✅ |
-| 40 | Flipper Import | ✅ | ✅ |
-| | **Detection** | | |
-| 41 | Flipper Detector | ✅ | ✅ |
-| 42 | Hacker Detector | ✅ | ✅ |
-| 43 | RF Silence Enforcer | ✅ | ✅ |
-| | **Comms** | | |
-| 44 | ESP-NOW Chat | ✅ | ✅ |
-| 45 | ESP-NOW C2 | ✅ | ✅ |
-| 46 | Dead Drop Mesh | ✅ | ✅ |
-| 47 | IR Data Transfer | ✅ | ✅ |
-| 48 | Multi-Device Sync | ✅ | ✅ |
-| | **Utility** | | |
-| 49 | NFC Biz Card | ✅ | ✅ |
-| 50 | Attack Stats | ✅ | ✅ |
-| | **Arsenal Core** | | |
-| 51 | Jam All | ✅ | ✅ |
-| 52 | Combos | ✅ | ✅ |
-| 53 | Scheduler | ✅ | ✅ |
-| 54 | Script Browser | ✅ | ✅ |
-| 55 | Session Log | ✅ | ✅ |
+| # | Tool | Full | LITE | | # | Tool | Full | LITE |
+|---|------|:----:|:----:|-|---|------|:----:|:----:|
+| 1 | Network Scanner | ✅ | ✅ | | 37 | Keyfob Logger | ✅ | ❌ |
+| 2 | DHCP Starvation | ✅ | ✅ | | 38 | Frequency Scanner | ✅ | ✅ |
+| 3 | Karma Attack | ✅ | ✅ | | 39 | Flipper Import | ✅ | ✅ |
+| 4 | DNS Spoofer | ✅ | ✅ | | 40 | Flipper Detector | ✅ | ❌ |
+| 5 | Auto-Phish Portal | ✅ | ❌ | | 41 | Hacker Detector | ✅ | ❌ |
+| 6 | Cred Forward | ✅ | ❌ | | 42 | RF Silence Enforcer | ✅ | ❌ |
+| 7 | Auth Flood | ✅ | ✅ | | 43 | ESP-NOW Chat | ✅ | ❌ |
+| 8 | AP Clone Flood | ✅ | ✅ | | 44 | ESP-NOW C2 | ✅ | ❌ |
+| 9 | SSL Strip Lite | ✅ | ❌ | | 45 | Dead Drop Mesh | ✅ | ❌ |
+| 10 | DNS Tunnel | ✅ | ✅ | | 46 | IR Data Transfer | ✅ | ❌ |
+| 11 | WPS PIN Attack | ✅ | ✅ | | 47 | Multi-Device Sync | ✅ | ❌ |
+| 12 | UPnP Port Opener | ✅ | ❌ | | 48 | NFC Biz Card | ✅ | ❌ |
+| 13 | Default Cred Scanner | ✅ | ❌ | | 49 | Attack Stats | ✅ | ✅ |
+| 14 | Rogue AP Detector | ✅ | ✅ | | 50 | Password Generator | ✅ | ✅ |
+| 15 | WiFi Bruteforce | ✅ | ❌ | | 51 | Jam All | ✅ | ✅ |
+| 16 | WPA Handshake Grabber | ✅ | ❌ | | 52 | Combos | ✅ | ✅ |
+| 17 | Beacon Flood | ✅ | ❌ | | 53 | Scheduler | ✅ | ✅ |
+| 18 | Selective Deauth | ✅ | ❌ | | 54 | Scripts | ✅ | ✅ |
+| 19 | ARP Poisoner | ✅ | ❌ | | 55 | Session Log | ✅ | ✅ |
+| 20 | BLE Tracker | ✅ | ❌ | | 56 | Config AP | ✅ | ✅ |
+| 21 | BT Name Spammer | ✅ | ❌ | | 57 | Config Dashboard | ✅ | ✅ |
+| 22 | AirTag Spoofer | ✅ | ❌ | | 58 | PIN Lock | ✅ | ✅ |
+| 23 | Audio Jammer | ✅ | ❌ | | 59 | Remote Dashboard | ✅ | ❌ |
+| 24 | Notification Spoofer | ✅ | ❌ | | 60 | SSID History Logger | ✅ | ✅ |
+| 25 | BT Rickroll | ✅ | ❌ | | 61 | QR Poisoner | ✅ | ✅ |
+| 26 | BT Device Profiler | ✅ | ❌ | | 62 | Auto-Dim | ✅ | ✅ |
+| 27 | Device Fingerprinter | ✅ | ✅ | | 63 | OPSEC Background | ✅ | ✅ |
+| 28 | OPSEC Monitor | ✅ | ✅ | | 64 | Network Scanner (Full) | ✅ | ✅ |
+| 29 | OUI Lookup | ✅ | ✅ | | 65 | DHCP Starvation (Full) | ✅ | ✅ |
+| 30 | Probe Log | ✅ | ✅ | | 66 | Karma Attack (Full) | ✅ | ✅ |
+| 31 | Banner Grabber | ✅ | ✅ | | 67 | DNS Spoofer (Full) | ✅ | ✅ |
+| 32 | SmartHome Scan | ✅ | ❌ | | 68 | Auth Flood (Full) | ✅ | ✅ |
+| 33 | Channel Chart | ✅ | ✅ | | 69 | AP Clone Flood (Full) | ✅ | ✅ |
+| 34 | People Counter | ✅ | ❌ | | 70 | DNS Tunnel (Full) | ✅ | ✅ |
+| 35 | MAC Rotator | ✅ | ✅ | | 71 | WPS PIN Attack (Full) | ✅ | ✅ |
+| 36 | Channel Hopper | ✅ | ✅ | | 72 | Rogue AP Detector (Full) | ✅ | ✅ |
 
 ---
 
 ## Board Compatibility
 
-| Board | Flash | Status |
-|-------|-------|--------|
-| **ESP32-S3 (Full - all 55 tools)** | | |
-| LilyGo T-Embed CC1101 | 16MB | 🟢 |
-| LilyGo T-Deck Pro | 16MB | 🟢 |
-| LilyGo T-Deck | 16MB | 🟢 |
-| LilyGo T-Display S3 | 16MB | 🟢 |
-| LilyGo T-Display S3 Touch | 16MB | 🟢 |
-| LilyGo T-Display S3 MMC | 16MB | 🟢 |
-| LilyGo T-Display S3 Touch MMC | 16MB | 🟢 |
-| LilyGo T-HMI | 16MB | 🟢 |
-| LilyGo T-LoRa Pager | 16MB | 🟢 |
-| LilyGo T-Watch S3 | 16MB | 🟢 |
-| M5Stack Cardputer | 8MB | 🟢 |
-| M5Stack CoreS3 | 16MB | 🟢 |
-| M5Stack StickS3 | 16MB | 🟢 |
-| ESP32-S3 DevKitC-1 | 16MB | 🟢 |
-| Smoochiee Board | 16MB | 🟢 |
+| Board | Flash | Version |
+|-------|-------|---------|
+| **ESP32-S3** | | |
+| LilyGo T-Embed CC1101 | 16MB | Full |
+| LilyGo T-Deck Pro | 16MB | Full |
+| LilyGo T-Deck | 16MB | Full |
+| LilyGo T-Display S3 | 16MB | Full |
+| LilyGo T-Display S3 Touch | 16MB | Full |
+| LilyGo T-Display S3 MMC | 16MB | Full |
+| LilyGo T-Display S3 Touch MMC | 16MB | Full |
+| LilyGo T-HMI | 16MB | Full |
+| LilyGo T-LoRa Pager | 16MB | Full |
+| LilyGo T-Watch S3 | 16MB | Full |
+| M5Stack Cardputer | 8MB | Full |
+| M5Stack CoreS3 | 16MB | Full |
+| M5Stack StickS3 | 16MB | Full |
+| ESP32-S3 DevKitC-1 | 16MB | Full |
+| Smoochiee Board | 16MB | Full |
 | **ESP32-C5** | | |
-| ESP32-C5 | 4MB | 🟢 |
-| ESP32-C5 TFT | 4MB | 🟢 |
-| **ESP32 (LITE - 55 tools, reduced for 4MB/8MB)** | | |
-| M5Stack Core 4MB | 4MB | 🟢 |
-| M5Stack Core 16MB | 16MB | 🟢 |
-| M5Stack CPlus 1.1 | 4MB | 🟢 |
-| CYD-2432S028 | 4MB | 🟢 |
-| CYD-2USB | 4MB | 🟢 |
-| CYD-2432W328C | 4MB | 🟢 |
-| CYD-2432W328R | 4MB | 🟢 |
-| CYD-3248S035R | 4MB | 🟢 |
-| CYD-3248S035C | 4MB | 🟢 |
-| Elecrow 2.4B | 4MB | 🟢 |
-| Elecrow 2.8B | 4MB | 🟢 |
-| Elecrow 3.5B | 4MB | 🟢 |
-| LilyGo T-Display TTGO | 4MB | 🟢 |
-| Marauder Mini | 4MB | 🟢 |
-| Marauder V4-V6 | 4MB | 🟢 |
-| Marauder V7 | 4MB | 🟢 |
-| Marauder V6.1 | 4MB | 🟢 |
-| Awok Mini | 4MB | 🟢 |
-| Awok Touch | 4MB | 🟢 |
-| WaveSentry R1 | 4MB | 🟢 |
-| Phantom S024R | 4MB | 🟢 |
-| **Known Limitations** | | |
-| M5Stack CPlus2 | - | 🔴 DRAM overflow |
-| M5Stack Core2 | - | 🔴 DRAM overflow |
+| ESP32-C5 | 4MB | Full |
+| ESP32-C5 TFT | 4MB | Full |
+| **ESP32** | | |
+| M5Stack Core 4MB | 4MB | LITE |
+| M5Stack Core 16MB | 16MB | LITE |
+| M5Stack CPlus 1.1 | 4MB | LITE |
+| CYD-2432S028 | 4MB | LITE |
+| CYD-2USB | 4MB | LITE |
+| CYD-2432W328C | 4MB | LITE |
+| CYD-2432W328R | 4MB | LITE |
+| CYD-3248S035R | 4MB | LITE |
+| CYD-3248S035C | 4MB | LITE |
+| Elecrow 2.4B | 4MB | LITE |
+| Elecrow 2.8B | 4MB | LITE |
+| Elecrow 3.5B | 4MB | LITE |
+| LilyGo T-Display TTGO | 4MB | LITE |
+| Marauder Mini | 4MB | LITE |
+| Marauder V4-V6 | 4MB | LITE |
+| Marauder V7 | 4MB | LITE |
+| Marauder V6.1 | 4MB | LITE |
+| Awok Mini | 4MB | LITE |
+| Awok Touch | 4MB | LITE |
+| WaveSentry R1 | 4MB | LITE |
+| Phantom S024R | 4MB | LITE |
+| **Known Issues** | | |
+| M5Stack CPlus2 | - | DRAM overflow |
+| M5Stack Core2 | - | DRAM overflow |
 
 ---
 
 ## Remote Dashboard
 
 Arsenal > Dashboard. Connect to `ArsenalNet` (password: `arsenal32`). Open `192.168.4.1`.
-
-- Start/stop all 55 tools from phone
-- Browse/upload/delete files on SD card
-- OTA firmware updates
-- Drag-and-drop script upload
-
-## Custom Combos
-
-Create `.txt` in `/arsenal/combos/` with one feature per line:
-
-```
-mac_rotator
-channel_hopper
-decoy_traffic
-ble_tracker
-```
-
-## SD Card Layout
-
-```
-/arsenal/
-  badusb/       DuckyScript payloads (.txt)
-  subghz/       Sub-GHz signal captures (.sub)
-  ir/           IR remote files (.ir)
-  portals/      Evil portal HTML templates
-  nfc/          NFC card dumps (.nfc)
-  rfid/         125kHz RFID captures (.rfid)
-  scripts/      JavaScript automation (.js)
-  combos/       Custom combo presets (.txt)
-  logs/         Session logs
-  creds.txt     Captured credentials
-```
-
----
 
 ## Credits
 

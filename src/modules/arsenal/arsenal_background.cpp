@@ -159,8 +159,8 @@ bool arsenal_background_is_running(void) {
 
 void arsenal_draw_opsec_dot(void) {
 
-    int dotX = 4;
-    int dotY = 14;
+    int dotX = 2;
+    int dotY = 12;
     int dotR = 4;
 
     uint16_t color;

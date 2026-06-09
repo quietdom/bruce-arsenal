@@ -131,9 +131,8 @@ void arsenal_sms_notification_spoofer(void) {
         delay(100);
         if (!NimBLEDevice::init("")) {
             displayError("BLE init failed", true);
-return; 
-}
-#endif
+            return;
+        }
         NimBLEAdvertising *pAdvertising = NimBLEDevice::getAdvertising();
 
         unsigned long startTime = millis();

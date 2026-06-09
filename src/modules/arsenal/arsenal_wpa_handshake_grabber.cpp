@@ -1,3 +1,4 @@
+#if !LITE_VERSION
 #include "arsenal.h"
 #include "arsenal_background.h"
 #include "arsenal_config.h"
@@ -261,3 +262,4 @@ void arsenal_wpa_handshake_grabber(void) {
 
     if (bgWasRunning) arsenal_background_start();
 }
+#endif

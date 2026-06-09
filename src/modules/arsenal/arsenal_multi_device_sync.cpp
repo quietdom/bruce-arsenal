@@ -1,3 +1,4 @@
+#if !LITE_VERSION
 #include "arsenal.h"
 #include "core/display.h"
 #include "core/mykeyboard.h"
@@ -107,3 +108,4 @@ void arsenal_multi_device_sync(void) {
     esp_now_unregister_recv_cb();
     esp_now_deinit();
 }
+#endif

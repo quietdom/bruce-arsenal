@@ -155,9 +155,11 @@ void ArsenalMenu::commsMenu() {
         {"ESP-NOW Chat",       arsenal_espnow_chat              },
         {"ESP-NOW C2",         arsenal_espnow_c2                },
 #endif
+#if !LITE_VERSION
         {"Dead Drop Mesh",     arsenal_dead_drop_mesh           },
         {"IR Data Transfer",   arsenal_ir_data_transfer         },
         {"Multi-Device Sync",  arsenal_multi_device_sync        },
+#endif
         {"Back",               [this]() { optionsMenu(); }      },
     };
     loopOptions(options, MENU_TYPE_SUBMENU, "Comms");

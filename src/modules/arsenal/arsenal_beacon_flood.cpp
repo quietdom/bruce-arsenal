@@ -1,3 +1,4 @@
+#if !LITE_VERSION
 #include "arsenal.h"
 #include "arsenal_background.h"
 #include "core/display.h"
@@ -82,3 +83,4 @@ void arsenal_beacon_flood(void) {
 
     esp_wifi_set_promiscuous(false);
 }
+#endif

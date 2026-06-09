@@ -1,3 +1,4 @@
+#if !LITE_VERSION
 #include "arsenal.h"
 #include "arsenal_background.h"
 #include "core/display.h"
@@ -228,3 +229,4 @@ void arsenal_selective_deauth(void) {
 
     if (bgWasRunning) arsenal_background_start();
 }
+#endif

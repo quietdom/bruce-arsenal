@@ -1,3 +1,4 @@
+#if !LITE_VERSION
 #include "arsenal.h"
 #include "core/display.h"
 #include "core/mykeyboard.h"
@@ -132,3 +133,4 @@ void arsenal_dead_drop_mesh(void) {
     addOptionToMainMenu();
     loopOptions(options, MENU_TYPE_SUBMENU, "Dead Drop Mesh");
 }
+#endif

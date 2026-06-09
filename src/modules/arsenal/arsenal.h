@@ -39,7 +39,9 @@ void arsenal_dns_spoofer(void);
 void arsenal_captive_portal_templates(void);
 void arsenal_captive_portal_autophish(void);
 #endif
+#if !LITE_VERSION
 void arsenal_wifi_bruteforce(void);
+#endif
 #if !LITE_VERSION
 void arsenal_cred_forward(void);
 #endif
@@ -74,8 +76,9 @@ void arsenal_remote_dashboard(void);
 
 void arsenal_script_browser(void);
 
-
+#if !LITE_VERSION
 void arsenal_wifi_bruteforce(void);
+#endif
 
 
 void arsenal_attack_scheduler(void);
@@ -94,12 +97,16 @@ void arsenal_config_dashboard(void);
 void arsenal_pin_lock(void);
 
 // WiFi Attacks
+#if !LITE_VERSION
 void arsenal_wpa_handshake_grabber(void);
 void arsenal_beacon_flood(void);
 void arsenal_selective_deauth(void);
+#endif
 void arsenal_auth_flood(void);
 void arsenal_ap_clone_flood(void);
+#if !LITE_VERSION
 void arsenal_arp_poisoner(void);
+#endif
 #if !LITE_VERSION
 void arsenal_ssl_strip(void);
 #endif
@@ -158,9 +165,11 @@ void arsenal_rf_silence_enforcer(void);
 void arsenal_espnow_chat(void);
 void arsenal_espnow_c2(void);
 #endif
+#if !LITE_VERSION
 void arsenal_dead_drop_mesh(void);
 void arsenal_ir_data_transfer(void);
 void arsenal_multi_device_sync(void);
+#endif
 
 // Evasion
 void arsenal_time_based_randomizer(void);

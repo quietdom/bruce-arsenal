@@ -1,215 +1,90 @@
-🌐 [English](../README.md) | [Português](README_PT.md) | [Italiano](README_IT.md) | [Français](README_FR.md) | [Русский](README_RU.md) | [中文](README_ZH.md) | [Polski](README_PL.md) | [Nederlands](README_NL.md) | [Türkçe](README_TR.md) | [Deutsch](README_DE.md) | [Tiếng Việt](README_VN.md) | [Español](README_ES.md) | [Indonesia](README_ID.md) | [العربية](README_AR.md)
+?? [English](../README.md) | [Portugues](README_PT.md) | [Italiano](README_IT.md) | [Francais](README_FR.md) | [Russian](README_RU.md) | [Chinese](README_ZH.md) | [Polski](README_PL.md) | [Nederlands](README_NL.md) | [Turkce](README_TR.md) | [Deutsch](README_DE.md) | [Vietnamese](README_VN.md) | [Espanol](README_ES.md) | [Indonesia](README_ID.md) | [Arabic](README_AR.md)
+
+<h1 align="center">?? Bruce Arsenal</h1>
 
 <p align="center">
-  <img src="../media/bruce_banner.jpg" alt="Bruce Arsenal" width="700">
-</p>
-
-<h1 align="center">🎯 Bruce Arsenal</h1>
-
-<p align="center">
-  <b>Кастомная наступательная прошивка для устройств ESP32</b><br>
-  <i>26 инструментов атаки • Мобильная панель • Фоновое уклонение • 60K+ скриптов</i>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Platform-ESP32--S3-blue?style=flat-square" alt="ESP32-S3">
-  <img src="https://img.shields.io/badge/Target-T--Embed%20CC1101-green?style=flat-square" alt="T-Embed">
-  <img src="https://img.shields.io/badge/Tools-26+-red?style=flat-square" alt="Tools">
-  <img src="https://img.shields.io/badge/Scripts-60K+-purple?style=flat-square" alt="Scripts">
-  <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" alt="Status">
+  <b>Пользовательская прошивка наступательной безопасности для устройств ESP32</b><br>
+  <i>72 инструмента - Одна прошивка - Несколько устройств</i>
 </p>
 
 ---
 
-## Что Это Такое
+## Что Это
 
-Глубоко модифицированная версия [Bruce Firmware](https://github.com/pr3y/Bruce) с интегрированным пользовательским модулем **Arsenal** — полным набором инструментов наступательной безопасности, доступным из одной вкладки меню с иконкой прицела.
-
-Все оригинальные функции Bruce сохранены. Arsenal добавляет 26 новых инструментов, мобильную веб-панель, фоновые сервисы уклонения и браузер скриптов, который может загружать более 60K полезных нагрузок с SD-карты.
+Модифицированная Bruce Firmware с пользовательским модуlem Arsenal - 72 инструмента наступательной безопасности из одного меню.
 
 ---
 
 ## Установка
 
-1. Скачайте `.bin` из [Releases](../../releases)
-2. Прошейте устройство одним из способов:
-   - **USB:** [ESP Web Flasher](https://espressif.github.io/esptool-js/) (Chrome/Edge)
-   - **OTA:** После первой прошивки используйте Arsenal → Dashboard → загрузите новый .bin с телефона
-3. Готово
+1. Скачайте .bin из Releases
+2. Прошейте через ESP Web Flasher (Chrome/Edge) или OTA через Arsenal Dashboard
 
 ---
 
-## Меню Arsenal
+## Инструменты Arsenal (72)
 
-```
-🎯 Arsenal
-├── WiFi Arsenal ──────── 8 наступательных WiFi инструментов
-├── BLE Arsenal ───────── 5 инструментов атаки Bluetooth
-├── Разведка ──────────── 3 инструмента разведки/осведомлённости
-├── Уклонение ─────────── 5 инструментов скрытности/анти-обнаружения
-├── Комбо ─────────────── Предустановленные + пользовательские цепочки атак
-├── Планировщик ────────── Отложенное выполнение атак
-├── Скрипты ───────────── Просмотр 60K+ полезных нагрузок с SD
-├── Лог сессии ────────── Логирование активности на SD
-├── Jam All ───────────── Одновременное глушение всех диапазонов (GUI)
-└── Dashboard ─────────── Мобильный веб-интерфейс + файловый менеджер + OTA
-```
+### WiFi Арсенал (11)
+Network Scanner, DHCP Starvation, Karma Attack, DNS Spoofer, Auto-Phish Portal, Cred Forward, Auth Flood, AP Clone Flood, SSL Strip Lite, DNS Tunnel, WPS PIN Attack
 
----
+### BLE Арсенал (6)
+BLE Tracker, BT Name Spammer, AirTag Spoofer, Audio Jammer, Notification Spoofer, BT Rickroll
 
-## Инструменты
+### Разведка (8)
+Device Fingerprinter, OPSEC Monitor, OUI Lookup, Probe Log, Banner Grabber, SmartHome Scan, Channel Chart, People Counter
 
-### WiFi Arsenal
+### Уклонение (5)
+MAC Rotator, Channel Hopper, Decoy Traffic, Identity Cloner, Time Randomizer
 
-| Инструмент | Что Делает |
-|------------|------------|
-| **Network Scanner** | ARP-сканирование + сканирование TCP-портов. Показывает устройства, открытые порты, имена производителей |
-| **DHCP Starvation** | Заливает DHCP-запросами с поддельными MAC для исчерпания пула IP маршрутизатора |
-| **Karma Attack** | Отвечает на все WiFi probe-запросы — ближайшие устройства автоматически подключаются к вам |
-| **DNS Spoofer** | Перехватывает DNS при работе в режиме AP. Все домены разрешаются на ваш портал |
-| **Portal Templates** | Загружает пользовательский фишинговый HTML с SD-карты. Захватывает учётные данные в файл |
-| **Auto-Phish Portal** | Определяет какие сети ищут жертвы, клонирует SSID, обслуживает портал |
-| **Cred Forward** | Захватывает учётные данные портала → автоматически подключается к реальному AP → мостит трафик. Полный прозрачный MITM |
-| **WiFi Brute Force** | Генерирует умный словарь из имени SSID (комбинации годов, leet speak, типичные паттерны). Проверяет в реальном времени |
+### Фишинг (4)
+Win Update Phish, WiFi Speed Phish, OAuth Phish, Device Found Phish
 
-### BLE Arsenal
+### Sub-GHz / RF (6)
+NRF24 MouseJack, Doorbell Replay, Garage Brute Force, Keyfob Logger, Frequency Scanner, Flipper Import
 
-| Инструмент | Что Делает |
-|------------|------------|
-| **BLE Tracker** | Непрерывное BLE-сканирование с оценкой расстояния по RSSI. Обнаруживает AirTag, SmartTag, Tile, следящие за вами |
-| **Name Spammer** | Заливает каналы BLE advertising сотнями случайных имён устройств |
-| **AirTag Spoofer** | Транслирует поддельные маяки Apple FindMy AirTag. Фантомные метки появляются на ближайших iPhone |
-| **Audio Jammer** | Нарушает аудио-соединения BLE (AirPods, колонки) потоком advertisement |
-| **Notification Spoofer** | Отправляет поддельные всплывающие уведомления о найденном устройстве на Android (Fast Pair), Windows (Swift Pair) и iOS (AirPods proximity) |
+### Обнаружение (3)
+Flipper Detector, Hacker Detector, RF Silence Enforcer
 
-### Разведка
+### Связь (5)
+ESP-NOW Chat, ESP-NOW C2, Dead Drop Mesh, IR Data Transfer, Multi-Device Sync
 
-| Инструмент | Что Делает |
-|------------|------------|
-| **Device Fingerprinter** | Пассивный WiFi fingerprinting. Определяет ОС/модель устройства по поведению probe, OUI, таймингу |
-| **OPSEC Monitor** | Обнаруживает, если вас сканируют, деаутентифицируют или отслеживают. Уровень угрозы: зелёный/жёлтый/красный |
-| **OUI Lookup** | Офлайн-поиск производителя по MAC в базе данных на SD-карте |
-
-### Уклонение
-
-| Инструмент | Что Делает |
-|------------|------------|
-| **MAC Rotator** | Рандомизирует WiFi MAC-адрес по настраиваемому таймеру. Регулируемая скорость |
-| **Channel Hopper** | Быстро переключает WiFi-каналы во время операций. Настраиваемый интервал |
-| **Decoy Traffic** | Излучает случайные beacon/probe фреймы на ротирующих каналах. Маскирует реальную активность в шуме |
-| **Identity Cloner** | Захватывает идентичности ближайших устройств (MAC + паттерн probe). Клонируйте одно, чтобы стать невидимым |
-| **QR Poisoner** | Генерирует QR-коды, указывающие на ваш портал. Показывайте на экране, печатайте и размещайте |
-
-### Jam All (Пользовательский GUI)
-
-Полноэкранная панель с переключателями по диапазонам, живые индикаторы активности, таймер и кнопка мгновенной остановки.
-
-| Диапазон | Метод |
-|----------|-------|
-| WiFi 2.4GHz | Флуд деаутентификации по всем 14 каналам |
-| BLE | Флуд каналов advertisement (37, 38, 39) |
-| Sub-GHz | Непрерывная передача CC1101 (315/433/868/915 МГц) |
-| NRF24 | Несущая 2.4GHz на ротирующих каналах |
-
-### Утилиты
-
-| Инструмент | Что Делает |
-|------------|------------|
-| **Attack Scheduler** | Выберите инструмент → задержка (0 до 1 часа) → длительность. Запускается и останавливается автоматически |
-| **Session Log** | Логирует каждое действие с временными метками. Просмотр/экспорт/очистка из меню |
-| **Script Browser** | Навигация по категоризированным папкам SD. Авто-запуск по типу файла (.txt/.sub/.ir/.html/.nfc/.js) |
-| **Combo Presets** | Цепочки атак в одно касание. Встроенные: Stealth Mode, Full Attack, Passive Recon. Создавайте пользовательские .txt на SD |
-| **Remote Dashboard** | Телефон подключается к AP ArsenalNet → полный мобильный веб-интерфейс с файловым менеджером + OTA-обновления |
+### Утилиты (2)
+NFC Biz Card, Attack Stats
 
 ---
 
-## Фоновые Сервисы
+## Совместимость плат
 
-Работают постоянно во всех меню — не только внутри Arsenal.
+### ESP32-S3 (Полный - 72 инструментов)
+LilyGo T-Embed CC1101, T-Deck Pro, T-Deck, T-Display S3, T-HMI, T-LoRa Pager, T-Watch S3, M5Stack Cardputer, CoreS3, StickS3
 
-| Сервис | Описание |
-|--------|----------|
-| **OPSEC Dot** | Цветной кружок в строке состояния (зелёный/жёлтый/красный). Всегда виден, на каждом экране |
-| **Always-On Evasion** | Ротация MAC + channel hopping + decoy traffic. Работает бесшумно на ядре 0 CPU |
-| **Low Power Mode** | Замедляет фоновые задачи в 5 раз для экономии батареи. Включается из меню Combos |
-| **Auto-Dim** | Яркость экрана снижается во время активных атак. Восстанавливается при остановке |
+### ESP32 (LITE - 31 инструментов)
+M5Stack Core 4MB/16MB, CPlus 1.1, CYD (all variants), Elecrow, Marauder, Awok, WaveSentry, Phantom
 
----
-
-## Remote Dashboard
-
-Запустите Arsenal → Dashboard. Подключите телефон к `ArsenalNet` (пароль: `arsenal32`). Откройте `192.168.4.1` в браузере.
-
-**Возможности:**
-- Запуск/остановка всех 26 инструментов с телефона
-- Просмотр, загрузка, удаление файлов на SD-карте (папка `/arsenal/`)
-- Загрузка прошивки `.bin` для OTA-обновления
-- Перетаскивание скриптов в категоризированные папки
-- Статус системы в реальном времени (heap, место на SD, uptime)
+### Известные ограничения
+M5Stack CPlus2, M5Stack Core2 - Переполнение DRAM (глобальные переменные ядра)
 
 ---
 
-## Структура SD-карты
+## Фоновые службы
 
-```
-/arsenal/
-├── badusb/       Полезные нагрузки DuckyScript (.txt)
-├── subghz/       Захваты сигналов Sub-GHz (.sub)
-├── ir/           Файлы ИК-пультов (.ir)
-├── portals/      HTML-шаблоны evil portal
-├── nfc/          Дампы NFC-карт (.nfc)
-├── rfid/         Захваты RFID 125kHz (.rfid)
-├── ibutton/      Файлы ключей iButton (.ibutton)
-├── scripts/      JavaScript-автоматизация (.js)
-├── combos/       Пользовательские пресеты комбо (.txt — одно имя функции на строку)
-├── logs/         Логи сессий (создаётся автоматически)
-└── creds.txt     Захваченные учётные данные (создаётся автоматически)
-```
-
-Совместимо с [BruceFlipperScripts](https://github.com/Unknown3613/BruceFlipperScripts) (60K+ скриптов).
+- **OPSEC Dot** - Цветной круг на панели состояния
+- **Always-On Evasion** - Ротация MAC + переключение каналов + отвлекающий трафик
+- **Auto-Dim** - Яркость экрана снижается во время атак
 
 ---
 
-## Пользовательские Комбо
+## Панель управления
 
-Создайте файл `.txt` в `/arsenal/combos/` с одной функцией на строку:
-
-```
-mac_rotator
-channel_hopper
-decoy_traffic
-ble_tracker
-```
-
-Автоматически появляется в Arsenal → Combos.
+Arsenal > Dashboard. Подключите телефон к ArsenalNet (пароль: arsenal32). Откройте 192.168.4.1.
 
 ---
 
-## Оборудование
+## Авторы
 
-Основная цель: **LilyGo T-Embed CC1101**
-- ESP32-S3 (16МБ flash, 8МБ PSRAM)
-- TFT-дисплей ST7789 320x170
-- Поворотный энкодер + кнопка
-- Sub-GHz радио CC1101
-- Радио NRF24 2.4GHz
-- NFC PN532
-- Слот SD-карты
-- USB-C (BadUSB HID)
-- Динамик + Микрофон
-- RGB-светодиоды
-- Датчик заряда BQ27220
+- [Bruce Firmware](https://github.com/pr3y/Bruce) by pr3y
+- Arsenal module by quietdom
 
 ---
 
-## Благодарности
-
-- Основано на [Bruce Firmware](https://github.com/pr3y/Bruce) от pr3y
-- Модуль Arsenal от quietdom
-- Коллекция скриптов совместима с [BruceFlipperScripts](https://github.com/Unknown3613/BruceFlipperScripts)
-
----
-
-## Отказ от ответственности
-
-Эта прошивка предназначена исключительно для авторизованного тестирования безопасности и образовательных целей. Не используйте против сетей или устройств, которыми вы не владеете или на тестирование которых у вас нет явного разрешения. Авторы не несут ответственности за неправомерное использование.
+## Только для авторизованного тестирования безопасности и образовательных целей.

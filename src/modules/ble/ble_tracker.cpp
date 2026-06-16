@@ -69,16 +69,16 @@ static void drawTrackerScreen() {
     tft.drawCentreString("Esc to stop", tftWidth / 2, tftHeight - 20, 1);
 }
 
-class TrackerAdvertCallback : public NimBLEAdvertCallbacks {
-    void onResult(const NimBLEAdvertDetails *advertDetails) {
-        NimBLEAddress addr = advertDetails->getAddress();
-        int rssi = advertDetails->getRSSI();
-        std::string name = advertDetails->isName() ? advertDetails->getName().c_str() : "";
-        updateDevice(addr.toString(), name, rssi);
+class TrackerScanCallback : public NimBLEScanCallbacks {
+    void onResult(NimBLEAdvertisedDevice *advertisedDevice) {
+        std::string addr = advertisedDevice->getAddress().toString();
+        int rssi = advertisedDevice->getRSSI();
+        std::string name = advertisedDevice->haveName() ? advertisedDevice->getName().c_str() : "";
+        updateDevice(addr, name, rssi);
     }
 };
 
-static TrackerAdvertCallback advertCallback;
+static TrackerScanCallback scanCallback;
 
 void bleTracker() {
     NimBLEDevice::deinit(true);
@@ -95,7 +95,7 @@ void bleTracker() {
     trackerRunning = true;
 
     NimBLEScan *pScan = NimBLEDevice::getScan();
-    pScan->setAdvertCallbacks(&advertCallback);
+    pScan->setScanCallbacks(&scanCallback);
     pScan->setActiveScan(true);
     pScan->setInterval(100);
     pScan->setWindow(99);

@@ -11,11 +11,6 @@ public:
     void drawIcon(float scale);
     bool hasTheme() { return bruceConfig.theme.ble; }
     String themePath() { return bruceConfig.theme.paths.ble; }
-
-private:
-    void configMenu(void);
-    void setBleNameMenu(void);
-    void bleArsenalMenu(void);
 };
 
 #endif

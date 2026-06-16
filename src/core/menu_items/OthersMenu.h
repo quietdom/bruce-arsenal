@@ -9,21 +9,12 @@ public:
     OthersMenu() : MenuItemInterface("Others") {}
 
     void micMenu();
-    void badUsbHidMenu(); // New submenu for BadUSB & HID tools
+    void badUsbHidMenu();
     void optionsMenu(void);
     void drawIcon(float scale);
 
     bool hasTheme() { return bruceConfig.theme.others; }
     String themePath() { return bruceConfig.theme.paths.others; }
-
-private:
-    void arsenalMenu(void);
-    void arsenalIntelligenceMenu(void);
-    void arsenalEvasionMenu(void);
-    void arsenalPhishingMenu(void);
-    void arsenalDetectionMenu(void);
-    void arsenalCommsMenu(void);
-    void arsenalUtilityMenu(void);
 };
 
 #endif

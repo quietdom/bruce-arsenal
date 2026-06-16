@@ -5,6 +5,10 @@
 #include "modules/ble/ble_common.h"
 #include "modules/ble/ble_ninebot.h"
 #include "modules/ble/ble_spam.h"
+#include "modules/ble/airtag_spoofer.h"
+#include "modules/ble/notif_spoofer.h"
+#include "modules/ble/ble_tracker.h"
+#include "modules/ble/audio_jammer.h"
 #if !defined(LITE_VERSION)
 #include "modules/ble/BLE_Suite.h"
 #endif
@@ -39,126 +43,36 @@ void BleMenu::optionsMenu() {
     options.push_back({"BLE Keyboard", [=]() { ducky_keyboard(hid_ble, true); }});
 #endif
     options.push_back({"BLE Spam", [=]() { spamMenu(); }});
-
 #if !defined(LITE_VERSION)
     options.push_back({"BLE Suite", [=]() { BleSuiteMenu(); }});
+    options.push_back({"Notif Spoofer", notifSpoofer});
+    options.push_back({"BT Name Spammer", arsenal_bt_name_spammer});
+    options.push_back({"AirTag Spoofer", airtagSpoofer});
+    options.push_back({"BLE Tracker", bleTracker});
+    options.push_back({"Audio Jammer", audioJammer});
+    options.push_back({"BT Rickroll", arsenal_bt_audio_rickroll});
+    options.push_back({"Device Profiler", arsenal_bt_device_profiler});
     options.push_back({"Ninebot", [=]() { BLENinebot(); }});
-    options.push_back({"Arsenal BLE", [=]() { bleArsenalMenu(); }});
 #endif
     addOptionToMainMenu();
-
     loopOptions(options, MENU_TYPE_SUBMENU, "Bluetooth", 0, false);
 }
 
 void BleMenu::drawIcon(float scale) {
     clearIconArea();
-
     int lineWidth = scale * 5;
     int iconW = scale * 36;
     int iconH = scale * 60;
     int radius = scale * 5;
     int deltaRadius = scale * 10;
-
     if (iconW % 2 != 0) iconW++;
     if (iconH % 4 != 0) iconH += 4 - (iconH % 4);
-
-    tft.drawWideLine(
-        iconCenterX,
-        iconCenterY + iconH / 4,
-        iconCenterX - iconW,
-        iconCenterY - iconH / 4,
-        lineWidth,
-        bruceConfig.priColor,
-        bruceConfig.priColor
-    );
-    tft.drawWideLine(
-        iconCenterX,
-        iconCenterY - iconH / 4,
-        iconCenterX - iconW,
-        iconCenterY + iconH / 4,
-        lineWidth,
-        bruceConfig.priColor,
-        bruceConfig.priColor
-    );
-    tft.drawWideLine(
-        iconCenterX,
-        iconCenterY + iconH / 4,
-        iconCenterX - iconW / 2,
-        iconCenterY + iconH / 2,
-        lineWidth,
-        bruceConfig.priColor,
-        bruceConfig.priColor
-    );
-    tft.drawWideLine(
-        iconCenterX,
-        iconCenterY - iconH / 4,
-        iconCenterX - iconW / 2,
-        iconCenterY - iconH / 2,
-        lineWidth,
-        bruceConfig.priColor,
-        bruceConfig.priColor
-    );
-
-    tft.drawWideLine(
-        iconCenterX - iconW / 2,
-        iconCenterY - iconH / 2,
-        iconCenterX - iconW / 2,
-        iconCenterY + iconH / 2,
-        lineWidth,
-        bruceConfig.priColor,
-        bruceConfig.priColor
-    );
-
-    tft.drawArc(
-        iconCenterX,
-        iconCenterY,
-        2.5 * radius,
-        2 * radius,
-        210,
-        330,
-        bruceConfig.priColor,
-        bruceConfig.bgColor
-    );
-    tft.drawArc(
-        iconCenterX,
-        iconCenterY,
-        2.5 * radius + deltaRadius,
-        2 * radius + deltaRadius,
-        210,
-        330,
-        bruceConfig.priColor,
-        bruceConfig.bgColor
-    );
-    tft.drawArc(
-        iconCenterX,
-        iconCenterY,
-        2.5 * radius + 2 * deltaRadius,
-        2 * radius + 2 * deltaRadius,
-        210,
-        330,
-        bruceConfig.priColor,
-        bruceConfig.bgColor
-    );
-}
-
-void BleMenu::bleArsenalMenu() {
-    if (!arsenal_pin_check()) {
-        displayRedStripe("Access denied");
-        delay(1500);
-        return;
-    }
-
-    options = {
-#if !LITE_VERSION
-        {"Notif Spoofer",      arsenal_sms_notification_spoofer },
-        {"BT Name Spammer",    arsenal_bt_name_spammer          },
-        {"AirTag Spoofer",     arsenal_airtag_spoofer           },
-        {"BLE Tracker",        arsenal_ble_tracker              },
-        {"BT Audio Jammer",    arsenal_bt_audio_jammer          },
-        {"BT Rickroll",        arsenal_bt_audio_rickroll        },
-        {"Device Profiler",    arsenal_bt_device_profiler       },
-#endif
-        {"Back",               [this]() { optionsMenu(); }      },
-    };
-    loopOptions(options, MENU_TYPE_SUBMENU, "Arsenal BLE");
+    tft.drawWideLine(iconCenterX, iconCenterY + iconH / 4, iconCenterX - iconW, iconCenterY - iconH / 4, lineWidth, bruceConfig.priColor, bruceConfig.priColor);
+    tft.drawWideLine(iconCenterX, iconCenterY - iconH / 4, iconCenterX - iconW, iconCenterY + iconH / 4, lineWidth, bruceConfig.priColor, bruceConfig.priColor);
+    tft.drawWideLine(iconCenterX, iconCenterY + iconH / 4, iconCenterX - iconW / 2, iconCenterY + iconH / 2, lineWidth, bruceConfig.priColor, bruceConfig.priColor);
+    tft.drawWideLine(iconCenterX, iconCenterY - iconH / 4, iconCenterX - iconW / 2, iconCenterY - iconH / 2, lineWidth, bruceConfig.priColor, bruceConfig.priColor);
+    tft.drawWideLine(iconCenterX - iconW / 2, iconCenterY - iconH / 2, iconCenterX - iconW / 2, iconCenterY + iconH / 2, lineWidth, bruceConfig.priColor, bruceConfig.priColor);
+    tft.drawArc(iconCenterX, iconCenterY, 2.5 * radius, 2 * radius, 210, 330, bruceConfig.priColor, bruceConfig.bgColor);
+    tft.drawArc(iconCenterX, iconCenterY, 2.5 * radius + deltaRadius, 2 * radius + deltaRadius, 210, 330, bruceConfig.priColor, bruceConfig.bgColor);
+    tft.drawArc(iconCenterX, iconCenterY, 2.5 * radius + 2 * deltaRadius, 2 * radius + 2 * deltaRadius, 210, 330, bruceConfig.priColor, bruceConfig.bgColor);
 }

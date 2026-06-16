@@ -16,37 +16,25 @@
 #include "modules/wifi/scan_hosts.h"
 #include "modules/wifi/sniffer.h"
 #include "modules/wifi/wifi_atks.h"
+#include "modules/wifi/dhcp_starvation.h"
+#include "modules/wifi/dns_spoofer.h"
+#include "modules/wifi/cred_forward.h"
 
 #ifndef LITE_VERSION
 #include "modules/pwnagotchi/pwnagotchi.h"
 #include "modules/wifi/wifi_recover.h"
 #endif
 
-// #include "modules/reverseShell/reverseShell.h"
-//  Developed by Fourier (github.com/9dl)
-//  Use BruceC2 to interact with the reverse shell server
-//  BruceC2: https://github.com/9dl/Bruce-C2
-//  To use BruceC2:
-//  1. Start Reverse Shell Mode in Bruce
-//  2. Start BruceC2 and wait.
-//  3. Visit 192.168.4.1 in your browser to access the web interface for shell executing.
-
-// 32bit: https://github.com/9dl/Bruce-C2/releases/download/v1.0/BruceC2_windows_386.exe
-// 64bit: https://github.com/9dl/Bruce-C2/releases/download/v1.0/BruceC2_windows_amd64.exe
 #include "modules/wifi/socks4_proxy.h"
 #include "modules/wifi/tcp_utils.h"
-
 #include "modules/arsenal/arsenal.h"
 #include "modules/arsenal/arsenal_config.h"
 
-// global toggle - controls whether scanNetworks includes hidden SSIDs
 bool showHiddenNetworks = false;
 
 void WifiMenu::optionsMenu() {
     returnToMenu = false;
     options.clear();
-    // Note: WiFi features will cleanly stop WebUI automatically when they start
-    // User can navigate menu normally even with WebUI active
     if (WiFi.status() != WL_CONNECTED) {
         options = {
             {"Connect to Wifi", lambdaHelper(wifiConnectMenu, WIFI_STA)},
@@ -61,13 +49,19 @@ void WifiMenu::optionsMenu() {
         options.push_back({"AP info", displayAPInfo});
     }
     options.push_back({"Wifi Atks", wifi_atk_menu});
-    options.push_back({"Evil Portal", [=]() {
-                           // WebUI cleanup now handled automatically inside EvilPortal constructor
-                           EvilPortal();
-                       }});
+    options.push_back({"Evil Portal", [=]() { EvilPortal(); }});
     options.push_back({"NetCut", [=]() { netcutMenu(); }});
-    // options.push_back({"ReverseShell", [=]()       { ReverseShell(); }});
 #ifndef LITE_VERSION
+    options.push_back({"Cred Forward", credForward});
+    options.push_back({"DNS Spoofer", dnsSpoofer});
+    options.push_back({"DHCP Starvation", dhcpStarvation});
+    options.push_back({"Auto-Phish", arsenal_captive_portal_autophish});
+    options.push_back({"HTTP Proxy", arsenal_ssl_strip});
+    options.push_back({"Selective Deauth", arsenal_selective_deauth});
+    options.push_back({"WPA Handshake", arsenal_wpa_handshake_grabber});
+    options.push_back({"UPnP Port Opener", arsenal_upnp_port_opener});
+    options.push_back({"Default Creds", arsenal_default_cred_scanner});
+    options.push_back({"WiFi Bruteforce", arsenal_wifi_bruteforce});
     options.push_back({"Listen TCP", listenTcpPort});
     options.push_back({"Client TCP", clientTCP});
     options.push_back({"SOCKS4 Proxy", []() { socks4Proxy(1080); }});
@@ -77,7 +71,6 @@ void WifiMenu::optionsMenu() {
     options.push_back({"Scan Hosts", [=]() {
                            bool doScan = true;
                            if (!wifiConnected) doScan = wifiConnectMenu();
-
                            if (doScan) {
                                esp_netif_t *esp_netinterface =
                                    esp_netif_get_handle_from_ifkey("WIFI_STA_DEF");
@@ -93,20 +86,25 @@ void WifiMenu::optionsMenu() {
     options.push_back({"Brucegotchi", brucegotchi_start});
     options.push_back({"WiFi Pass Recovery", wifi_recover_menu});
 #endif
-
+    options.push_back({"Auth Flood", arsenal_auth_flood});
+    options.push_back({"AP Clone Flood", arsenal_ap_clone_flood});
+    options.push_back({"DNS Tunnel", arsenal_dns_tunnel});
+    options.push_back({"WPS PIN Info", arsenal_wps_pin_attack});
+    options.push_back({"Rogue AP Detect", arsenal_rogue_ap_detector});
+    options.push_back({"WiFi Probe Log", arsenal_wifi_probe_log});
+    options.push_back({"SSID History", arsenal_ssid_history_logger});
+    options.push_back({"Channel Chart", arsenal_wifi_channel_chart});
+    options.push_back({"Fingerprint", arsenal_device_fingerprinter});
+    options.push_back({"Banner Grab", arsenal_service_banner_grabber});
+    options.push_back({"Karma Attack", arsenal_karma_attack});
     options.push_back({"Config", [this]() { configMenu(); }});
-    options.push_back({"Arsenal WiFi", [this]() { wifiArsenalMenu(); }});
-
     addOptionToMainMenu();
-
     loopOptions(options, MENU_TYPE_SUBMENU, "WiFi");
-
     options.clear();
 }
 
 void WifiMenu::configMenu() {
     std::vector<Option> wifiOptions;
-
     wifiOptions.push_back({"Change MAC", wifiMACMenu});
     wifiOptions.push_back({"Add Evil Wifi", addEvilWifiMenu});
     wifiOptions.push_back({"Remove Evil Wifi", removeEvilWifiMenu});
@@ -114,11 +112,8 @@ void WifiMenu::configMenu() {
                                bruceConfig.setTerminalLog(!bruceConfig.TerminalLog);
                                configMenu();
                            }});
-
-    // Evil Wifi Settings submenu (unchanged)
     wifiOptions.push_back({"Evil Wifi Settings", [this]() {
                                std::vector<Option> evilOptions;
-
                                evilOptions.push_back({"Set Gateway IP", setEvilGatewayIp});
                                evilOptions.push_back({"Password Mode", setEvilPasswordMode});
                                evilOptions.push_back({"Rename /creds", setEvilEndpointCreds});
@@ -129,18 +124,13 @@ void WifiMenu::configMenu() {
                                evilOptions.push_back({"Back", [this]() { configMenu(); }});
                                loopOptions(evilOptions, MENU_TYPE_SUBMENU, "Evil Wifi Settings");
                            }});
-
     {
-
         String hidden__wifi_option = String("Hidden Networks:") + (showHiddenNetworks ? "ON" : "OFF");
-
-        // construct Option explicitly using char* label
         Option opt(hidden__wifi_option.c_str(), [this]() {
             showHiddenNetworks = !showHiddenNetworks;
             displayInfo(String("Hidden Networks:") + (showHiddenNetworks ? "ON" : "OFF"), true);
             configMenu();
         });
-
         wifiOptions.push_back(opt);
     }
     wifiOptions.push_back({"Back", [this]() { optionsMenu(); }});
@@ -151,68 +141,7 @@ void WifiMenu::drawIcon(float scale) {
     clearIconArea();
     int deltaY = scale * 20;
     int radius = scale * 6;
-
     tft.fillCircle(iconCenterX, iconCenterY + deltaY, radius, bruceConfig.priColor);
-    tft.drawArc(
-        iconCenterX,
-        iconCenterY + deltaY,
-        deltaY + radius,
-        deltaY,
-        130,
-        230,
-        bruceConfig.priColor,
-        bruceConfig.bgColor
-    );
-    tft.drawArc(
-        iconCenterX,
-        iconCenterY + deltaY,
-        2 * deltaY + radius,
-        2 * deltaY,
-        130,
-        230,
-        bruceConfig.priColor,
-        bruceConfig.bgColor
-    );
-}
-
-void WifiMenu::wifiArsenalMenu() {
-    if (!arsenal_pin_check()) {
-        displayRedStripe("Access denied");
-        delay(1500);
-        return;
-    }
-
-    options = {
-        {"DNS Spoofer",        arsenal_dns_spoofer              },
-#if !LITE_VERSION
-        {"Auto-Phish Portal",  arsenal_captive_portal_autophish },
-        {"Cred Forward",       arsenal_cred_forward             },
-#endif
-        {"Auth Flood",         arsenal_auth_flood               },
-        {"AP Clone Flood",     arsenal_ap_clone_flood           },
-#if !LITE_VERSION
-        {"HTTP Proxy",          arsenal_ssl_strip                },
-        {"Selective Deauth",   arsenal_selective_deauth         },
-        {"WPA Handshake",      arsenal_wpa_handshake_grabber    },
-#endif
-        {"DHCP Starvation",    arsenal_dhcp_starvation          },
-#if !LITE_VERSION
-        {"UPnP Port Opener",   arsenal_upnp_port_opener         },
-        {"Default Creds",      arsenal_default_cred_scanner     },
-#endif
-        {"DNS Tunnel",         arsenal_dns_tunnel               },
-        {"WPS PIN Info",       arsenal_wps_pin_attack           },
-        {"Rogue AP Detect",    arsenal_rogue_ap_detector        },
-#if !LITE_VERSION
-        {"WiFi Bruteforce",    arsenal_wifi_bruteforce          },
-#endif
-        {"WiFi Probe Log",     arsenal_wifi_probe_log           },
-        {"SSID History",       arsenal_ssid_history_logger      },
-        {"Channel Chart",      arsenal_wifi_channel_chart       },
-        {"Fingerprint",        arsenal_device_fingerprinter     },
-        {"Banner Grab",        arsenal_service_banner_grabber   },
-        {"Karma Attack",       arsenal_karma_attack             },
-        {"Back",               [this]() { optionsMenu(); }      },
-    };
-    loopOptions(options, MENU_TYPE_SUBMENU, "Arsenal WiFi");
+    tft.drawArc(iconCenterX, iconCenterY + deltaY, deltaY + radius, deltaY, 130, 230, bruceConfig.priColor, bruceConfig.bgColor);
+    tft.drawArc(iconCenterX, iconCenterY + deltaY, 2 * deltaY + radius, 2 * deltaY, 130, 230, bruceConfig.priColor, bruceConfig.bgColor);
 }

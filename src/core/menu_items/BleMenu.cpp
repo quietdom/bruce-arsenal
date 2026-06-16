@@ -9,7 +9,7 @@
 #include "modules/ble/notif_spoofer.h"
 #include "modules/ble/ble_tracker.h"
 #include "modules/ble/audio_jammer.h"
-#if !defined(LITE_VERSION)
+#if !LITE_VERSION
 #include "modules/ble/BLE_Suite.h"
 #endif
 #include "modules/arsenal/arsenal.h"
@@ -18,7 +18,7 @@
 
 void BleMenu::optionsMenu() {
     options.clear();
-#if !defined(LITE_VERSION)
+#if !LITE_VERSION
     if (BLEConnected) {
         options.push_back({"Disconnect", [=]() {
 #if defined(CONFIG_IDF_TARGET_ESP32C5)
@@ -33,7 +33,7 @@ void BleMenu::optionsMenu() {
                            }});
     }
 #endif
-#if !defined(LITE_VERSION)
+#if !LITE_VERSION
     options.push_back({"Media Cmds", [=]() { MediaCommands(hid_ble, true); }});
     options.push_back({"BLE Scan", ble_scan});
     options.push_back({"iBeacon", [=]() {
@@ -43,7 +43,7 @@ void BleMenu::optionsMenu() {
     options.push_back({"BLE Keyboard", [=]() { ducky_keyboard(hid_ble, true); }});
 #endif
     options.push_back({"BLE Spam", [=]() { spamMenu(); }});
-#if !defined(LITE_VERSION)
+#if !LITE_VERSION
     options.push_back({"BLE Suite", [=]() { BleSuiteMenu(); }});
     options.push_back({"Notif Spoofer", notifSpoofer});
     options.push_back({"BT Name Spammer", arsenal_bt_name_spammer});

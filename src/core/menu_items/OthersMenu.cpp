@@ -20,21 +20,23 @@ void OthersMenu::optionsMenu() {
 #if defined(MIC_SPM1423) || defined(MIC_INMP441)
         {"Microphone",      [this]() { micMenu(); }         },
 #endif
-#if !defined(LITE_VERSION)
+#if !LITE_VERSION
 #if defined(USB_as_HID)
         {"BadUSB & HID",    [this]() { badUsbHidMenu(); }},
 #endif
-#endif
-#ifndef LITE_VERSION
         {"iButton",         setup_ibutton                   },
 #endif
         {"OPSEC Monitor",   arsenal_opsec_monitor           },
         {"OUI Lookup",      arsenal_oui_lookup              },
         {"Probe Log",       arsenal_wifi_probe_log          },
         {"Banner Grabber",  arsenal_service_banner_grabber  },
+#if !LITE_VERSION
         {"SmartHome Scan",  arsenal_smart_home_scanner      },
+#endif
         {"Channel Chart",   arsenal_wifi_channel_chart      },
+#if !LITE_VERSION
         {"People Counter",  arsenal_people_counter          },
+#endif
         {"Device Nickname", arsenal_device_nickname         },
         {"MAC Rotator",     arsenal_mac_rotator             },
         {"Channel Hopper",  arsenal_channel_hopper          },
@@ -45,6 +47,7 @@ void OthersMenu::optionsMenu() {
         {"WiFi Speed",      arsenal_phish_wifi_speed        },
         {"OAuth Phish",     arsenal_phish_oauth             },
         {"Device Found",    arsenal_phish_device_found      },
+#if !LITE_VERSION
         {"Flipper Detector",arsenal_flipper_detector        },
         {"Hacker Detector", arsenal_hacker_detector         },
         {"RF Silence",      arsenal_rf_silence_enforcer     },
@@ -54,6 +57,7 @@ void OthersMenu::optionsMenu() {
         {"IR Data Transfer",arsenal_ir_data_transfer        },
         {"Multi-Device Sync",arsenal_multi_device_sync      },
         {"NFC Biz Card",    arsenal_nfc_business_card       },
+#endif
         {"Attack Stats",    arsenal_attack_stats            },
         {"Password Gen",    arsenal_password_generator      },
         {"QR Poisoner",     arsenal_qr_poisoner             },

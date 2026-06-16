@@ -20,7 +20,7 @@
 #include "modules/wifi/dns_spoofer.h"
 #include "modules/wifi/cred_forward.h"
 
-#ifndef LITE_VERSION
+#if !LITE_VERSION
 #include "modules/pwnagotchi/pwnagotchi.h"
 #include "modules/wifi/wifi_recover.h"
 #endif
@@ -51,7 +51,7 @@ void WifiMenu::optionsMenu() {
     options.push_back({"Wifi Atks", wifi_atk_menu});
     options.push_back({"Evil Portal", [=]() { EvilPortal(); }});
     options.push_back({"NetCut", [=]() { netcutMenu(); }});
-#ifndef LITE_VERSION
+#if !LITE_VERSION
     options.push_back({"Cred Forward", credForward});
     options.push_back({"DNS Spoofer", dnsSpoofer});
     options.push_back({"DHCP Starvation", dhcpStarvation});

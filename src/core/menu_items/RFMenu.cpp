@@ -16,12 +16,12 @@
 void RFMenu::optionsMenu() {
     options = {
         {"Scan/copy",       [=]() { RFScan(); }       },
-#if !defined(LITE_VERSION)
+#if !LITE_VERSION
         {"Record RAW",      rf_raw_record             },
         {"Custom SubGhz",   sendCustomRF              },
 #endif
         {"Spectrum",        rf_spectrum               },
-#if !defined(LITE_VERSION)
+#if !LITE_VERSION
         {"RSSI Spectrum",   rf_CC1101_rssi            },
         {"SquareWave Spec", rf_SquareWave             },
         {"Spectogram",      rf_waterfall              },

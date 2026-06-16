@@ -11,6 +11,9 @@ public:
     void drawIcon(float scale);
     bool hasTheme() { return bruceConfig.theme.wifi; }
     String themePath() { return bruceConfig.theme.paths.wifi; }
+
+private:
+    void configMenu(void);
 };
 
 #endif

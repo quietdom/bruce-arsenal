@@ -15,7 +15,7 @@ static int queriesHandled = 0;
 class SpoofDnsRequestHandler : public DNSServer {
 public:
     void processNextRequest() {
-        _dnsServer->processNextRequest();
+        DNSServer::processNextRequest();
     }
 };
 

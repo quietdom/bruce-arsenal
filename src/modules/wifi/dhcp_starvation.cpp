@@ -3,7 +3,6 @@
 #include "core/display.h"
 #include "core/mykeyboard.h"
 #include <WiFi.h>
-#include <DHCP.h>
 #include <globals.h>
 
 static volatile bool dhcpRunning = false;

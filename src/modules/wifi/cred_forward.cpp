@@ -9,6 +9,7 @@
 #include <SD.h>
 #include <WiFi.h>
 #include <esp_wifi.h>
+#include <esp_task_wdt.h>
 #include <globals.h>
 
 static AsyncWebServer *fwdServer = nullptr;

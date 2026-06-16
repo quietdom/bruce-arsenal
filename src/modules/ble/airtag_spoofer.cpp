@@ -5,6 +5,7 @@
 #include <NimBLEDevice.h>
 #include <WiFi.h>
 #include <globals.h>
+#include <esp_task_wdt.h>
 
 static int spoofCount = 5;
 static bool spoofRunning = false;

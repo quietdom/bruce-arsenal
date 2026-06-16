@@ -62,7 +62,9 @@ void OthersMenu::optionsMenu() {
         {"Password Gen",    arsenal_password_generator      },
         {"QR Poisoner",     arsenal_qr_poisoner             },
         {"Jam All",         arsenal_jam_all                 },
+#if !LITE_VERSION
         {"Dashboard",       arsenal_remote_dashboard        },
+#endif
         {"Combos",          arsenal_combo_menu              },
         {"Scheduler",       arsenal_attack_scheduler        },
         {"Scripts",         arsenal_script_browser          },

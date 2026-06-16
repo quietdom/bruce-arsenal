@@ -96,7 +96,9 @@ void WifiMenu::optionsMenu() {
     options.push_back({"Channel Chart", arsenal_wifi_channel_chart});
     options.push_back({"Fingerprint", arsenal_device_fingerprinter});
     options.push_back({"Banner Grab", arsenal_service_banner_grabber});
+#if !LITE_VERSION
     options.push_back({"Karma Attack", arsenal_karma_attack});
+#endif
     options.push_back({"Config", [this]() { configMenu(); }});
     addOptionToMainMenu();
     loopOptions(options, MENU_TYPE_SUBMENU, "WiFi");

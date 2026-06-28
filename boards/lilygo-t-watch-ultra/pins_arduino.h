@@ -82,4 +82,8 @@ static const uint8_t SCK = 35;
 #define USING_BHI260_SENSOR
 #define HAS_SD_CARD_SOCKET
 
+// BadUSB pins (via Grove I2C, no native USB badusb on watch)
+#define BAD_RX SDA
+#define BAD_TX SCL
+
 #endif /* Pins_Arduino_h */

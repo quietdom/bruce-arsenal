@@ -5,21 +5,21 @@
 
 struct BlePacket {
     String address;
-    String advType;
     int rssi;
     String localName;
-    uint8_t advData[31];
-    int advLen;
 };
 
-static BLEScan *snifferScan = nullptr;
 static BlePacket lastPackets[32];
 static int packetCount = 0;
 static int totalPackets = 0;
 static bool snifferRunning = false;
 
-class SnifferAdvertisedDeviceCallback : public NimBLEAdvertisedDeviceCallbacks {
-    void onResult(NimBLEAdvertisedDevice *advertisedDevice) override {
+#ifdef NIMBLE_V2_PLUS
+class SnifferScanCallback : public NimBLEScanCallbacks {
+#else
+class SnifferScanCallback : public NimBLEAdvertisedDeviceCallbacks {
+#endif
+    void onResult(NimBLEAdvertisedDevice *advertisedDevice) {
         if (packetCount >= 32) {
             for (int i = 0; i < 31; i++) {
                 lastPackets[i] = lastPackets[i + 1];
@@ -32,33 +32,12 @@ class SnifferAdvertisedDeviceCallback : public NimBLEAdvertisedDeviceCallbacks {
         p.rssi = advertisedDevice->getRSSI();
         p.localName = advertisedDevice->haveName() ? advertisedDevice->getName().c_str() : "";
 
-        if (advertisedDevice->haveAdvType()) {
-            uint8_t advType = advertisedDevice->getAdvType();
-            switch (advType) {
-                case 0: p.advType = "ADV_IND"; break;
-                case 1: p.advType = "ADV_DIRECT_IND"; break;
-                case 2: p.advType = "ADV_NONCONN_IND"; break;
-                case 3: p.advType = "ADV_SCAN_IND"; break;
-                default: p.advType = "UNKNOWN"; break;
-            }
-        } else {
-            p.advType = "N/A";
-        }
-
-        p.advLen = 0;
-        if (advertisedDevice->haveAdvData()) {
-            std::string data = advertisedDevice->getAdvData();
-            p.advLen = data.length();
-            if (p.advLen > 31) p.advLen = 31;
-            memcpy(p.advData, data.data(), p.advLen);
-        }
-
         totalPackets++;
         packetCount++;
     }
 };
 
-static SnifferAdvertisedDeviceCallback snifferCallback;
+static SnifferScanCallback snifferCallback;
 
 static void drawSniffer() {
     displayRedStripe("BLE Sniffer - ESC to stop");
@@ -81,8 +60,7 @@ static void drawSniffer() {
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
         tft.setCursor(padX, y);
 
-        tft.printf("%s %s %ddBm", p.address.substring(0, 8).c_str(),
-                   p.advType.c_str(), p.rssi);
+        tft.printf("%s %ddBm", p.address.substring(0, 8).c_str(), p.rssi);
 
         y += 12;
 
@@ -105,18 +83,22 @@ void ble_sniffer() {
     snifferRunning = true;
 
     NimBLEDevice::init("");
-    snifferScan = NimBLEDevice::getScan();
-    snifferScan->setAdvertisedDeviceCallbacks(&snifferCallback);
-    snifferScan->setActiveScan(false);
-    snifferScan->setInterval(100);
-    snifferScan->setWindow(99);
+    NimBLEScan *pScan = NimBLEDevice::getScan();
+#ifdef NIMBLE_V2_PLUS
+    pScan->setScanCallbacks(&snifferCallback);
+#else
+    pScan->setAdvertisedDeviceCallbacks(&snifferCallback);
+#endif
+    pScan->setActiveScan(false);
+    pScan->setInterval(100);
+    pScan->setWindow(99);
 
-    snifferScan->start(0, nullptr, false);
+    pScan->start(0, nullptr, false);
 
     while (snifferRunning) {
         drawSniffer();
 
-        if (checkEscPress()) {
+        if (check(EscPress)) {
             snifferRunning = false;
             break;
         }
@@ -124,8 +106,6 @@ void ble_sniffer() {
         delay(500);
     }
 
-    snifferScan->stop();
-    snifferScan->clearAdvertisedDeviceCallbacks();
-    NimBLEDevice::deinit();
-    snifferScan = nullptr;
+    pScan->stop();
+    NimBLEDevice::deinit(true);
 }

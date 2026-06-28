@@ -33,7 +33,7 @@ void _setup_gpio() {
     delay(10);
 
     // Initialize XL9555 IO Expander
-    xl9555_ready = io.init(Wire, 0x20);
+    xl9555_ready = io.begin(Wire, 0x20);
     if (xl9555_ready) {
         Serial.println("XL9555 init success");
         // Enable display power (GPIO7 = bit 7 of Port 0)

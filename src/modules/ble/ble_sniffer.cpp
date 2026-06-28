@@ -14,11 +14,7 @@ static int packetCount = 0;
 static int totalPackets = 0;
 static bool snifferRunning = false;
 
-#ifdef NIMBLE_V2_PLUS
 class SnifferScanCallback : public NimBLEScanCallbacks {
-#else
-class SnifferScanCallback : public NimBLEAdvertisedDeviceCallbacks {
-#endif
     void onResult(NimBLEAdvertisedDevice *advertisedDevice) {
         if (packetCount >= 32) {
             for (int i = 0; i < 31; i++) {
@@ -84,11 +80,7 @@ void ble_sniffer() {
 
     NimBLEDevice::init("");
     NimBLEScan *pScan = NimBLEDevice::getScan();
-#ifdef NIMBLE_V2_PLUS
     pScan->setScanCallbacks(&snifferCallback);
-#else
-    pScan->setAdvertisedDeviceCallbacks(&snifferCallback);
-#endif
     pScan->setActiveScan(false);
     pScan->setInterval(100);
     pScan->setWindow(99);

@@ -1,10 +1,10 @@
 🌐 [English](README.md) | [Portugues](docs/README_PT.md) | [Italiano](docs/README_IT.md) | [Francais](docs/README_FR.md) | 🇷🇺 [Русский](docs/README_RU.md) | 🇨🇳 [中文](docs/README_ZH.md) | [Polski](docs/README_PL.md) | [Nederlands](docs/README_NL.md) | [Turkce](docs/README_TR.md) | [Deutsch](docs/README_DE.md) | Tiếng Việt [Tiếng Việt](docs/README_VN.md) | [Espanol](docs/README_ES.md) | [Indonesia](docs/README_ID.md) | 🇸🇦 [العربية](docs/README_AR.md)
 
 <p align="center">
-  <img src="media/bruce_banner.jpg" alt="Bruce Arsenal" width="700">
+  <img src="media/bruce_banner.jpg" alt="Bruce Firmware" width="700">
 </p>
 
-<h1 align="center">🎯 Bruce Arsenal</h1>
+<h1 align="center">🎯 Bruce Firmware</h1>
 
 <p align="center">
   <b>Custom offensive security firmware for ESP32 devices</b><br>
@@ -13,7 +13,7 @@
 
 ---
 
-A modified [Bruce Firmware](https://github.com/pr3y/Bruce) with a custom **Arsenal** module. All original Bruce features remain intact.
+A modified [Bruce Firmware](https://github.com/pr3y/Bruce) with additional tools and features. All original Bruce features remain intact.
 
 ## Installation
 
@@ -28,7 +28,7 @@ A modified [Bruce Firmware](https://github.com/pr3y/Bruce) with a custom **Arsen
 
 ### OTA Update (After First Flash)
 
-1. Connect your phone to `ArsenalNet` (password: `arsenal32`)
+1. Connect your phone to `BruceNet` (password: `bruce32`)
 2. Open `192.168.4.1` in your browser
 3. Go to **OTA Update**, select the `.bin` file
 4. Wait for upload and automatic reboot
@@ -43,7 +43,7 @@ Replace `COM3` with your serial port. On Linux use `/dev/ttyUSB0`.
 
 ---
 
-## Arsenal Tools (72 Full / 55 LITE)
+## Additional Tools (72 Full / 55 LITE)
 
 | # | Tool | Full | LITE | | # | Tool | Full | LITE |
 |---|------|:----:|:----:|-|---|------|:----:|:----:|
@@ -113,10 +113,10 @@ A: Make sure WiFi antenna is connected. On boards with external antenna, check t
 A: BLE requires NimBLE library. If building from source, make sure `h2zero/NimBLE-Arduino` is in your `lib_deps`.
 
 **Q: How do I access the Remote Dashboard?**
-A: Connect phone to WiFi `ArsenalNet` (password: `arsenal32`), open `192.168.4.1` in browser.
+A: Connect phone to WiFi `BruceNet` (password: `bruce32`), open `192.168.4.1` in browser.
 
 **Q: How do I update firmware OTA?**
-A: Connect to `ArsenalNet`, open dashboard, go to OTA Update, select new `.bin` file.
+A: Connect to `BruceNet`, open dashboard, go to OTA Update, select new `.bin` file.
 
 **Q: Can I build from source?**
 A: Yes. Install [PlatformIO](https://platformio.org/), clone this repo, run `pio run -e <board-name>`. Board names are in `platformio.ini`.
@@ -125,12 +125,12 @@ A: Yes. Install [PlatformIO](https://platformio.org/), clone this repo, run `pio
 
 ## Remote Dashboard
 
-Arsenal > Dashboard. Connect to `ArsenalNet` (password: `arsenal32`). Open `192.168.4.1`.
+Connect to `BruceNet` (password: `bruce32`). Open `192.168.4.1`.
 
 ## Credits
 
 - [Bruce Firmware](https://github.com/pr3y/Bruce) by pr3y
-- Arsenal module by quietdom
+- Custom tools by quietdom
 
 ## Disclaimer
 

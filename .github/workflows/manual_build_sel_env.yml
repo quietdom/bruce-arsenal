@@ -43,6 +43,7 @@ on:
           - "lilygo-t-embed"
           - "lilygo-t-deck"
           - "lilygo-t-watch-s3"
+          - "lilygo-t-watch-ultra"
           - "lilygo-t-deck-pro"
           - "lilygo-t-display-s3"
           - "lilygo-t-display-s3-touch"

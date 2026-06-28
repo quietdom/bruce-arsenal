@@ -8,7 +8,7 @@
 
 <p align="center">
   <b>Custom offensive security firmware for ESP32 devices</b><br>
-  <i>72 tools Full / 55 tools LITE - One firmware - Multiple devices</i>
+  <i>73 tools Full / 56 tools LITE - One firmware - Multiple devices</i>
 </p>
 
 ---

@@ -38,4 +38,6 @@ void stopBLEStack();
 
 void disPlayBLESend();
 
+void ble_sniffer();
+
 #endif

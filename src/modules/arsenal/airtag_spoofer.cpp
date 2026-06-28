@@ -85,7 +85,7 @@ void arsenal_airtag_spoofer(void) {
 
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
             tft.setCursor(padX, y);
-            tft.printf("Phantom Tags: %d", spoofCount);
+            tft.printf("Spoofed Tags: %d", spoofCount);
             y += 14;
 
             tft.setCursor(padX, y);

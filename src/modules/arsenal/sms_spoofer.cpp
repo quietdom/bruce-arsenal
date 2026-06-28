@@ -193,7 +193,7 @@ void arsenal_sms_notification_spoofer(void) {
                 tft.print("Nearby devices will see");
                 y += 12;
                 tft.setCursor(padX, y);
-                tft.print("phantom device popups!");
+                tft.print("cloned device popups!");
 
                 tft.setTextColor(TFT_RED, bruceConfig.bgColor);
                 tft.drawCentreString(String("Esc to stop"), tftWidth / 2, tftHeight - 20, 1);

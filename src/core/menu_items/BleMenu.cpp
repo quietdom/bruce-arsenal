@@ -44,6 +44,7 @@ void BleMenu::optionsMenu() {
 #endif
     options.push_back({"BLE Spam", [=]() { spamMenu(); }});
 #if !LITE_VERSION
+    options.push_back({"BLE Sniffer", ble_sniffer});
     options.push_back({"BLE Suite", [=]() { BleSuiteMenu(); }});
     options.push_back({"Notif Spoofer", notifSpoofer});
     options.push_back({"BT Name Spammer", arsenal_bt_name_spammer});

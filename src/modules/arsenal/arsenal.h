@@ -32,25 +32,17 @@
 
 
 void arsenal_network_scanner(void);
-void arsenal_dhcp_starvation(void);
 void arsenal_karma_attack(void);
-void arsenal_dns_spoofer(void);
 #if !LITE_VERSION
-void arsenal_captive_portal_templates(void);
 void arsenal_captive_portal_autophish(void);
 #endif
 #if !LITE_VERSION
 void arsenal_wifi_bruteforce(void);
 #endif
-#if !LITE_VERSION
-void arsenal_cred_forward(void);
-#endif
 
 
 #if !LITE_VERSION
-void arsenal_ble_tracker(void);
 void arsenal_bt_name_spammer(void);
-void arsenal_airtag_spoofer(void);
 void arsenal_bt_audio_jammer(void);
 void arsenal_sms_notification_spoofer(void);
 #endif

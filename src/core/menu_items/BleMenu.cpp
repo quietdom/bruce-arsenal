@@ -4,6 +4,7 @@
 #include "modules/badusb_ble/ducky_typer.h"
 #include "modules/ble/ble_common.h"
 #include "modules/ble/ble_ninebot.h"
+#include "modules/ble/ble_spam.h"
 #include "modules/ble/airtag_spoofer.h"
 #include "modules/ble/notif_spoofer.h"
 #include "modules/ble/ble_tracker.h"

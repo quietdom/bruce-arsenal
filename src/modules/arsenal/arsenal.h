@@ -34,6 +34,7 @@
 void arsenal_network_scanner(void);
 void arsenal_karma_attack(void);
 void arsenal_deauth_detector(void);
+void arsenal_pmkid_capture(void);
 #if !LITE_VERSION
 void arsenal_captive_portal_autophish(void);
 #endif

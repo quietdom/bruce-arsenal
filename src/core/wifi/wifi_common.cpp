@@ -264,7 +264,11 @@ void wifiConnectTask(void *pvParameters) {
     for (int i = 0; i < nets; i++) {
         ssid = WiFi.SSID(i);
         pwd = bruceConfig.getWifiPassword(ssid);
-        if (pwd == "") continue;
+        bool isOpen = (WiFi.encryptionType(i) == WIFI_AUTH_OPEN);
+        // Skip only if there's no stored password AND the network is not open.
+        // Open networks connect with an empty password so they should not be
+        // filtered out here (previously every pwd == "" was skipped).
+        if (pwd == "" && !isOpen) continue;
 
         WiFi.begin(ssid, pwd);
         for (int i = 0; i < 50; i++) {

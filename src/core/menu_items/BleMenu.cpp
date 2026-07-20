@@ -41,8 +41,8 @@ void BleMenu::optionsMenu() {
                        }});
     options.push_back({"Bad BLE", [=]() { ducky_setup(hid_ble, true); }});
     options.push_back({"BLE Keyboard", [=]() { ducky_keyboard(hid_ble, true); }});
-#endif
     options.push_back({"BLE Spam", notifSpoofer});
+#endif
 #if !LITE_VERSION
     options.push_back({"BLE Sniffer", ble_sniffer});
     options.push_back({"BLE Suite", [=]() { BleSuiteMenu(); }});

@@ -2,9 +2,11 @@
 #include "core/display.h"
 #include "core/mykeyboard.h"
 #include <globals.h>
+#ifndef LITE_VERSION
 #include "modules/wifi/dns_spoofer.h"
 #include "modules/wifi/dhcp_starvation.h"
 #include "modules/ble/airtag_spoofer.h"
+#endif
 
 struct ScheduledTask {
     String name;
@@ -26,9 +28,9 @@ struct SchedulableFeature {
 };
 
 static const SchedulableFeature FEATURES[] = {
+#ifndef LITE_VERSION
     {"DHCP Starvation",  dhcpStarvation},
     {"DNS Spoofer",      dnsSpoofer},
-#ifndef LITE_VERSION
     {"Karma Attack",     arsenal_karma_attack},
     {"BT Name Spam",     arsenal_bt_name_spammer},
     {"AirTag Spoofer",   airtagSpoofer},

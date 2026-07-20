@@ -29,38 +29,7 @@
 #include <modules/wifi/sniffer.h>
 #include <sstream>
 
-// Enhanced deauth reason codes - expanded for better effectiveness
-static const uint8_t DEAUTH_REASONS[] = {
-    0x01, // Unspecified
-    0x04, // Disassociated due to inactivity
-    0x06, // Class 2 frame received from non-authenticated STA
-    0x07, // Class 3 frame received from non-associated STA
-    0x08, // Disassociated because sending STA is leaving
-    0x0A, // Requested by AP
-    0x0D, // Invalid PMKID
-    0x0F, // 4-way handshake timeout
-    0x12, // Disassociated due to AP resource
-    0x28  // SA Query timeout
-};
-static const int DEAUTH_REASON_COUNT = sizeof(DEAUTH_REASONS) / sizeof(DEAUTH_REASONS[0]);
-
-// Global deauth state for burst control and adaptive behavior
-static struct {
-    uint8_t reason_index = 0;          // Current position in reason code rotation
-    uint32_t burst_counter = 0;        // Total bursts sent since attack start
-    bool storm_active = false;         // Storm mode flag for aggressive sending
-    uint32_t last_burst_time = 0;      // Timestamp of last burst for timing control
-    uint8_t consecutive_failures = 0;  // Track failures for adaptive delay
-} deauth_state;
-
-// Store all APs with same SSID for mesh network targeting
-struct APInfo {
-    uint8_t bssid[6];
-    int channel;
-};
-static std::vector<APInfo> sameSSID_APs;
-
-// Função para obter o MAC do gateway (ORIGINAL - DON'T CHANGE)
+// Original gateway MAC helper
 void getGatewayMAC(uint8_t gatewayMAC[6]) {
     wifi_ap_record_t ap_info;
     if (esp_wifi_sta_get_ap_info(&ap_info) == ESP_OK) {
@@ -809,4 +778,3 @@ void deauthTargetList(const std::vector<Host>& targets) {
     padprintln("Frames sent: " + String(total_frames));
     padprintln("Bursts: " + String(deauth_state.burst_counter));
     delay(1000);
-}

@@ -778,3 +778,4 @@ void deauthTargetList(const std::vector<Host>& targets) {
     padprintln("Frames sent: " + String(total_frames));
     padprintln("Bursts: " + String(deauth_state.burst_counter));
     delay(1000);
+}

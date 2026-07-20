@@ -1,4 +1,4 @@
-#if !defined(LITE_VERSION)
+#if !LITE_VERSION
 #include "arsenal.h"
 #include "core/display.h"
 #include "core/mykeyboard.h"

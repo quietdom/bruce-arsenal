@@ -28,10 +28,10 @@ void arsenal_garage_brute_force(void) {
     delay(1500);
 
     options.clear();
-    options.push_back({"Came 12-bit (350us)", []() { rf_bruteforce(); }});
-    options.push_back({"Nice 12-bit (700us)", []() { rf_bruteforce(); }});
-    options.push_back({"Ansonic 12-bit (555us)", []() { rf_bruteforce(); }});
-    options.push_back({"Holtek 12-bit (430us)", []() { rf_bruteforce(); }});
+    options.push_back({"Came 12-bit (350us)",  []() { rf_bruteforce_set_protocol(0); rf_bruteforce(); }});
+    options.push_back({"Nice 12-bit (700us)",  []() { rf_bruteforce_set_protocol(1); rf_bruteforce(); }});
+    options.push_back({"Ansonic 12-bit (555us)", []() { rf_bruteforce_set_protocol(2); rf_bruteforce(); }});
+    options.push_back({"Holtek 12-bit (430us)", []() { rf_bruteforce_set_protocol(3); rf_bruteforce(); }});
     addOptionToMainMenu();
     loopOptions(options, MENU_TYPE_SUBMENU, "Protocol");
 }

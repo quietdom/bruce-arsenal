@@ -57,6 +57,7 @@ void arsenal_bt_name_spammer(void) {
 
         int nameIndex = 0;
         int totalSent = 0;
+        int totalFailed = 0;
         unsigned long startTime = millis();
 
         while (true) {
@@ -71,11 +72,11 @@ void arsenal_bt_name_spammer(void) {
             pAdvertising->setAdvertisementData(advData);
             pAdvertising->setScanResponseData(scanRespData);
 
-            pAdvertising->start();
+            bool ok = pAdvertising->start();
             delay(50);
             pAdvertising->stop();
 
-            totalSent++;
+            if (ok) totalSent++; else totalFailed++;
             nameIndex++;
 
 
@@ -92,7 +93,7 @@ void arsenal_bt_name_spammer(void) {
 
                 tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
                 tft.setCursor(padX, y);
-                tft.printf("Names sent: %d", totalSent);
+                tft.printf("Sent: %d  Failed: %d", totalSent, totalFailed);
                 y += 14;
 
                 unsigned long elapsed = (millis() - startTime) / 1000;

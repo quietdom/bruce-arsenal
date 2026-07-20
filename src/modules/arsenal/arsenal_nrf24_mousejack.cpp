@@ -1,6 +1,6 @@
 #include "arsenal.h"
 
-#if !LITE_VERSION
+#ifndef LITE_VERSION
 
 #include "core/display.h"
 #include "core/mykeyboard.h"

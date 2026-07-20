@@ -76,6 +76,7 @@ void arsenal_ap_clone_flood(void) {
     esp_wifi_set_promiscuous(true);
 
     int sent = 0;
+    int failed = 0;
     int channel = 1;
     unsigned long startTime = millis();
 
@@ -92,11 +93,11 @@ void arsenal_ap_clone_flood(void) {
             memcpy(clone_beacon + ssidTagStart + 2, cloneSSID, cloneSSIDLen);
 
             int frameLen = ssidTagStart + 2 + cloneSSIDLen;
-            esp_wifi_80211_tx(WIFI_IF_STA, clone_beacon, frameLen, false);
-            sent++;
+            esp_err_t err = esp_wifi_80211_tx(WIFI_IF_STA, clone_beacon, frameLen, false);
+            if (err == ESP_OK) sent++; else failed++;
         }
 
-        channel = (channel % 14) + 1;
+        channel = (channel % 13) + 1;
 
         drawMainBorderWithTitle("AP Clone Flood");
         int y = 45;
@@ -106,7 +107,7 @@ void arsenal_ap_clone_flood(void) {
         tft.printf("SSID: %s", targetSSID.c_str());
         y += 14;
         tft.setCursor(12, y);
-        tft.printf("Frames: %d", sent);
+        tft.printf("Sent: %d  Failed: %d", sent, failed);
         y += 14;
         tft.setCursor(12, y);
         tft.printf("Channel: %d", channel);

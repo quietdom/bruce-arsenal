@@ -3,6 +3,7 @@
 #include "core/display.h"
 #include "core/mykeyboard.h"
 #include "core/sd_functions.h"
+#include "core/wifi/webInterface.h"
 #include <WiFi.h>
 #include <esp_wifi.h>
 #include <globals.h>

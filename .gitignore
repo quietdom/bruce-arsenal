@@ -28,3 +28,12 @@ session-ses_*.md
 core2_err.txt
 cplus2_latest.txt
 release_bins/
+
+# editor/backup junk
+*.bak
+*.orig
+*.tmp
+*.old
+*.swp
+*~
+.DS_Store

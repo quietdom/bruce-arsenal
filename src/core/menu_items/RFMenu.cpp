@@ -32,6 +32,7 @@ void RFMenu::optionsMenu() {
         {"Jammer",          [=]() { RFJammer(true); } },
         {"NRF24 MouseJack", arsenal_nrf24_mousejack   },
         {"Doorbell Replay", arsenal_doorbell_replay   },
+        {"Rolljam",         arsenal_rolljam           },
         {"Garage Brute",    arsenal_garage_brute_force},
         {"Keyfob Logger",   arsenal_car_keyfob_logger },
 #endif

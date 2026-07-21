@@ -66,6 +66,7 @@ class AudioScanCallbacks : public NimBLEScanCallbacks {
 static void jamAudioTarget(String targetAddr) {
     NimBLEAdvertising *pAdvertising = NimBLEDevice::getAdvertising();
     int jamPackets = 0;
+    int jamFailed = 0;
     unsigned long startTime = millis();
 
     NimBLEDevice::setSecurityAuth(false, false, false);
@@ -85,10 +86,10 @@ static void jamAudioTarget(String targetAddr) {
             advData.setFlags(0x06);
 
             pAdvertising->setAdvertisementData(advData);
-            pAdvertising->start();
+            bool ok = pAdvertising->start();
             delay(5);
             pAdvertising->stop();
-            jamPackets++;
+            if (ok) jamPackets++; else jamFailed++;
         }
 
 
@@ -109,7 +110,7 @@ static void jamAudioTarget(String targetAddr) {
             y += 14;
 
             tft.setCursor(padX, y);
-            tft.printf("Packets: %d", jamPackets);
+            tft.printf("Sent: %d  Failed: %d", jamPackets, jamFailed);
             y += 14;
 
             unsigned long elapsed = (millis() - startTime) / 1000;

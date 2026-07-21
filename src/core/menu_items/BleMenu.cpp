@@ -41,12 +41,11 @@ void BleMenu::optionsMenu() {
                        }});
     options.push_back({"Bad BLE", [=]() { ducky_setup(hid_ble, true); }});
     options.push_back({"BLE Keyboard", [=]() { ducky_keyboard(hid_ble, true); }});
+    options.push_back({"BLE Spam", notifSpoofer});
 #endif
-    options.push_back({"BLE Spam", [=]() { spamMenu(); }});
 #if !LITE_VERSION
     options.push_back({"BLE Sniffer", ble_sniffer});
     options.push_back({"BLE Suite", [=]() { BleSuiteMenu(); }});
-    options.push_back({"Notif Spoofer", notifSpoofer});
     options.push_back({"BT Name Spammer", arsenal_bt_name_spammer});
     options.push_back({"AirTag Spoofer", airtagSpoofer});
     options.push_back({"BLE Tracker", bleTracker});

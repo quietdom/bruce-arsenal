@@ -98,6 +98,12 @@ static bool rf_brute_start() {
     return true;
 }
 
+void rf_bruteforce_set_protocol(int idx) {
+    if (idx < 0) idx = 0;
+    if (idx >= BRUTE_PROTOCOL_COUNT) idx = BRUTE_PROTOCOL_COUNT - 1;
+    brute_protocol_idx = idx;
+}
+
 void rf_bruteforce() {
     while (true) {
         const BruteProtocol &proto = brute_protocols[brute_protocol_idx];

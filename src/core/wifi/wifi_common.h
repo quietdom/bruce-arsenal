@@ -35,8 +35,7 @@ String checkMAC();
 
 /**
  * @brief tries to connect to min(found_networks, maxSearch) networks
- * using stored passwords
- * @TODO fix: rn it skips open networks due to password == "" check
+ * using stored passwords. Open networks are connected with no password.
  */
 void wifiConnectTask(void *pvParameters);
 

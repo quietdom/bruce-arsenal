@@ -27,3 +27,7 @@ static constexpr BruteProtocol brute_protocols[] = {
 static constexpr int BRUTE_PROTOCOL_COUNT = sizeof(brute_protocols) / sizeof(brute_protocols[0]);
 
 void rf_bruteforce();
+// Pre-select protocol/frequency before entering rf_bruteforce() so callers
+// like the garage brute menu can pin a specific protocol instead of always
+// landing on the default. idx is clamped to [0, BRUTE_PROTOCOL_COUNT).
+void rf_bruteforce_set_protocol(int idx);

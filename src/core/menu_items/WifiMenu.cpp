@@ -58,7 +58,9 @@ void WifiMenu::optionsMenu() {
     options.push_back({"Auto-Phish", arsenal_captive_portal_autophish});
     options.push_back({"HTTP Proxy", arsenal_ssl_strip});
     options.push_back({"Selective Deauth", arsenal_selective_deauth});
+    options.push_back({"Deauth Detector", arsenal_deauth_detector});
     options.push_back({"WPA Handshake", arsenal_wpa_handshake_grabber});
+    options.push_back({"PMKID Capture", arsenal_pmkid_capture});
     options.push_back({"UPnP Port Opener", arsenal_upnp_port_opener});
     options.push_back({"Default Creds", arsenal_default_cred_scanner});
     options.push_back({"WiFi Bruteforce", arsenal_wifi_bruteforce});

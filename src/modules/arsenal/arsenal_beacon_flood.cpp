@@ -33,6 +33,7 @@ void arsenal_beacon_flood(void) {
     esp_wifi_set_promiscuous(true);
 
     int sent = 0;
+    int failed = 0;
     int channel = 1;
     int rate = 10;
     unsigned long startTime = millis();
@@ -46,11 +47,12 @@ void arsenal_beacon_flood(void) {
             for (int j = 0; j < 8; j++) {
                 flood_beacon[38 + j] = 'A' + random(26);
             }
-            esp_wifi_80211_tx(WIFI_IF_STA, flood_beacon, sizeof(flood_beacon), false);
-            sent++;
+            esp_err_t err = esp_wifi_80211_tx(WIFI_IF_STA, flood_beacon, sizeof(flood_beacon), false);
+            if (err == ESP_OK) sent++; else failed++;
         }
 
-        channel = (channel % 14) + 1;
+        // Cap at 13. 14 is Japan-only and setChannel silently fails elsewhere.
+        channel = (channel % 13) + 1;
 
         if (sent % 50 == 0) {
             drawMainBorderWithTitle("Beacon Flood");
@@ -58,7 +60,7 @@ void arsenal_beacon_flood(void) {
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
             tft.setTextSize(FP);
             tft.setCursor(12, y);
-            tft.printf("Frames: %d", sent);
+            tft.printf("Sent: %d  Failed: %d", sent, failed);
             y += 14;
             tft.setCursor(12, y);
             tft.printf("Channel: %d", channel);

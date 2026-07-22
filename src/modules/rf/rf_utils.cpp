@@ -224,7 +224,11 @@ bool initRfModule(String mode, float frequency) {
 #if TFT_MOSI > 0
             initCC1101once(&tft.getSPIinstance());
 #else
-            yield();
+            // Headless or 8-bit displays share the bus but do not define
+            // TFT_MOSI as a value, so tft.getSPIinstance() is not usable.
+            // Fall back to the default SPI so the radio still gets initialized
+            // instead of silently skipping and then failing the presence check.
+            initCC1101once(&SPI);
 #endif
         } else if (bruceConfigPins.CC1101_bus.mosi ==
                    bruceConfigPins.SDCARD_bus.mosi) { // (CARDPUTER) and (ESP32S3DEVKITC1) and devices that
@@ -256,7 +260,16 @@ bool initRfModule(String mode, float frequency) {
             initCC1101once(NULL);
         }
         ELECHOUSE_cc1101.Init();
-        if (ELECHOUSE_cc1101.getCC1101()) { // Check the CC1101 Spi connection.
+        // On boards that share the SPI bus with the TFT (T-Embed, Core2), the
+        // display can be mid-transaction when we probe the radio, which makes
+        // getCC1101() intermittently fail with "not found". Pause the TFT
+        // around the presence check the same way the SD mount does.
+        bool sharedBus = (bruceConfigPins.CC1101_bus.mosi == (gpio_num_t)TFT_MOSI &&
+                          bruceConfigPins.CC1101_bus.mosi != GPIO_NUM_NC);
+        if (sharedBus) tft.endWrite();
+        bool present = ELECHOUSE_cc1101.getCC1101();
+        if (sharedBus) tft.startWrite();
+        if (present) { // Check the CC1101 Spi connection.
             Serial.println("cc1101 Connection OK");
         } else {
             displayError("CC1101 not found");

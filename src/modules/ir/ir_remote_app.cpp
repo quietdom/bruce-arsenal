@@ -2,6 +2,7 @@
 #include "custom_ir.h"
 #include "core/display.h"
 #include "core/mykeyboard.h"
+#include "core/utils.h"
 #include <globals.h>
 
 // Each button maps to an IR protocol + address + command. Values are the

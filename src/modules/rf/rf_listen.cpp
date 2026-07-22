@@ -60,13 +60,23 @@ void rf_listen() {
     ELECHOUSE_cc1101.setRxBW(58);
     ELECHOUSE_cc1101.setModulation(2);
     ELECHOUSE_cc1101.setDcFilterOff(true);
-    attachInterrupt(digitalPinToInterrupt(bruceConfigPins.CC1101_bus.io0), onPulse, CHANGE);
+
+    // Only attach the GDO0 interrupt if the pin is actually wired on this
+    // board. Attaching to GPIO_NUM_NC can fault and was freezing the T-Embed.
+    int gdo0 = bruceConfigPins.CC1101_bus.io0;
+    bool intAttached = false;
+    if (gdo0 >= 0 && digitalPinToInterrupt(gdo0) >= 0) {
+        attachInterrupt(digitalPinToInterrupt(gdo0), onPulse, CHANGE);
+        intAttached = true;
+    }
     displayRedStripe("Listening...", getComplementaryColor2(bruceConfig.priColor), bruceConfig.priColor);
 
     unsigned long lastPulseTime = millis();
     bool pulseActive = false;
 
-    while (check(EscPress)) { delay(10); }
+    // Wait for the launching key to be released so we do not immediately exit
+    // (the old loop was inverted and spun while Esc was held, which could hang).
+    while (check(SelPress) || check(EscPress)) { delay(10); }
 
     while (!check(EscPress)) {
         displayRedStripe(
@@ -92,7 +102,11 @@ void rf_listen() {
 
         if (check(EscPress)) break;
         if (check(SelPress)) break;
+        delay(10);
     }
 
-    detachInterrupt(digitalPinToInterrupt(bruceConfigPins.CC1101_bus.io0));
+    if (intAttached) detachInterrupt(digitalPinToInterrupt(gdo0));
+    // Release the shared SPI bus back to the TFT/SD. Without this the T-Embed
+    // (which shares MOSI/SCK between CC1101 and the display) froze after exit.
+    deinitRfModule();
 }

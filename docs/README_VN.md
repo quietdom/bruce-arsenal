@@ -1,14 +1,14 @@
 🌐 [English](../README.md) | [Portugues](README_PT.md) | [Italiano](README_IT.md) | [Francais](README_FR.md) | [Русский](README_RU.md) | [中文](README_ZH.md) | [Polski](README_PL.md) | [Nederlands](README_NL.md) | [Turkce](README_TR.md) | [Deutsch](README_DE.md) | **Tiếng Việt** | [Espanol](README_ES.md) | [Indonesia](README_ID.md) | [العربية](README_AR.md)
 
 <p align="center">
-  <img src="../media/bruce_banner.jpg" alt="Bruce Arsenal" width="700">
+  <img src="../media/artworks/bruce-working.jpg" alt="Bruce Arsenal" width="500">
 </p>
 
 <h1 align="center">🎯 Bruce Arsenal</h1>
 
 <p align="center">
-  <b>Firmware bảo mật tấn công tùy chỉnh cho thiết bị ESP32</b><br>
-  <i>68 công cụ — một firmware, nhiều board</i>
+  <b>Firmware bảo mật tấn công tùy chỉnh cho ESP32</b><br>
+  <i>Một firmware, nhiều board — 68 công cụ</i>
 </p>
 
 ---
@@ -17,118 +17,71 @@ Một phiên bản sửa đổi của [Bruce Firmware](https://github.com/pr3y/B
 
 ## Có gì mới trong v1.2.0
 
-**Đã sửa:**
-- T-Embed RF Listen bị treo — đã sửa (giải phóng bus SPI dùng chung khi thoát)
-- "Không tìm thấy CC1101" — đã sửa
-- NRF24 "hầu như không hoạt động" — đã sửa (kiểm tra chip và cấp nguồn)
-- jam_all — sửa cả 4 băng tần
-- Bộ đếm flood/spam — giờ hiển thị gửi/thất bại thật
-- WireGuard — khóa riêng không còn in ra serial
-- Deauther — impl quay lại .cpp, liên kết đã sửa
+**Đã sửa** — Treo RF Listen trên T-Embed (giải phóng bus SPI dùng chung khi thoát) ·"Không tìm thấy CC1101"·NRF24"hầu như không hoạt động"(kiểm tra chip và cấp nguồn)·jam_all 4 băng tần·bộ đếm gửi/thất bại thật·khóa WireGuard không còn in ra serial·linker deauther.
 
-**Mới:**
-- **Universal IR Remote** — điều khiển TV theo hãng, mã trong flash, không cần SD
-- **PMKID Capture** — WPA không cần client, lưu HC22000 vào SD
-- **Deauth Detector** — phòng thủ, cảnh báo khi bạn bị deauth
-- **Rolljam** — bắt mã điều khiển qua jam + RX
-- **Real MouseJack** — giờ chạy bản triển khai thật 934 dòng
-- **Saved target lists** — lưu/tải mục tiêu deauth trên SD
-- **Refreshed BLE spammer** — 40 FastPair ID thật + 18 mẫu Apple
+**Mới** — Universal IR Remote (theo hãng, mã trong flash, không cần SD)·PMKID Capture (WPA không cần client)·Deauth Detector (phòng thủ)·Rolljam (jam+bắt keyfob)·MouseJack thật·lưu/tải mục tiêu deauth·BLE spammer mới (40 FastPair ID + 18 mẫu Apple).
 
-## Cài đặt
+## Nạp firmware
 
 1. Tải `.bin` cho board của bạn từ [Releases](../../releases)
-2. Mở [ESP Web Flasher](https://espressif.github.io/esptool-js/) (Chrome hoặc Edge)
-3. **Connect**, chọn cổng serial ESP32
-4. **Program**, chọn `.bin`, địa chỉ `0x0`
-5. Nạp, chờ, nhấn **RST** hoặc cắm lại USB
+2. Mở [ESP Web Flasher](https://espressif.github.io/esptool-js/) (Chrome/Edge)
+3. **Connect** → chọn cổng ESP32 → **Program** → chọn `.bin` → địa chỉ `0x0`
+4. Nhấn **RST** hoặc cắm lại USB
 
----
+OTA: kết nối AP (dưới đây), mở bảng điều khiển, **OTA Update** → chọn `.bin` mới.
 
-## Công cụ Arsenal (68)
+CLI: `esptool.py --port COM3 --baud 460800 write_flash 0x0 firmware.bin`
 
-| # | Tool | Full | LITE | | # | Tool | Full | LITE |
-|---|------|:----:|:----:|-|---|------|:----:|:----:|
-| 1 | Network Scanner | ✅ | ✅ | 35 | MAC Rotator | ✅ | ✅ |
-| 2 | DHCP Starvation | ✅ | ✅ | 36 | Channel Hopper | ✅ | ✅ |
-| 3 | Karma Attack | ✅ | ✅ | 37 | Keyfob Logger | ✅ | ❌ |
-| 4 | DNS Spoofer | ✅ | ✅ | 38 | Frequency Scanner | ✅ | ✅ |
-| 5 | Auto-Phish Portal | ✅ | ❌ | 39 | Flipper Import | ✅ | ✅ |
-| 6 | Cred Forward | ✅ | ❌ | 40 | Flipper Detector | ✅ | ❌ |
-| 7 | Auth Flood | ✅ | ✅ | 41 | Hacker Detector | ✅ | ❌ |
-| 8 | AP Clone Flood | ✅ | ✅ | 42 | RF Silence Enforcer | ✅ | ❌ |
-| 9 | SSL Strip Lite | ✅ | ❌ | 43 | ESP-NOW Chat | ✅ | ❌ |
-| 10 | DNS Tunnel | ✅ | ✅ | 44 | ESP-NOW C2 | ✅ | ❌ |
-| 11 | WPS PIN Reference | ✅ | ✅ | 45 | Dead Drop Mesh | ✅ | ❌ |
-| 12 | UPnP Port Opener | ✅ | ❌ | 46 | IR Data Transfer | ✅ | ❌ |
-| 13 | Default Cred Scanner | ✅ | ❌ | 47 | Multi-Device Sync | ✅ | ❌ |
-| 14 | Rogue AP Detector | ✅ | ✅ | 48 | NFC Biz Card | ✅ | ❌ |
-| 15 | WiFi Bruteforce | ✅ | ❌ | 49 | Attack Stats | ✅ | ✅ |
-| 16 | WPA Handshake Grabber | ✅ | ❌ | 50 | Password Generator | ✅ | ✅ |
-| 17 | Beacon Flood | ✅ | ❌ | 51 | Jam All | ✅ | ✅ |
-| 18 | Selective Deauth | ✅ | ❌ | 52 | Combos | ✅ | ✅ |
-| 19 | Enhanced Deauth | ✅ | ❌ | 53 | Scheduler | ✅ | ✅ |
-| 20 | ARP Poisoner | ✅ | ❌ | 54 | Scripts | ✅ | ✅ |
-| 21 | BLE Tracker | ✅ | ❌ | 55 | Session Log | ✅ | ✅ |
-| 22 | BT Name Spammer | ✅ | ❌ | 56 | Config AP | ✅ | ✅ |
-| 23 | AirTag Spoofer | ✅ | ❌ | 57 | Config Dashboard | ✅ | ✅ |
-| 24 | Audio Jammer | ✅ | ❌ | 58 | PIN Lock | ✅ | ✅ |
-| 25 | Notification Spoofer | ✅ | ❌ | 59 | Remote Dashboard | ✅ | ❌ |
-| 26 | BT Rickroll | ✅ | ❌ | 60 | SSID History Logger | ✅ | ✅ |
-| 27 | BT Device Profiler | ✅ | ❌ | 61 | QR Poisoner | ✅ | ✅ |
-| 28 | Device Fingerprinter | ✅ | ✅ | 62 | Auto-Dim | ✅ | ✅ |
-| 29 | OPSEC Monitor | ✅ | ✅ | 63 | OPSEC Background | ✅ | ✅ |
-| 30 | OUI Lookup | ✅ | ✅ | 64 | Deauth Detector | ✅ | ❌ |
-| 31 | Probe Log | ✅ | ✅ | 65 | PMKID Capture | ✅ | ❌ |
-| 32 | Banner Grabber | ✅ | ✅ | 66 | Rolljam | ✅ | ❌ |
-| 33 | SmartHome Scan | ✅ | ❌ | 67 | NRF24 MouseJack | ✅ | ❌ |
-| 34 | Channel Chart | ✅ | ✅ | 68 | Universal IR Remote | ✅ | ✅ |
+## Kết nối bảng điều khiển
 
----
+Có hai bộ thông tin đăng nhập — tùy thuộc vào tính năng bạn mở:
 
-## Tương thích board
+| | AP name | AP password | Dashboard login | IP |
+|---|---------|-------------|-----------------|----|
+| **Bảng Arsenal** | `ArsenalNet` | `arsenal32` | `admin` / `arsenal` | `172.0.0.1` |
+| **WebUI Bruce cơ sở** | `BruceNet` | `brucenet` | `admin` / `bruce` | `172.0.0.1` |
 
-| **ESP32-S3** | | |
-| LilyGo T-Embed CC1101 | 16 MB | Full |
-| LilyGo T-Deck Pro | 16 MB | Full |
-| LilyGo T-Deck | 16 MB | Full |
-| LilyGo T-Display S3 (all variants) | 16 MB | Full |
-| LilyGo T-HMI | 16 MB | Full |
-| LilyGo T-LoRa Pager | 16 MB | Full |
-| LilyGo T-Watch S3 | 16 MB | Full |
-| M5Stack Cardputer | 8 MB | Full |
-| M5Stack CoreS3 | 16 MB | Full |
-| M5Stack StickS3 | 16 MB | Full |
-| ESP32-S3 DevKitC-1 | 16 MB | Full |
-| Smoochiee Board | 16 MB | Full |
-| **ESP32-C5** | | |
-| ESP32-C5 | 4 MB | Full |
-| ESP32-C5 TFT | 4 MB | Full |
-| **ESP32 (4 MB, LITE)** | | |
-| M5Stack Core 4 MB | 4 MB | LITE |
-| M5Stack Core 16 MB | 16 MB | LITE |
-| M5Stack CPlus 1.1 | 4 MB | LITE |
-| CYD-2432S028 / 2USB / W328C / W328R | 4 MB | LITE |
-| CYD-3248S035R / S035C | 4 MB | LITE |
-| Elecrow 2.4B / 2.8B / 3.5B | 4 MB | LITE |
-| LilyGo T-Display TTGO | 4 MB | LITE |
-| Marauder Mini / V4-V6 / V7 / V6.1 | 4 MB | LITE |
-| Awok Mini / Touch | 4 MB | LITE |
-| WaveSentry R1 / Phantom S024R | 4 MB | LITE |
-| **Vấn đề đã biết** | | |
-| M5Stack CPlus2 | — | DRAM overflow — use LITE |
-| M5Stack Core2 | — | DRAM overflow — use LITE |
+Tất cả cấu hình được trong **Cài đặt** trên thiết bị. Nếu mặc định không hoạt động, ai đó đã đổi — nạp lại hoặc kiểm tra Cài đặt → WiFi AP / WebUI. IP là **`172.0.0.1`**, không phải `192.168.4.1`.
 
----
+## Công cụ (68)
 
-## Bảng điều khiển từ xa
+| | | | | | | |
+|---|---|---|---|---|---|---|
+| Network Scanner | DHCP Starvation | Karma Attack | DNS Spoofer | Auto-Phish Portal | Cred Forward | Auth Flood |
+| AP Clone Flood | SSL Strip Lite | DNS Tunnel | WPS PIN Reference | UPnP Port Opener | Default Cred Scanner | Rogue AP Detector |
+| WiFi Bruteforce | WPA Handshake Grabber | Beacon Flood | Selective Deauth | Enhanced Deauth | ARP Poisoner | BLE Tracker |
+| BT Name Spammer | AirTag Spoofer | Audio Jammer | Notification Spoofer | BT Rickroll | BT Device Profiler | Device Fingerprinter |
+| OPSEC Monitor | OUI Lookup | Probe Log | Banner Grabber | SmartHome Scan | Channel Chart | MAC Rotator |
+| Channel Hopper | Keyfob Logger | Frequency Scanner | Flipper Import | Flipper Detector | Hacker Detector | RF Silence Enforcer |
+| ESP-NOW Chat | ESP-NOW C2 | Dead Drop Mesh | IR Data Transfer | Multi-Device Sync | NFC Biz Card | Attack Stats |
+| Password Generator | Jam All | Combos | Scheduler | Scripts | Session Log | Config AP |
+| Config Dashboard | PIN Lock | Remote Dashboard | SSID History Logger | QR Poisoner | Auto-Dim | OPSEC Background |
+| Deauth Detector | PMKID Capture | Rolljam | NRF24 MouseJack | Universal IR Remote | | |
 
-Arsenal > Dashboard. Kết nối `BruceNet` (mật khẩu: `bruce32`). Mở `192.168.4.1`.
+✅ = hoạt động trên cả Full và LITE. Hầu hết Full-only cần board 16 MB.
+
+## Board
+
+**Full (16 MB):** T-Embed CC1101 · T-Deck / T-Deck Pro · T-Display S3 (all variants) · T-HMI · T-LoRa Pager · T-Watch S3 · M5Stack Cardputer / CoreS3 / StickS3 · ESP32-S3 DevKitC-1 · Smoochiee
+
+**Full (4 MB):** ESP32-C5 / ESP32-C5 TFT
+
+**LITE (4 MB):** M5Stack Core 4/16 MB · CPlus 1.1 · CYD-2432S028/2USB/W328C/W328R · CYD-3248S035R/C · Elecrow 2.4B/2.8B/3.5B · T-Display TTGO · Marauder Mini/V4-V6/V7/V6.1 · Awok Mini/Touch · WaveSentry R1 · Phantom S024R
+
+**Vấn đề đã biết:** M5Stack CPlus2 & Core2 — DRAM overflow, use LITE.
+
+## Biên dịch từ mã nguồn
+
+```bash
+git clone https://github.com/quietdom/bruce-arsenal
+cd bruce-arsenal
+pio run -e <board-name>   # tên trong platformio.ini
+```
 
 ## Cảm ơn
 
-- [Bruce Firmware](https://github.com/pr3y/Bruce) bởi pr3y — nền tảng của dự án này
-- Module Arsenal và công cụ tùy chỉnh bởi quietdom
+- [Bruce Firmware](https://github.com/pr3y/Bruce) bởi pr3y — nền tảng
+- Module Arsenal + công cụ bởi quietdom
 
 ## Miễn trừ trách nhiệm
 

@@ -1,14 +1,14 @@
 🌐 [English](../README.md) | [Portugues](README_PT.md) | [Italiano](README_IT.md) | [Francais](README_FR.md) | [Русский](README_RU.md) | [中文](README_ZH.md) | [Polski](README_PL.md) | [Nederlands](README_NL.md) | [Turkce](README_TR.md) | **Deutsch** | [Tiếng Việt](README_VN.md) | [Espanol](README_ES.md) | [Indonesia](README_ID.md) | [العربية](README_AR.md)
 
 <p align="center">
-  <img src="../media/bruce_banner.jpg" alt="Bruce Arsenal" width="700">
+  <img src="../media/artworks/bruce-working.jpg" alt="Bruce Arsenal" width="500">
 </p>
 
 <h1 align="center">🎯 Bruce Arsenal</h1>
 
 <p align="center">
-  <b>Benutzerdefinierte Offensiv-Sicherheits-Firmware für ESP32-Geräte</b><br>
-  <i>68 Werkzeuge — eine Firmware, viele Boards</i>
+  <b>Benutzerdefinierte Offensiv-Sicherheits-Firmware für ESP32</b><br>
+  <i>Eine Firmware, viele Boards — 68 Werkzeuge</i>
 </p>
 
 ---
@@ -17,118 +17,71 @@ Eine modifizierte [Bruce Firmware](https://github.com/pr3y/Bruce) mit einem benu
 
 ## Neu in v1.2.0
 
-**Behoben:**
-- T-Embed RF Listen Einfrieren — behoben (geteilter SPI-Bus beim Beenden freigegeben)
-- „CC1101 nicht gefunden“ — behoben
-- NRF24 „funktioniert kaum“ — behoben (prüft den Chip und versorgt ihn)
-- jam_all — alle 4 Bänder behoben
-- Flood/Spam-Zähler — zeigen jetzt echte gesendet/fehlgeschlagen
-- WireGuard — Private Key wird nicht mehr auf Serial ausgegeben
-- Deauther — Impl zurück in der .cpp, Linking behoben
+**Behoben** — T-Embed RF Listen Einfrieren (geteilter SPI-Bus beim Beenden freigegeben) · „CC1101 nicht gefunden“ · NRF24 „funktioniert kaum“ (prüft den Chip und versorgt ihn) · jam_all auf 4 Bändern · echte Zähler gesendet/fehlgeschlagen · WireGuard-Key nicht mehr auf Serial · Deauther-Linker.
 
-**Neu:**
-- **Universal IR Remote** — TV-Fernbedienung nach Marke, Codes im Flash, kein SD
-- **PMKID Capture** — WPA ohne Client, speichert HC22000 auf SD
-- **Deauth Detector** — defensiv, warnt wenn du deauthentifiziert wirst
-- **Rolljam** — erfasst Codes per Jam + RX
-- **Real MouseJack** — führt jetzt die echte 934-Zeilen-Implementierung aus
-- **Saved target lists** — speichert/lädt Deauth-Ziele auf SD
-- **Refreshed BLE spammer** — 40 echte FastPair-IDs + 18 Apple-Modelle
+**Neu** — Universal IR Remote (nach Marke, Codes im Flash, kein SD) · PMKID Capture (WPA ohne Client) · Deauth Detector (defensiv) · Rolljam (Jam+Keyfob-Capture) · echtes MouseJack · Deauth-Ziele speichern/laden · BLE-Spammer erneuert (40 FastPair-IDs + 18 Apple-Modelle).
 
-## Installation
+## Flashen
 
 1. Lade die `.bin` für dein Board aus [Releases](../../releases)
-2. Öffne den [ESP Web Flasher](https://espressif.github.io/esptool-js/) (Chrome oder Edge)
-3. **Connect**, wähle den ESP32-Seriellport
-4. **Program**, wähle die `.bin`, Adresse `0x0`
-5. Programmieren, warten, **RST** drücken oder USB neu anschließen
+2. Öffne den [ESP Web Flasher](https://espressif.github.io/esptool-js/) (Chrome/Edge)
+3. **Connect** → wähle ESP32-Port → **Program** → wähle `.bin` → Adresse `0x0`
+4. **RST** drücken oder USB neu anschließen
 
----
+OTA: verbinde dich mit dem AP (unten), öffne das Dashboard, **OTA Update** → wähle die neue `.bin`.
 
-## Arsenal-Werkzeuge (68)
+CLI: `esptool.py --port COM3 --baud 460800 write_flash 0x0 firmware.bin`
 
-| # | Tool | Full | LITE | | # | Tool | Full | LITE |
-|---|------|:----:|:----:|-|---|------|:----:|:----:|
-| 1 | Network Scanner | ✅ | ✅ | 35 | MAC Rotator | ✅ | ✅ |
-| 2 | DHCP Starvation | ✅ | ✅ | 36 | Channel Hopper | ✅ | ✅ |
-| 3 | Karma Attack | ✅ | ✅ | 37 | Keyfob Logger | ✅ | ❌ |
-| 4 | DNS Spoofer | ✅ | ✅ | 38 | Frequency Scanner | ✅ | ✅ |
-| 5 | Auto-Phish Portal | ✅ | ❌ | 39 | Flipper Import | ✅ | ✅ |
-| 6 | Cred Forward | ✅ | ❌ | 40 | Flipper Detector | ✅ | ❌ |
-| 7 | Auth Flood | ✅ | ✅ | 41 | Hacker Detector | ✅ | ❌ |
-| 8 | AP Clone Flood | ✅ | ✅ | 42 | RF Silence Enforcer | ✅ | ❌ |
-| 9 | SSL Strip Lite | ✅ | ❌ | 43 | ESP-NOW Chat | ✅ | ❌ |
-| 10 | DNS Tunnel | ✅ | ✅ | 44 | ESP-NOW C2 | ✅ | ❌ |
-| 11 | WPS PIN Reference | ✅ | ✅ | 45 | Dead Drop Mesh | ✅ | ❌ |
-| 12 | UPnP Port Opener | ✅ | ❌ | 46 | IR Data Transfer | ✅ | ❌ |
-| 13 | Default Cred Scanner | ✅ | ❌ | 47 | Multi-Device Sync | ✅ | ❌ |
-| 14 | Rogue AP Detector | ✅ | ✅ | 48 | NFC Biz Card | ✅ | ❌ |
-| 15 | WiFi Bruteforce | ✅ | ❌ | 49 | Attack Stats | ✅ | ✅ |
-| 16 | WPA Handshake Grabber | ✅ | ❌ | 50 | Password Generator | ✅ | ✅ |
-| 17 | Beacon Flood | ✅ | ❌ | 51 | Jam All | ✅ | ✅ |
-| 18 | Selective Deauth | ✅ | ❌ | 52 | Combos | ✅ | ✅ |
-| 19 | Enhanced Deauth | ✅ | ❌ | 53 | Scheduler | ✅ | ✅ |
-| 20 | ARP Poisoner | ✅ | ❌ | 54 | Scripts | ✅ | ✅ |
-| 21 | BLE Tracker | ✅ | ❌ | 55 | Session Log | ✅ | ✅ |
-| 22 | BT Name Spammer | ✅ | ❌ | 56 | Config AP | ✅ | ✅ |
-| 23 | AirTag Spoofer | ✅ | ❌ | 57 | Config Dashboard | ✅ | ✅ |
-| 24 | Audio Jammer | ✅ | ❌ | 58 | PIN Lock | ✅ | ✅ |
-| 25 | Notification Spoofer | ✅ | ❌ | 59 | Remote Dashboard | ✅ | ❌ |
-| 26 | BT Rickroll | ✅ | ❌ | 60 | SSID History Logger | ✅ | ✅ |
-| 27 | BT Device Profiler | ✅ | ❌ | 61 | QR Poisoner | ✅ | ✅ |
-| 28 | Device Fingerprinter | ✅ | ✅ | 62 | Auto-Dim | ✅ | ✅ |
-| 29 | OPSEC Monitor | ✅ | ✅ | 63 | OPSEC Background | ✅ | ✅ |
-| 30 | OUI Lookup | ✅ | ✅ | 64 | Deauth Detector | ✅ | ❌ |
-| 31 | Probe Log | ✅ | ✅ | 65 | PMKID Capture | ✅ | ❌ |
-| 32 | Banner Grabber | ✅ | ✅ | 66 | Rolljam | ✅ | ❌ |
-| 33 | SmartHome Scan | ✅ | ❌ | 67 | NRF24 MouseJack | ✅ | ❌ |
-| 34 | Channel Chart | ✅ | ✅ | 68 | Universal IR Remote | ✅ | ✅ |
+## Mit dem Dashboard verbinden
 
----
+Es gibt zwei Credentials-Sätze — je nachdem, welche Funktion du gestartet hast:
 
-## Board-Kompatibilität
+| | AP name | AP password | Dashboard login | IP |
+|---|---------|-------------|-----------------|----|
+| **Arsenal-Dashboard** | `ArsenalNet` | `arsenal32` | `admin` / `arsenal` | `172.0.0.1` |
+| **Bruce-Basis-WebUI** | `BruceNet` | `brucenet` | `admin` / `bruce` | `172.0.0.1` |
 
-| **ESP32-S3** | | |
-| LilyGo T-Embed CC1101 | 16 MB | Full |
-| LilyGo T-Deck Pro | 16 MB | Full |
-| LilyGo T-Deck | 16 MB | Full |
-| LilyGo T-Display S3 (all variants) | 16 MB | Full |
-| LilyGo T-HMI | 16 MB | Full |
-| LilyGo T-LoRa Pager | 16 MB | Full |
-| LilyGo T-Watch S3 | 16 MB | Full |
-| M5Stack Cardputer | 8 MB | Full |
-| M5Stack CoreS3 | 16 MB | Full |
-| M5Stack StickS3 | 16 MB | Full |
-| ESP32-S3 DevKitC-1 | 16 MB | Full |
-| Smoochiee Board | 16 MB | Full |
-| **ESP32-C5** | | |
-| ESP32-C5 | 4 MB | Full |
-| ESP32-C5 TFT | 4 MB | Full |
-| **ESP32 (4 MB, LITE)** | | |
-| M5Stack Core 4 MB | 4 MB | LITE |
-| M5Stack Core 16 MB | 16 MB | LITE |
-| M5Stack CPlus 1.1 | 4 MB | LITE |
-| CYD-2432S028 / 2USB / W328C / W328R | 4 MB | LITE |
-| CYD-3248S035R / S035C | 4 MB | LITE |
-| Elecrow 2.4B / 2.8B / 3.5B | 4 MB | LITE |
-| LilyGo T-Display TTGO | 4 MB | LITE |
-| Marauder Mini / V4-V6 / V7 / V6.1 | 4 MB | LITE |
-| Awok Mini / Touch | 4 MB | LITE |
-| WaveSentry R1 / Phantom S024R | 4 MB | LITE |
-| **Bekannte Probleme** | | |
-| M5Stack CPlus2 | — | DRAM overflow — use LITE |
-| M5Stack Core2 | — | DRAM overflow — use LITE |
+Alles konfigurierbar unter **Einstellungen** am Gerät. Wenn ein Default nicht geht, hat jemand ihn geändert — neu flashen oder Einstellungen → WiFi AP / WebUI prüfen. Die IP ist **`172.0.0.1`**, nicht `192.168.4.1`.
 
----
+## Werkzeuge (68)
 
-## Remote-Dashboard
+| | | | | | | |
+|---|---|---|---|---|---|---|
+| Network Scanner | DHCP Starvation | Karma Attack | DNS Spoofer | Auto-Phish Portal | Cred Forward | Auth Flood |
+| AP Clone Flood | SSL Strip Lite | DNS Tunnel | WPS PIN Reference | UPnP Port Opener | Default Cred Scanner | Rogue AP Detector |
+| WiFi Bruteforce | WPA Handshake Grabber | Beacon Flood | Selective Deauth | Enhanced Deauth | ARP Poisoner | BLE Tracker |
+| BT Name Spammer | AirTag Spoofer | Audio Jammer | Notification Spoofer | BT Rickroll | BT Device Profiler | Device Fingerprinter |
+| OPSEC Monitor | OUI Lookup | Probe Log | Banner Grabber | SmartHome Scan | Channel Chart | MAC Rotator |
+| Channel Hopper | Keyfob Logger | Frequency Scanner | Flipper Import | Flipper Detector | Hacker Detector | RF Silence Enforcer |
+| ESP-NOW Chat | ESP-NOW C2 | Dead Drop Mesh | IR Data Transfer | Multi-Device Sync | NFC Biz Card | Attack Stats |
+| Password Generator | Jam All | Combos | Scheduler | Scripts | Session Log | Config AP |
+| Config Dashboard | PIN Lock | Remote Dashboard | SSID History Logger | QR Poisoner | Auto-Dim | OPSEC Background |
+| Deauth Detector | PMKID Capture | Rolljam | NRF24 MouseJack | Universal IR Remote | | |
 
-Arsenal > Dashboard. Verbinde dich mit `BruceNet` (Passwort: `bruce32`). Öffne `192.168.4.1`.
+✅ = funktioniert auf Full und LITE. Die meisten Full-only brauchen ein 16-MB-Board.
+
+## Boards
+
+**Full (16 MB):** T-Embed CC1101 · T-Deck / T-Deck Pro · T-Display S3 (all variants) · T-HMI · T-LoRa Pager · T-Watch S3 · M5Stack Cardputer / CoreS3 / StickS3 · ESP32-S3 DevKitC-1 · Smoochiee
+
+**Full (4 MB):** ESP32-C5 / ESP32-C5 TFT
+
+**LITE (4 MB):** M5Stack Core 4/16 MB · CPlus 1.1 · CYD-2432S028/2USB/W328C/W328R · CYD-3248S035R/C · Elecrow 2.4B/2.8B/3.5B · T-Display TTGO · Marauder Mini/V4-V6/V7/V6.1 · Awok Mini/Touch · WaveSentry R1 · Phantom S024R
+
+**Bekannte Probleme:** M5Stack CPlus2 & Core2 — DRAM overflow, use LITE.
+
+## Aus dem Code kompilieren
+
+```bash
+git clone https://github.com/quietdom/bruce-arsenal
+cd bruce-arsenal
+pio run -e <board-name>   # Namen in platformio.ini
+```
 
 ## Credits
 
-- [Bruce Firmware](https://github.com/pr3y/Bruce) von pr3y — die Basis dieses Projekts
-- Arsenal-Modul und eigene Werkzeuge von quietdom
+- [Bruce Firmware](https://github.com/pr3y/Bruce) von pr3y — die Basis
+- Arsenal-Modul + Werkzeuge von quietdom
 
 ## Haftungsausschluss
 

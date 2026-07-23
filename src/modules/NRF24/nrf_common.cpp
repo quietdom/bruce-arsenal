@@ -74,13 +74,29 @@ bool nrf_start(NRF24_MODE mode) {
     );
     delay(10);
 
+    // Make sure the radio is actually present and powered before reporting
+    // success, so "barely works" becomes either works or a clear error. Cheap
+    // NRF24L01+ clones and loose wiring make begin() succeed but
+    // isChipConnected() fail, which is the usual cause of flaky behavior.
     if (NRFradio.begin(
             NRFSPI,
             rf24_gpio_pin_t(bruceConfigPins.NRF24_bus.io0),
             rf24_gpio_pin_t(bruceConfigPins.NRF24_bus.cs)
         )) {
+        // Verify the chip actually responds. Cheap NRF24L01+ clones and loose
+        // wiring make begin() succeed but isChipConnected() fail, which is the
+        // usual cause of "barely works".
+        if (!NRFradio.isChipConnected()) {
+            displayError("NRF24 not responding");
+            Serial.println("NRF24 isChipConnected() failed");
+            return false;
+        }
+        NRFradio.powerUp();
+        NRFradio.setPALevel(RF24_PA_MAX);
+        NRFradio.setDataRate(RF24_2MBPS);
         result = true;
     } else {
+        displayError("NRF24 not found");
         return false;
     }
     return result;

@@ -32,11 +32,19 @@ void BleMenu::optionsMenu() {
                        }});
     options.push_back({"Bad BLE", [=]() { ducky_setup(hid_ble, true); }});
     options.push_back({"BLE Keyboard", [=]() { ducky_keyboard(hid_ble, true); }});
+    options.push_back({"BLE Spam", notifSpoofer});
 #endif
-    options.push_back({"BLE Spam", [=]() { spamMenu(); }});
 
-#if !defined(LITE_VERSION)
+#if !LITE_VERSION
+    options.push_back({"BLE Sniffer", ble_sniffer});
     options.push_back({"BLE Suite", [=]() { BleSuiteMenu(); }});
+    options.push_back({"BLE Spam", [=]() { spamMenu(); }});
+    options.push_back({"BT Name Spammer", arsenal_bt_name_spammer});
+    options.push_back({"AirTag Spoofer", airtagSpoofer});
+    options.push_back({"BLE Tracker", bleTracker});
+    options.push_back({"Audio Jammer", audioJammer});
+    options.push_back({"BT Rickroll", arsenal_bt_audio_rickroll});
+    options.push_back({"Device Profiler", arsenal_bt_device_profiler});
     options.push_back({"Ninebot", [=]() { BLENinebot(); }});
 #else
     options.push_back({"BLE Sniffer", [=]() { BLE_SnifferMenu(); }});

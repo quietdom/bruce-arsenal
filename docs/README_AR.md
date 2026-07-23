@@ -1,4 +1,4 @@
-🌐 [English](../README.md) | [Portugues](README_PT.md) | [Italiano](README_IT.md) | [Francais](README_FR.md) | 🇷🇺 [Русский](README_RU.md) | 🇨🇳 [中文](README_ZH.md) | [Polski](README_PL.md) | [Nederlands](README_NL.md) | [Turkce](README_TR.md) | [Deutsch](README_DE.md) | Tiếng Việt [Tiếng Việt](README_VN.md) | [Espanol](README_ES.md) | [Indonesia](README_ID.md) | 🇸🇦 **العربية**
+🌐 [English](../README.md) | [Portugues](README_PT.md) | [Italiano](README_IT.md) | [Francais](README_FR.md) | [Русский](README_RU.md) | [中文](README_ZH.md) | [Polski](README_PL.md) | [Nederlands](README_NL.md) | [Turkce](README_TR.md) | [Deutsch](README_DE.md) | [Tiếng Việt](README_VN.md) | [Espanol](README_ES.md) | [Indonesia](README_ID.md) | **العربية**
 
 <p align="center">
   <img src="../media/bruce_banner.jpg" alt="Bruce Arsenal" width="700">
@@ -7,124 +7,82 @@
 <h1 align="center">🎯 Bruce Arsenal</h1>
 
 <p align="center">
-  <b>برنامج ثابت أمني هجومي مخصص لأجهزة ESP32</b><br>
-  <i>72 أداة Full / 55 أداة LITE - برنامج ثابت واحد - أجهزة متعددة</i>
+  <b>🔧 برمجيات أمنية هجومية مخصصة لأجهزة ESP32</b><br>
+  <i>⚡ برمجة واحدة، أجهزة متعددة — 68 أداة</i>
 </p>
 
 ---
 
-تعديل لـ [Bruce Firmware](https://github.com/pr3y/Bruce) مع وحدة **Arsenal** مخصصة. تظل جميع ميزات Bruce الأصلية سليمة.
+نسخة معدلة من [Bruce Firmware](https://github.com/pr3y/Bruce) مع وحدة **Arsenal** مخصصة. جميع ميزات Bruce الأصلية تبقى كما هي. تُجمَّع وتُختبر على 30 لوحة قبل كل إصدار.
 
-## التثبيت
+## 🆕 الجديد في v1.2.0
 
-1. قم بتنزيل `.bin` من [Releases](../../releases)
-2. اكتب عبر [ESP Web Flasher](https://espressif.github.io/esptool-js/) (Chrome/Edge) أو OTA عبر Arsenal Dashboard
+**🐛 تم الإصلاح** — تجمد T-Embed RF Listen (تحرير ناقل SPI المشترك عند الخروج)·"CC1101 غير موجود"·NRF24"بالكاد يعمل"(يتحقق من الشريحة ويغذيها)·jam_all على 4 نطاقات·عدادات المرسل/الفاشل الحقيقية·مفتاح WireGuard لم يعد على المنفذ التسلسلي·رابط deauther.
 
----
+**✨ جديد** — Universal IR Remote (حسب العلامة، الأكواد في الذاكرة، بدون SD)·PMKID Capture (WPA بدون عميل)·Deauth Detector (دفاعي)·Rolljam (تشويش+التقاط keyfob)·MouseJack حقيقي·حفظ/تحميل أهداف deauth·مرسل BLE محدّث (40 معرّف FastPair + 18 طراز Apple).
 
-## أدوات Arsenal (72 Full / 55 LITE)
+## 💾 التثبيت
 
-| # | الأداة | Full | LITE | | # | الأداة | Full | LITE |
-|---|------|:----:|:----:|-|---|------|:----:|:----:|
-| 1 | Network Scanner | ✅ | ✅ | | 37 | Keyfob Logger | ✅ | ❌ |
-| 2 | DHCP Starvation | ✅ | ✅ | | 38 | Frequency Scanner | ✅ | ✅ |
-| 3 | Karma Attack | ✅ | ✅ | | 39 | Flipper Import | ✅ | ✅ |
-| 4 | DNS Spoofer | ✅ | ✅ | | 40 | Flipper Detector | ✅ | ❌ |
-| 5 | Auto-Phish Portal | ✅ | ❌ | | 41 | Hacker Detector | ✅ | ❌ |
-| 6 | Cred Forward | ✅ | ❌ | | 42 | RF Silence Enforcer | ✅ | ❌ |
-| 7 | Auth Flood | ✅ | ✅ | | 43 | ESP-NOW Chat | ✅ | ❌ |
-| 8 | AP Clone Flood | ✅ | ✅ | | 44 | ESP-NOW C2 | ✅ | ❌ |
-| 9 | SSL Strip Lite | ✅ | ❌ | | 45 | Dead Drop Mesh | ✅ | ❌ |
-| 10 | DNS Tunnel | ✅ | ✅ | | 46 | IR Data Transfer | ✅ | ❌ |
-| 11 | WPS PIN Attack | ✅ | ✅ | | 47 | Multi-Device Sync | ✅ | ❌ |
-| 12 | UPnP Port Opener | ✅ | ❌ | | 48 | NFC Biz Card | ✅ | ❌ |
-| 13 | Default Cred Scanner | ✅ | ❌ | | 49 | Attack Stats | ✅ | ✅ |
-| 14 | Rogue AP Detector | ✅ | ✅ | | 50 | Password Generator | ✅ | ✅ |
-| 15 | WiFi Bruteforce | ✅ | ❌ | | 51 | Jam All | ✅ | ✅ |
-| 16 | WPA Handshake Grabber | ✅ | ❌ | | 52 | Combos | ✅ | ✅ |
-| 17 | Beacon Flood | ✅ | ❌ | | 53 | Scheduler | ✅ | ✅ |
-| 18 | Selective Deauth | ✅ | ❌ | | 54 | Scripts | ✅ | ✅ |
-| 19 | ARP Poisoner | ✅ | ❌ | | 55 | Session Log | ✅ | ✅ |
-| 20 | BLE Tracker | ✅ | ❌ | | 56 | Config AP | ✅ | ✅ |
-| 21 | BT Name Spammer | ✅ | ❌ | | 57 | Config Dashboard | ✅ | ✅ |
-| 22 | AirTag Spoofer | ✅ | ❌ | | 58 | PIN Lock | ✅ | ✅ |
-| 23 | Audio Jammer | ✅ | ❌ | | 59 | Remote Dashboard | ✅ | ❌ |
-| 24 | Notification Spoofer | ✅ | ❌ | | 60 | SSID History Logger | ✅ | ✅ |
-| 25 | BT Rickroll | ✅ | ❌ | | 61 | QR Poisoner | ✅ | ✅ |
-| 26 | BT Device Profiler | ✅ | ❌ | | 62 | Auto-Dim | ✅ | ✅ |
-| 27 | Device Fingerprinter | ✅ | ✅ | | 63 | OPSEC Background | ✅ | ✅ |
-| 28 | OPSEC Monitor | ✅ | ✅ | | 64 | Network Scanner (Full) | ✅ | ✅ |
-| 29 | OUI Lookup | ✅ | ✅ | | 65 | DHCP Starvation (Full) | ✅ | ✅ |
-| 30 | Probe Log | ✅ | ✅ | | 66 | Karma Attack (Full) | ✅ | ✅ |
-| 31 | Banner Grabber | ✅ | ✅ | | 67 | DNS Spoofer (Full) | ✅ | ✅ |
-| 32 | SmartHome Scan | ✅ | ❌ | | 68 | Auth Flood (Full) | ✅ | ✅ |
-| 33 | Channel Chart | ✅ | ✅ | | 69 | AP Clone Flood (Full) | ✅ | ✅ |
-| 34 | People Counter | ✅ | ❌ | | 70 | DNS Tunnel (Full) | ✅ | ✅ |
-| 35 | MAC Rotator | ✅ | ✅ | | 71 | WPS PIN Attack (Full) | ✅ | ✅ |
-| 36 | Channel Hopper | ✅ | ✅ | | 72 | Rogue AP Detector (Full) | ✅ | ✅ |
+1. 📥 نزّل ملف `.bin` للوحة الخاصة بك من [Releases](../../releases)
+2. 🌐 افتح [ESP Web Flasher](https://espressif.github.io/esptool-js/) (Chrome/Edge)
+3. **Connect** → اختر منفذ ESP32 → **Program** → اختر `.bin` → العنوان `0x0`
+4. 🔄 اضغط **RST** أو أعد توصيل USB
 
----
+OTA: اتصل بـ AP (بالأسفل)، افتح لوحة التحكم، **OTA Update** → اختر `.bin` الجديد.
 
-## توافق اللوحات
+CLI: `esptool.py --port COM3 --baud 460800 write_flash 0x0 firmware.bin`
 
-| اللوحة | Flash | الإصدار |
-|--------|-------|---------|
-| **ESP32-S3** | | |
-| LilyGo T-Embed CC1101 | 16MB | Full |
-| LilyGo T-Deck Pro | 16MB | Full |
-| LilyGo T-Deck | 16MB | Full |
-| LilyGo T-Display S3 | 16MB | Full |
-| LilyGo T-Display S3 Touch | 16MB | Full |
-| LilyGo T-Display S3 MMC | 16MB | Full |
-| LilyGo T-Display S3 Touch MMC | 16MB | Full |
-| LilyGo T-HMI | 16MB | Full |
-| LilyGo T-LoRa Pager | 16MB | Full |
-| LilyGo T-Watch S3 | 16MB | Full |
-| M5Stack Cardputer | 8MB | Full |
-| M5Stack CoreS3 | 16MB | Full |
-| M5Stack StickS3 | 16MB | Full |
-| ESP32-S3 DevKitC-1 | 16MB | Full |
-| Smoochiee Board | 16MB | Full |
-| **ESP32-C5** | | |
-| ESP32-C5 | 4MB | Full |
-| ESP32-C5 TFT | 4MB | Full |
-| **ESP32** | | |
-| M5Stack Core 4MB | 4MB | LITE |
-| M5Stack Core 16MB | 16MB | LITE |
-| M5Stack CPlus 1.1 | 4MB | LITE |
-| CYD-2432S028 | 4MB | LITE |
-| CYD-2USB | 4MB | LITE |
-| CYD-2432W328C | 4MB | LITE |
-| CYD-2432W328R | 4MB | LITE |
-| CYD-3248S035R | 4MB | LITE |
-| CYD-3248S035C | 4MB | LITE |
-| Elecrow 2.4B | 4MB | LITE |
-| Elecrow 2.8B | 4MB | LITE |
-| Elecrow 3.5B | 4MB | LITE |
-| LilyGo T-Display TTGO | 4MB | LITE |
-| Marauder Mini | 4MB | LITE |
-| Marauder V4-V6 | 4MB | LITE |
-| Marauder V7 | 4MB | LITE |
-| Marauder V6.1 | 4MB | LITE |
-| Awok Mini | 4MB | LITE |
-| Awok Touch | 4MB | LITE |
-| WaveSentry R1 | 4MB | LITE |
-| Phantom S024R | 4MB | LITE |
-| **المشاكل المعروفة** | | |
-| M5Stack CPlus2 | - | DRAM overflow |
-| M5Stack Core2 | - | DRAM overflow |
+## 📡 الاتصال بلوحة التحكم
 
----
+هناك مجموعتان من بيانات الاعتماد — تعتمدان على الميزة التي فتحتها:
 
-## لوحة التحكم عن بُعد
+| | AP name | AP password | Dashboard login | IP |
+|---|---------|-------------|-----------------|----|
+| **🛡️ لوحة Arsenal** | `ArsenalNet` | `arsenal32` | `admin` / `arsenal` | `172.0.0.1` |
+| **🌐 واجهة Bruce الأساسية** | `BruceNet` | `brucenet` | `admin` / `bruce` | `172.0.0.1` |
 
-Arsenal > Dashboard. اتصل بـ `ArsenalNet` (كلمة المرور: `arsenal32`). افتح `192.168.4.1`.
+كل شيء قابل للتكوين من **الإعدادات** على الجهاز. إذا لم يعمل الإعداد الافتراضي، فقد غيّره شخص ما — أعد التثبيت أو تحقق من الإعدادات → WiFi AP / WebUI. عنوان IP هو **`172.0.0.1`**، وليس `192.168.4.1`.
 
-## الشكر
+## 🧰 الأدوات (68)
 
-- [Bruce Firmware](https://github.com/pr3y/Bruce) بواسطة pr3y
-- وحدة Arsenal بواسطة quietdom
+| | | | | | | |
+|---|---|---|---|---|---|---|
+| Network Scanner | DHCP Starvation | Karma Attack | DNS Spoofer | Auto-Phish Portal | Cred Forward | Auth Flood |
+| AP Clone Flood | SSL Strip Lite | DNS Tunnel | WPS PIN Reference | UPnP Port Opener | Default Cred Scanner | Rogue AP Detector |
+| WiFi Bruteforce | WPA Handshake Grabber | Beacon Flood | Selective Deauth | Enhanced Deauth | ARP Poisoner | BLE Tracker |
+| BT Name Spammer | AirTag Spoofer | Audio Jammer | Notification Spoofer | BT Rickroll | BT Device Profiler | Device Fingerprinter |
+| OPSEC Monitor | OUI Lookup | Probe Log | Banner Grabber | SmartHome Scan | Channel Chart | MAC Rotator |
+| Channel Hopper | Keyfob Logger | Frequency Scanner | Flipper Import | Flipper Detector | Hacker Detector | RF Silence Enforcer |
+| ESP-NOW Chat | ESP-NOW C2 | Dead Drop Mesh | IR Data Transfer | Multi-Device Sync | NFC Biz Card | Attack Stats |
+| Password Generator | Jam All | Combos | Scheduler | Scripts | Session Log | Config AP |
+| Config Dashboard | PIN Lock | Remote Dashboard | SSID History Logger | QR Poisoner | Auto-Dim | OPSEC Background |
+| Deauth Detector | PMKID Capture | Rolljam | NRF24 MouseJack | Universal IR Remote | | |
 
-## إخلاء مسؤولية
+✅ = يعمل على Full و LITE. معظم أدوات Full-only تتطلب لوحة 16 ميغابايت.
 
-فقط لاختبارات الأمان المصرح بها والأغراض التعليمية.
+## 🖥️ اللوحات
+
+**Full (16 MB):** T-Embed CC1101 · T-Deck / T-Deck Pro · T-Display S3 (all variants) · T-HMI · T-LoRa Pager · T-Watch S3 · M5Stack Cardputer / CoreS3 / StickS3 · ESP32-S3 DevKitC-1 · Smoochiee
+
+**Full (4 MB):** ESP32-C5 / ESP32-C5 TFT
+
+**LITE (4 MB):** M5Stack Core 4/16 MB · CPlus 1.1 · CYD-2432S028/2USB/W328C/W328R · CYD-3248S035R/C · Elecrow 2.4B/2.8B/3.5B · T-Display TTGO · Marauder Mini/V4-V6/V7/V6.1 · Awok Mini/Touch · WaveSentry R1 · Phantom S024R
+
+**⚠️ مشاكل معروفة:** M5Stack CPlus2 & Core2 — DRAM overflow, use LITE.
+
+## 🔨 التجميع من المصدر
+
+```bash
+git clone https://github.com/quietdom/bruce-arsenal
+cd bruce-arsenal
+pio run -e <board-name>   # الأسماء في platformio.ini
+```
+
+## 👥 الاعتمادات
+
+- [Bruce Firmware](https://github.com/pr3y/Bruce) بواسطة pr3y — الأساس
+- وحدة Arsenal + الأدوات بواسطة quietdom
+
+## ⚖️ إخلاء المسؤولية
+
+لاستخدام اختبارات الأمان المصرح بها والأغراض التعليمية فقط. لا تكن غبيًا مع هذا.

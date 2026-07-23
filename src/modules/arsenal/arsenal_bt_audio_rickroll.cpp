@@ -141,6 +141,7 @@ void arsenal_bt_audio_rickroll(void) {
 
     NimBLEAdvertising *pAdv = NimBLEDevice::getAdvertising();
     int count = 0;
+    int failed = 0;
 
     while (!check(EscPress)) {
         NimBLEDevice::getAdvertising()->stop();
@@ -151,10 +152,10 @@ void arsenal_bt_audio_rickroll(void) {
         advData.setManufacturerData(payload);
         advData.setFlags(0x06);
         pAdv->setAdvertisementData(advData);
-        pAdv->start();
+        bool ok = pAdv->start();
         delay(80);
         pAdv->stop();
-        count++;
+        if (ok) count++; else failed++;
 
         if (count % 10 == 0) {
             drawMainBorderWithTitle("BT Rickroll");
@@ -165,7 +166,7 @@ void arsenal_bt_audio_rickroll(void) {
             tft.printf("Target: %s", devices[targetIdx].name.c_str());
             y += 14;
             tft.setCursor(12, y);
-            tft.printf("Packets sent: %d", count);
+            tft.printf("Sent: %d  Failed: %d", count, failed);
             tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
             tft.drawCentreString(String("Esc:stop"), tftWidth / 2, tftHeight - 20, 1);
         }

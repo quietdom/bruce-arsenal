@@ -1,137 +1,88 @@
 🌐 [English](README.md) | [Portugues](docs/README_PT.md) | [Italiano](docs/README_IT.md) | [Francais](docs/README_FR.md) | 🇷🇺 [Русский](docs/README_RU.md) | 🇨🇳 [中文](docs/README_ZH.md) | [Polski](docs/README_PL.md) | [Nederlands](docs/README_NL.md) | [Turkce](docs/README_TR.md) | [Deutsch](docs/README_DE.md) | Tiếng Việt [Tiếng Việt](docs/README_VN.md) | [Espanol](docs/README_ES.md) | [Indonesia](docs/README_ID.md) | 🇸🇦 [العربية](docs/README_AR.md)
 
 <p align="center">
-  <img src="media/bruce_banner.jpg" alt="Bruce Firmware" width="700">
+  <img src="media/bruce_banner.jpg" alt="Bruce Arsenal" width="700">
 </p>
 
-<h1 align="center">🎯 Bruce Firmware</h1>
+<h1 align="center">🎯 Bruce Arsenal</h1>
 
 <p align="center">
-  <b>Custom offensive security firmware for ESP32 devices</b><br>
-  <i>73 tools Full / 56 tools LITE - One firmware - Multiple devices</i>
+  <b>🔧 Custom offensive-security firmware for ESP32</b><br>
+  <i>⚡ One firmware, many boards — 68 tools</i>
 </p>
 
 ---
 
-A modified [Bruce Firmware](https://github.com/pr3y/Bruce) with additional tools and features. All original Bruce features remain intact.
+A modified [Bruce Firmware](https://github.com/pr3y/Bruce) with a custom **Arsenal** module. All original Bruce features stay intact. Built and tested across 30 boards before every release.
 
-## Installation
+## 🆕 What's new in v1.2.0
 
-### Quick Flash (Recommended)
+**🐛 Fixed** — T-Embed RF Listen freeze (shared SPI bus now released on exit) · "CC1101 not found" (silent init skip + TFT race both fixed) · NRF24 "barely works" (now verifies the chip + powers it up properly) · jam_all across all four bands · honest flood/spam counters (real sent/failed, no fake inflation) · WireGuard private key no longer leaks to serial · deauther linker bomb.
 
-1. Download the `.bin` for your board from [Releases](../../releases)
-2. Go to [ESP Web Flasher](https://espressif.github.io/esptool-js/) (use Chrome or Edge)
-3. Click **Connect**, select your ESP32 serial port
-4. Click **Program**, select the `.bin` file, set address to `0x0`
-5. Click **Program** and wait for completion
-6. Press **RST** on your device or unplug/replug USB
+**✨ New** — Universal IR Remote (brand-based, codes in flash, no SD) · PMKID Capture (client-less WPA) · Deauth Detector (defensive) · Rolljam (keyfob jam+capture) · real MouseJack (runs the actual 934-line impl) · Save/Load deauth target lists · refreshed BLE spammer (40 real FastPair IDs + 18 Apple models).
 
-### OTA Update (After First Flash)
+## 💾 Flash
 
-1. Connect your phone to `BruceNet` (password: `bruce32`)
-2. Open `192.168.4.1` in your browser
-3. Go to **OTA Update**, select the `.bin` file
-4. Wait for upload and automatic reboot
+1. 📥 Grab the `.bin` for your board from [Releases](../../releases)
+2. 🌐 Open the [ESP Web Flasher](https://espressif.github.io/esptool-js/) (Chrome/Edge)
+3. **Connect** → pick your ESP32 port → **Program** → choose the `.bin` → address `0x0`
+4. 🔄 Press **RST** or replug USB
 
-### Flash via esptool (Advanced)
+OTA: connect to the AP (see below), open the dashboard, **OTA Update** → pick the new `.bin`.
+
+CLI: `esptool.py --port COM3 --baud 460800 write_flash 0x0 firmware.bin`
+
+## 📡 Connecting to the dashboard
+
+There are two credential sets — they depend on which feature you launched:
+
+| | AP name | AP password | Dashboard login | IP |
+|---|---------|-------------|-----------------|----|
+| **🛡️ Arsenal Dashboard** | `ArsenalNet` | `arsenal32` | `admin` / `arsenal` | `172.0.0.1` |
+| **🌐 Base Bruce WebUI** | `BruceNet` | `brucenet` | `admin` / `bruce` | `172.0.0.1` |
+
+All of these are user-configurable from the device's **Settings** menu. If a default doesn't work, someone changed it — reflash or check Settings → WiFi AP / WebUI. The IP is **`172.0.0.1`**, not `192.168.4.1`.
+
+## 🧰 Tools (68)
+
+| | | | | | | |
+|---|---|---|---|---|---|---|
+| Network Scanner | DHCP Starvation | Karma Attack | DNS Spoofer | Auto-Phish Portal | Cred Forward | Auth Flood |
+| AP Clone Flood | SSL Strip Lite | DNS Tunnel | WPS PIN Reference | UPnP Port Opener | Default Cred Scanner | Rogue AP Detector |
+| WiFi Bruteforce | WPA Handshake Grabber | Beacon Flood | Selective Deauth | Enhanced Deauth | ARP Poisoner | BLE Tracker |
+| BT Name Spammer | AirTag Spoofer | Audio Jammer | Notification Spoofer | BT Rickroll | BT Device Profiler | Device Fingerprinter |
+| OPSEC Monitor | OUI Lookup | Probe Log | Banner Grabber | SmartHome Scan | Channel Chart | MAC Rotator |
+| Channel Hopper | Keyfob Logger | Frequency Scanner | Flipper Import | Flipper Detector | Hacker Detector | RF Silence Enforcer |
+| ESP-NOW Chat | ESP-NOW C2 | Dead Drop Mesh | IR Data Transfer | Multi-Device Sync | NFC Biz Card | Attack Stats |
+| Password Generator | Jam All | Combos | Scheduler | Scripts | Session Log | Config AP |
+| Config Dashboard | PIN Lock | Remote Dashboard | SSID History Logger | QR Poisoner | Auto-Dim | OPSEC Background |
+| Deauth Detector | PMKID Capture | Rolljam | NRF24 MouseJack | Universal IR Remote | | |
+
+✅ = works on both Full and LITE builds. Most Full-only tools need a 16 MB board.
+
+## 🖥️ Boards
+
+**Full (16 MB):** T-Embed CC1101 · T-Deck / T-Deck Pro · T-Display S3 (all variants) · T-HMI · T-LoRa Pager · T-Watch S3 · M5Stack Cardputer / CoreS3 / StickS3 · ESP32-S3 DevKitC-1 · Smoochiee
+
+**Full (4 MB):** ESP32-C5 / ESP32-C5 TFT
+
+**LITE (4 MB):** M5Stack Core 4/16 MB · CPlus 1.1 · CYD-2432S028/2USB/W328C/W328R · CYD-3248S035R/C · Elecrow 2.4B/2.8B/3.5B · T-Display TTGO · Marauder Mini/V4-V6/V7/V6.1 · Awok Mini/Touch · WaveSentry R1 · Phantom S024R
+
+**⚠️ Known issues:** M5Stack CPlus2 & Core2 — DRAM overflow, use LITE.
+
+## 🔨 Build from source
 
 ```bash
-pip install esptool
-esptool.py --port COM3 --baud 460800 write_flash 0x0 firmware.bin
+git clone https://github.com/quietdom/bruce-arsenal
+cd bruce-arsenal
+pio run -e <board-name>   # names in platformio.ini
 ```
-Replace `COM3` with your serial port. On Linux use `/dev/ttyUSB0`.
 
----
+## 👥 Credits
 
-## Additional Tools (72 Full / 55 LITE)
+- [Bruce Firmware](https://github.com/pr3y/Bruce) by pr3y — the base
+- Arsenal module + custom tools by quietdom
 
-| # | Tool | Full | LITE | | # | Tool | Full | LITE |
-|---|------|:----:|:----:|-|---|------|:----:|:----:|
-| 1 | Network Scanner | ✅ | ✅ | | 37 | Keyfob Logger | ✅ | ❌ |
-| 2 | DHCP Starvation | ✅ | ✅ | | 38 | Frequency Scanner | ✅ | ✅ |
-| 3 | Karma Attack | ✅ | ✅ | | 39 | Flipper Import | ✅ | ✅ |
-| 4 | DNS Spoofer | ✅ | ✅ | | 40 | Flipper Detector | ✅ | ❌ |
-| 5 | Auto-Phish Portal | ✅ | ❌ | | 41 | Hacker Detector | ✅ | ❌ |
-| 6 | Cred Forward | ✅ | ❌ | | 42 | RF Silence Enforcer | ✅ | ❌ |
-| 7 | Auth Flood | ✅ | ✅ | | 43 | ESP-NOW Chat | ✅ | ❌ |
-| 8 | AP Clone Flood | ✅ | ✅ | | 44 | ESP-NOW C2 | ✅ | ❌ |
-| 9 | SSL Strip Lite | ✅ | ❌ | | 45 | Dead Drop Mesh | ✅ | ❌ |
-| 10 | DNS Tunnel | ✅ | ✅ | | 46 | IR Data Transfer | ✅ | ❌ |
-| 11 | WPS PIN Attack | ✅ | ✅ | | 47 | Multi-Device Sync | ✅ | ❌ |
-| 12 | UPnP Port Opener | ✅ | ❌ | | 48 | NFC Biz Card | ✅ | ❌ |
-| 13 | Default Cred Scanner | ✅ | ❌ | | 49 | Attack Stats | ✅ | ✅ |
-| 14 | Rogue AP Detector | ✅ | ✅ | | 50 | Password Generator | ✅ | ✅ |
-| 15 | WiFi Bruteforce | ✅ | ❌ | | 51 | Jam All | ✅ | ✅ |
-| 16 | WPA Handshake Grabber | ✅ | ❌ | | 52 | Combos | ✅ | ✅ |
-| 17 | Beacon Flood | ✅ | ❌ | | 53 | Scheduler | ✅ | ✅ |
-| 18 | Selective Deauth | ✅ | ❌ | | 54 | Scripts | ✅ | ✅ |
-| 19 | ARP Poisoner | ✅ | ❌ | | 55 | Session Log | ✅ | ✅ |
-| 20 | BLE Tracker | ✅ | ❌ | | 56 | Config AP | ✅ | ✅ |
-| 21 | BT Name Spammer | ✅ | ❌ | | 57 | Config Dashboard | ✅ | ✅ |
-| 22 | AirTag Spoofer | ✅ | ❌ | | 58 | PIN Lock | ✅ | ✅ |
-| 23 | Audio Jammer | ✅ | ❌ | | 59 | Remote Dashboard | ✅ | ❌ |
-| 24 | Notification Spoofer | ✅ | ❌ | | 60 | SSID History Logger | ✅ | ✅ |
-| 25 | BT Rickroll | ✅ | ❌ | | 61 | QR Poisoner | ✅ | ✅ |
-| 26 | BT Device Profiler | ✅ | ❌ | | 62 | Auto-Dim | ✅ | ✅ |
-| 27 | Device Fingerprinter | ✅ | ✅ | | 63 | OPSEC Background | ✅ | ✅ |
-| 28 | OPSEC Monitor | ✅ | ✅ | | 64 | Network Scanner (Full) | ✅ | ✅ |
-| 29 | OUI Lookup | ✅ | ✅ | | 65 | DHCP Starvation (Full) | ✅ | ✅ |
-| 30 | Probe Log | ✅ | ✅ | | 66 | Karma Attack (Full) | ✅ | ✅ |
-| 31 | Banner Grabber | ✅ | ✅ | | 67 | DNS Spoofer (Full) | ✅ | ✅ |
-| 32 | SmartHome Scan | ✅ | ❌ | | 68 | Auth Flood (Full) | ✅ | ✅ |
-| 33 | Channel Chart | ✅ | ✅ | | 69 | AP Clone Flood (Full) | ✅ | ✅ |
-| 34 | People Counter | ✅ | ❌ | | 70 | DNS Tunnel (Full) | ✅ | ✅ |
-| 35 | MAC Rotator | ✅ | ✅ | | 71 | WPS PIN Attack (Full) | ✅ | ✅ |
-| 36 | Channel Hopper | ✅ | ✅ | | 72 | Rogue AP Detector (Full) | ✅ | ✅ |
+## ⚖️ Disclaimer
 
----
-
-## Not Compatible
-
-- **M5Stack CPlus2** - DRAM overflow (use LITE version)
-- **M5Stack Core2** - DRAM overflow (use LITE version)
-
-All other supported Bruce boards work with Full or LITE depending on flash/RAM.
-
----
-
-## FAQ
-
-**Q: Device boots to a blank screen or keeps restarting**
-A: Flash again with the correct `.bin` for your board. Make sure you selected the right serial port.
-
-**Q: "Low memory" error when starting a tool**
-A: Your board doesn't have enough free RAM. Close other running features or use a board with more memory (ESP32-S3).
-
-**Q: SD card features don't work**
-A: Insert a formatted FAT32 SD card before booting. Some boards require SD card in the slot at boot time.
-
-**Q: WiFi tools crash or don't find networks**
-A: Make sure WiFi antenna is connected. On boards with external antenna, check the antenna switch.
-
-**Q: BLE features say "init failed"**
-A: BLE requires NimBLE library. If building from source, make sure `h2zero/NimBLE-Arduino` is in your `lib_deps`.
-
-**Q: How do I access the Remote Dashboard?**
-A: Connect phone to WiFi `BruceNet` (password: `bruce32`), open `192.168.4.1` in browser.
-
-**Q: How do I update firmware OTA?**
-A: Connect to `BruceNet`, open dashboard, go to OTA Update, select new `.bin` file.
-
-**Q: Can I build from source?**
-A: Yes. Install [PlatformIO](https://platformio.org/), clone this repo, run `pio run -e <board-name>`. Board names are in `platformio.ini`.
-
----
-
-## Remote Dashboard
-
-Connect to `BruceNet` (password: `bruce32`). Open `192.168.4.1`.
-
-## Credits
-
-- [Bruce Firmware](https://github.com/pr3y/Bruce) by pr3y
-- Custom tools by quietdom
-
-## Disclaimer
-
-For authorized security testing and educational purposes only.
+For authorized security testing and educational use only. Don't be a jerk with it.

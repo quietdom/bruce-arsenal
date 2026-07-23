@@ -18,14 +18,13 @@ struct WpsTarget {
     uint8_t bssid[6];
     int32_t rssi;
     uint8_t channel;
-    bool wpsOpen;
 };
 
 void arsenal_wps_pin_attack(void) {
     ARSENAL_HEAP_CHECK();
     if (WiFi.getMode() == WIFI_MODE_NULL) WiFi.mode(WIFI_STA);
 
-    drawMainBorderWithTitle("WPS PIN Attack");
+    drawMainBorderWithTitle("WPS PIN Reference");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.setTextSize(FP);
     tft.setCursor(12, 50);
@@ -49,7 +48,7 @@ void arsenal_wps_pin_attack(void) {
         targets[targetCount].ssid = WiFi.SSID(i);
         targets[targetCount].rssi = WiFi.RSSI(i);
         targets[targetCount].channel = WiFi.channel(i);
-        targets[targetCount].wpsOpen = true;
+        
         targetCount++;
     }
 
@@ -64,7 +63,7 @@ void arsenal_wps_pin_attack(void) {
     options.clear();
     for (int i = 0; i < targetCount; i++) {
         String label = targets[i].ssid + " (" + String(targets[i].rssi) + "dB)";
-        if (targets[i].wpsOpen) label += " [WPS]";
+
         options.push_back({label, []() {}});
     }
     int selected = -1;
@@ -73,13 +72,13 @@ void arsenal_wps_pin_attack(void) {
         options[i].operation = [&selected, idx]() { selected = idx; };
     }
     addOptionToMainMenu();
-    loopOptions(options, MENU_TYPE_SUBMENU, "WPS Targets");
+    loopOptions(options, MENU_TYPE_SUBMENU, "Select Target");
 
     if (selected < 0) return;
 
     WpsTarget &tgt = targets[selected];
 
-    drawMainBorderWithTitle("WPS PIN Attack");
+    drawMainBorderWithTitle("WPS PIN Reference");
     int y = 36;
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.setTextSize(FP);

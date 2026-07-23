@@ -206,11 +206,9 @@ void BleKeyboard::end(void) {
         for (j = 0; j < i; j++) pServer->disconnect(pServer->getPeerInfo(i).getConnHandle());
     }
     delete hid;
-#if defined(CONFIG_IDF_TARGET_ESP32C5)
-    esp_bt_controller_deinit();
-#else
-    BLEDevice::deinit();
-#endif
+    hid = nullptr;
+
+    BLEDevice::deinit(true);
     this->connected = false;
 }
 
@@ -222,7 +220,7 @@ void BleKeyboard::setBatteryLevel(uint8_t level) {
 }
 
 // must be called before begin in order to set the name
-void BleKeyboard::setName(String deviceName) { this->deviceName = deviceName; }
+void BleKeyboard::setName(const String &deviceName) { this->deviceName = deviceName; }
 
 /**
  * @brief Sets the waiting time (in milliseconds) between multiple keystrokes in NimBLE mode.
@@ -237,6 +235,22 @@ void BleKeyboard::set_product_id(uint16_t pid) { this->pid = pid; }
 
 void BleKeyboard::set_version(uint16_t version) { this->version = version; }
 
+// Mirrors bleNotifyRetry() from modules/ble/ble_common: NimBLECharacteristic::notify()
+// returns false when the os_mbuf could not be allocated (MSYS pool temporarily
+// full, made worse by reducing CONFIG_BT_NIMBLE_MSYS_*_BLOCK_COUNT). If untreated,
+// the key is silently dropped. Retry while yielding 1 tick for the host to drain.
+// Kept local because this library is self-contained (does not depend on src/).
+
+static bool bleKbNotifyRetry(BLECharacteristic *chr, const uint8_t *value, size_t len, uint8_t retries = 8) {
+    if (chr == nullptr) return false;
+    if (chr->notify(value, len)) return true;
+    for (uint8_t i = 0; i < retries; i++) {
+        vTaskDelay(1);
+        if (chr->notify(value, len)) return true;
+    }
+    return false;
+}
+
 void BleKeyboard::sendReport(KeyReport *keys) {
 #ifdef NIMBLE_V2_PLUS
     if (this->isConnected() && this->getSubscribedCount() > 0)
@@ -245,7 +259,7 @@ void BleKeyboard::sendReport(KeyReport *keys) {
 #endif
     {
         this->inputKeyboard->setValue((uint8_t *)keys, sizeof(KeyReport));
-        this->inputKeyboard->notify();
+        bleKbNotifyRetry(this->inputKeyboard, (uint8_t *)keys, sizeof(KeyReport));
 #if defined(USE_NIMBLE)
         // vTaskDelay(delayTicks);
         this->delay_ms(_delay_ms);
@@ -261,7 +275,7 @@ void BleKeyboard::sendReport(MediaKeyReport *keys) {
 #endif
     {
         this->inputMediaKeys->setValue((uint8_t *)keys, sizeof(MediaKeyReport));
-        this->inputMediaKeys->notify();
+        bleKbNotifyRetry(this->inputMediaKeys, (uint8_t *)keys, sizeof(MediaKeyReport));
 #if defined(USE_NIMBLE)
         // vTaskDelay(delayTicks);
         this->delay_ms(_delay_ms);
@@ -419,11 +433,11 @@ size_t BleKeyboard::write(const uint8_t *buffer, size_t size) {
 }
 #ifdef NIMBLE_V2_PLUS
 void BleKeyboard::ServerCallbacks::onConnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo) {
-    // BleKeyboard::connected = true;
+    parent->connected = true;
     Serial.println("BRUCE KEYBOARD: lib connected");
 }
 void BleKeyboard::ServerCallbacks::onDisconnect(NimBLEServer *pServer, NimBLEConnInfo &connInfo, int reason) {
-    // BleKeyboard::connected = true;
+    parent->connected = false;
     Serial.println("BRUCE KEYBOARD: lib disconnected");
 }
 void BleKeyboard::ServerCallbacks::onAuthenticationComplete(NimBLEConnInfo &connInfo) {

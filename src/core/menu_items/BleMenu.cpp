@@ -5,35 +5,26 @@
 #include "modules/ble/ble_common.h"
 #include "modules/ble/ble_ninebot.h"
 #include "modules/ble/ble_spam.h"
-#include "modules/ble/airtag_spoofer.h"
-#include "modules/ble/notif_spoofer.h"
-#include "modules/ble/ble_tracker.h"
-#include "modules/ble/audio_jammer.h"
-#if !LITE_VERSION
+#if !defined(LITE_VERSION)
 #include "modules/ble/BLE_Suite.h"
+#else
+#include "modules/ble/ble_sniffer.h"
 #endif
-#include "modules/arsenal/arsenal.h"
-#include "modules/arsenal/arsenal_config.h"
 #include <globals.h>
 
 void BleMenu::optionsMenu() {
     options.clear();
-#if !LITE_VERSION
+#if !defined(LITE_VERSION)
     if (BLEConnected) {
         options.push_back({"Disconnect", [=]() {
-#if defined(CONFIG_IDF_TARGET_ESP32C5)
-                               esp_bt_controller_deinit();
-#else
-            BLEDevice::deinit();
-#endif
+                               BLEDevice::deinit();
                                BLEConnected = false;
                                delete hid_ble;
                                hid_ble = nullptr;
-                               if (_Ask_for_restart == 1) _Ask_for_restart = 2;
                            }});
     }
 #endif
-#if !LITE_VERSION
+#if !defined(LITE_VERSION)
     options.push_back({"Media Cmds", [=]() { MediaCommands(hid_ble, true); }});
     options.push_back({"BLE Scan", ble_scan});
     options.push_back({"iBeacon", [=]() {
@@ -43,37 +34,105 @@ void BleMenu::optionsMenu() {
     options.push_back({"BLE Keyboard", [=]() { ducky_keyboard(hid_ble, true); }});
 #endif
     options.push_back({"BLE Spam", [=]() { spamMenu(); }});
-#if !LITE_VERSION
-    options.push_back({"BLE Sniffer", ble_sniffer});
+
+#if !defined(LITE_VERSION)
     options.push_back({"BLE Suite", [=]() { BleSuiteMenu(); }});
-    options.push_back({"Notif Spoofer", notifSpoofer});
-    options.push_back({"BT Name Spammer", arsenal_bt_name_spammer});
-    options.push_back({"AirTag Spoofer", airtagSpoofer});
-    options.push_back({"BLE Tracker", bleTracker});
-    options.push_back({"Audio Jammer", audioJammer});
-    options.push_back({"BT Rickroll", arsenal_bt_audio_rickroll});
-    options.push_back({"Device Profiler", arsenal_bt_device_profiler});
     options.push_back({"Ninebot", [=]() { BLENinebot(); }});
+#else
+    options.push_back({"BLE Sniffer", [=]() { BLE_SnifferMenu(); }});
 #endif
     addOptionToMainMenu();
+
     loopOptions(options, MENU_TYPE_SUBMENU, "Bluetooth", 0, false);
 }
 
 void BleMenu::drawIcon(float scale) {
     clearIconArea();
+
     int lineWidth = scale * 5;
     int iconW = scale * 36;
     int iconH = scale * 60;
     int radius = scale * 5;
     int deltaRadius = scale * 10;
+
     if (iconW % 2 != 0) iconW++;
     if (iconH % 4 != 0) iconH += 4 - (iconH % 4);
-    tft.drawWideLine(iconCenterX, iconCenterY + iconH / 4, iconCenterX - iconW, iconCenterY - iconH / 4, lineWidth, bruceConfig.priColor, bruceConfig.priColor);
-    tft.drawWideLine(iconCenterX, iconCenterY - iconH / 4, iconCenterX - iconW, iconCenterY + iconH / 4, lineWidth, bruceConfig.priColor, bruceConfig.priColor);
-    tft.drawWideLine(iconCenterX, iconCenterY + iconH / 4, iconCenterX - iconW / 2, iconCenterY + iconH / 2, lineWidth, bruceConfig.priColor, bruceConfig.priColor);
-    tft.drawWideLine(iconCenterX, iconCenterY - iconH / 4, iconCenterX - iconW / 2, iconCenterY - iconH / 2, lineWidth, bruceConfig.priColor, bruceConfig.priColor);
-    tft.drawWideLine(iconCenterX - iconW / 2, iconCenterY - iconH / 2, iconCenterX - iconW / 2, iconCenterY + iconH / 2, lineWidth, bruceConfig.priColor, bruceConfig.priColor);
-    tft.drawArc(iconCenterX, iconCenterY, 2.5 * radius, 2 * radius, 210, 330, bruceConfig.priColor, bruceConfig.bgColor);
-    tft.drawArc(iconCenterX, iconCenterY, 2.5 * radius + deltaRadius, 2 * radius + deltaRadius, 210, 330, bruceConfig.priColor, bruceConfig.bgColor);
-    tft.drawArc(iconCenterX, iconCenterY, 2.5 * radius + 2 * deltaRadius, 2 * radius + 2 * deltaRadius, 210, 330, bruceConfig.priColor, bruceConfig.bgColor);
+
+    tft.drawWideLine(
+        iconCenterX,
+        iconCenterY + iconH / 4,
+        iconCenterX - iconW,
+        iconCenterY - iconH / 4,
+        lineWidth,
+        bruceConfig.priColor,
+        bruceConfig.priColor
+    );
+    tft.drawWideLine(
+        iconCenterX,
+        iconCenterY - iconH / 4,
+        iconCenterX - iconW,
+        iconCenterY + iconH / 4,
+        lineWidth,
+        bruceConfig.priColor,
+        bruceConfig.priColor
+    );
+    tft.drawWideLine(
+        iconCenterX,
+        iconCenterY + iconH / 4,
+        iconCenterX - iconW / 2,
+        iconCenterY + iconH / 2,
+        lineWidth,
+        bruceConfig.priColor,
+        bruceConfig.priColor
+    );
+    tft.drawWideLine(
+        iconCenterX,
+        iconCenterY - iconH / 4,
+        iconCenterX - iconW / 2,
+        iconCenterY - iconH / 2,
+        lineWidth,
+        bruceConfig.priColor,
+        bruceConfig.priColor
+    );
+
+    tft.drawWideLine(
+        iconCenterX - iconW / 2,
+        iconCenterY - iconH / 2,
+        iconCenterX - iconW / 2,
+        iconCenterY + iconH / 2,
+        lineWidth,
+        bruceConfig.priColor,
+        bruceConfig.priColor
+    );
+
+    tft.drawArc(
+        iconCenterX,
+        iconCenterY,
+        2.5 * radius,
+        2 * radius,
+        210,
+        330,
+        bruceConfig.priColor,
+        bruceConfig.bgColor
+    );
+    tft.drawArc(
+        iconCenterX,
+        iconCenterY,
+        2.5 * radius + deltaRadius,
+        2 * radius + deltaRadius,
+        210,
+        330,
+        bruceConfig.priColor,
+        bruceConfig.bgColor
+    );
+    tft.drawArc(
+        iconCenterX,
+        iconCenterY,
+        2.5 * radius + 2 * deltaRadius,
+        2 * radius + 2 * deltaRadius,
+        210,
+        330,
+        bruceConfig.priColor,
+        bruceConfig.bgColor
+    );
 }

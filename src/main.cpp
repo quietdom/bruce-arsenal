@@ -212,6 +212,14 @@ void _post_setup_gpio() __attribute__((weak));
 void _post_setup_gpio() {}
 
 /*********************************************************************
+ **  Function: _pre_storage_gpio()
+ **  Sets up a weak (empty) function for board fixes that must run
+ **  after the first TFT access and before storage is mounted.
+ *********************************************************************/
+void _pre_storage_gpio() __attribute__((weak));
+void _pre_storage_gpio() {}
+
+/*********************************************************************
  **  Function: setup_gpio
  **  Setup GPIO pins
  *********************************************************************/
@@ -481,6 +489,7 @@ void setup() {
 #else
     tft.begin();
 #endif
+    _pre_storage_gpio();
     begin_storage();
     RAM_LOG("after-storage"); // bruceConfig/bruceConfigPins loaded from FS
     begin_tft();

@@ -478,10 +478,10 @@ struct BleSpamAttackOption {
 };
 
 struct BleSpamConfig {
-    uint32_t adv_ms = 15;
+    uint32_t adv_ms = 5;
     uint32_t gap_ms = 5;
     BleSpamTxPower tx_power = BLE_SPAM_TX_MAX;
-    BleSpamMacRandMode mac_rand_mode = BLE_SPAM_MAC_EVERY_3;
+    BleSpamMacRandMode mac_rand_mode = BLE_SPAM_MAC_EVERY_PACKET;
 };
 
 struct BleSpamSelection {
@@ -694,9 +694,9 @@ static BleSpamConfig bleSpamLoadConfig() {
     if (prefs.begin("ble_spam", false)) {
         uint8_t tx_init = prefs.getUChar("tx_init", 0);
         if (tx_init == 0) {
-            config.adv_ms = 15;
+            config.adv_ms = 5;
             config.gap_ms = 5;
-            config.mac_rand_mode = BLE_SPAM_MAC_EVERY_3;
+            config.mac_rand_mode = BLE_SPAM_MAC_EVERY_PACKET;
             config.tx_power = BLE_SPAM_TX_MAX;
             prefs.putUInt("adv_ms", config.adv_ms);
             prefs.putUInt("gap_ms", config.gap_ms);
@@ -1586,9 +1586,12 @@ bleSpamConfigScreen(const BleSpamSelection &selection, BleSpamConfig &config, bo
         }
 
         if (redrawRows) {
-            int rowH = max(12, FP * LH + 4);
             int rowStart = BORDER_PAD_Y + FM * LH + 10;
-            int startRowY = rowStart + rowH * 4 + ((tftHeight > 135) ? rowH : 0);
+            int footerH = FP * LH + 4;
+            int footerY = tftHeight - footerH - 8;
+            int available = footerY - rowStart - 4;
+            int rowH = max(1, min(FP * LH + 4, available / 5));
+            int startRowY = rowStart + rowH * 4;
 
             bleSpamRenderConfigRows(config, cursor, editState, rowStart, rowH);
 
@@ -1598,8 +1601,7 @@ bleSpamConfigScreen(const BleSpamSelection &selection, BleSpamConfig &config, bo
             tft.drawCentreString("[ Start ]", tftWidth / 2, startRowY + 2, 1);
 
             tft.setTextColor(TFT_DARKGREY, bruceConfig.bgColor);
-            int footerY = tftHeight - FP * LH - 12;
-            tft.fillRect(8, footerY, tftWidth - 16, FP * LH + 4, bruceConfig.bgColor);
+            tft.fillRect(8, footerY, tftWidth - 16, footerH, bruceConfig.bgColor);
             tft.drawCentreString("Click=Select  ESC=Back", tftWidth / 2, footerY + 2, 1);
 
             redrawRows = false;
@@ -1695,16 +1697,19 @@ static void bleSpamRenderRunningScreen(
         String title = bleSpamGetDeviceName(selection.attack_type, selection.device_index);
         drawMainBorderWithTitle(bleSpamMakeTitle(title));
 
-        rowH = max(12, FP * LH + 4);
         statsY = BORDER_PAD_Y + FM * LH + 8;
-        configStartY = statsY + rowH * 2 + rowH;
+        int footerH = FP * LH + 4;
+        int footerY = tftHeight - footerH - 8;
+        int sepGap = 4;
+        int available = footerY - statsY - sepGap - 2;
+        rowH = max(1, min(FP * LH + 4, available / 6));
+        configStartY = statsY + rowH * 2 + sepGap;
 
         tft.drawFastHLine(8, statsY + rowH * 2 - 2, tftWidth - 16, bruceConfig.priColor);
         tft.drawFastHLine(8, configStartY + rowH * 4 - 2, tftWidth - 16, bruceConfig.priColor);
 
         tft.setTextColor(TFT_DARKGREY, bruceConfig.bgColor);
-        int footerY = tftHeight - FP * LH - 12;
-        tft.fillRect(8, footerY, tftWidth - 16, FP * LH + 4, bruceConfig.bgColor);
+        tft.fillRect(8, footerY, tftWidth - 16, footerH, bruceConfig.bgColor);
         tft.drawCentreString("Click=Edit  ESC=Stop", tftWidth / 2, footerY + 2, 1);
     }
 

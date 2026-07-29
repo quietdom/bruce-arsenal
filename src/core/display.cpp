@@ -65,12 +65,14 @@ void displayScrollingText(const String &text, Opt_Coord &coord, bool highlight) 
 ** Description:   Draw touch screen footer
 ***************************************************************************************/
 void TouchFooter(uint16_t color) {
+#if defined(HAS_TOUCH)
     tft.drawRoundRect(5, tftHeight + 2, tftWidth - 10, 43, 5, color);
     tft.setTextColor(color);
     tft.setTextSize(FM);
     tft.drawCentreString("PREV", tftWidth / 6, tftHeight + 4, 1);
     tft.drawCentreString("SEL", tftWidth / 2, tftHeight + 4, 1);
     tft.drawCentreString("NEXT", 5 * tftWidth / 6, tftHeight + 4, 1);
+#endif
 }
 /***************************************************************************************
 ** Function name: TouchFooter

@@ -102,12 +102,16 @@ void ScrollableTextArea::update(bool force) {
             scrollDown();
             rotarySteps++;
         }
-    } else
-#endif
-    {
-        if (check(PrevPress) || check(UpPress)) scrollUp();
-        else if (check(NextPress) || check(DownPress)) scrollDown();
+        vTaskDelay(4 / portTICK_PERIOD_MS);
+        PrevPress = false;
+        NextPress = false;
+        UpPress = false;
+        DownPress = false;
     }
+#endif
+
+    if (check(PrevPress) || check(UpPress)) scrollUp();
+    else if (check(NextPress) || check(DownPress)) scrollDown();
 
     draw(force);
 }

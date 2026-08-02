@@ -589,6 +589,7 @@ bool tryAppendLiveInputSuffixFromRemoteLine(const String &line, bool renderUpdat
 }
 
 void renderPrompt(bool forceNewLine) {
+    tft.setTextSize(FP);
     if (commandBuffer == "> ") {
         String promptPrefix = getQueuedPromptPrefix();
         if (!promptPrefix.isEmpty()) commandBuffer = promptPrefix;
@@ -1160,10 +1161,12 @@ void runSessionUiLoop(const String &title) {
 #else
         if (check(SelPress)) {
             String message = keyboard("", 76, title + " Command:");
+
             if (message == "cls" || message == "clear") {
                 appendSessionCommandToLog(message);
                 resetClientScreen(title.c_str());
             } else {
+                tft.setTextSize(FP);
                 appendSessionCommandToLog(message);
                 queueSessionCommand(message + "\r");
                 tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
@@ -1172,6 +1175,7 @@ void runSessionUiLoop(const String &title) {
             }
             resetCommandBufferToPrompt();
             renderPrompt();
+            SelPress = false; // Resets button state to avoid repeated prompts
         }
 #endif
 
@@ -1193,7 +1197,7 @@ char *stringTochar(const String &s) {
     return arr;
 }
 
-void ssh_setup(const String &host) {
+void ssh_setup(String host) {
     if (!wifiConnected) wifiConnectMenu();
     if (!initClientMutex()) {
         displayError("SSH mutex creation failed.", true);

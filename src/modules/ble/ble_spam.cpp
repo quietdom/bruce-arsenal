@@ -359,7 +359,11 @@ BLEAdvertisementData GetUniversalAdvertisementData(EBLEPayloadType Type, const S
                 Name = generateRandomName();
                 name_len = strlen(Name);
             }
-            if (name_len > 31) name_len = 31;
+            // The manufacturer-data element built below is 7+name_len bytes, and the
+            // caller always adds a 3-byte Flags element on top (see setFlags() calls
+            // after GetUniversalAdvertisementData() for Microsoft). Clamp so the two
+            // together never exceed the 31-byte legacy adv payload limit.
+            if (name_len > 21) name_len = 21;
 
             uint8_t AdvData_Raw_Local[7 + 31];
             AdvData_Raw = AdvData_Raw_Local;
@@ -398,6 +402,7 @@ BLEAdvertisementData GetUniversalAdvertisementData(EBLEPayloadType Type, const S
                     (uint8_t)((model >> 0x00) & 0xFF)
                 };
                 AdvData.addData(Samsung_Data, 15);
+                AdvData.setFlags(0x06);
             } else {
                 // Galaxy Buds packet (MarlinSchuck)
                 uint32_t model = samsung_buds_models[random(samsung_buds_count)];
@@ -439,6 +444,9 @@ BLEAdvertisementData GetUniversalAdvertisementData(EBLEPayloadType Type, const S
                 Buds_Data[bi++] = 0xFF;
                 Buds_Data[bi++] = 0x75;
                 AdvData.addData(Buds_Data, bi);
+                // Buds_Data already fills the full 31-byte legacy adv payload;
+                // there's no room left for a Flags AD element, so don't add one
+                // here (setFlags would just fail with "Data length exceeded").
             }
             return AdvData;
         }
@@ -1350,7 +1358,9 @@ static bool bleSpamBuildAdvertisementData(
                 useSamsung = (random(2) == 0) && isSamsungDevice(String(macBuf));
             }
             advertisementData = GetUniversalAdvertisementData(useSamsung ? Samsung : Google);
-            advertisementData.setFlags(0x06);
+            // Samsung branch already sets its own flags (or intentionally omits
+            // them for the 31-byte Galaxy Buds packet, which has no room left).
+            if (!useSamsung) advertisementData.setFlags(0x06);
             return true;
         }
         case BLE_SPAM_ATTACK_WINDOWS_SWIFT_PAIR: {
@@ -1423,14 +1433,17 @@ static bool bleSpamBuildAdvertisementData(
                 Buds_Data[bi++] = 0xFF;
                 Buds_Data[bi++] = 0x75;
                 AdvData.addData(Buds_Data, bi);
+                // Buds_Data already fills the full 31-byte legacy adv payload;
+                // there's no room left for a Flags AD element, so don't add one
+                // here (setFlags would just fail with "Data length exceeded").
             } else {
                 uint8_t model = watch_models[random(watch_models_count)].value;
                 uint8_t Watch_Data[15] = {
                     0x0E, 0xFF, 0x75, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x01, 0xFF, 0x00, 0x00, 0x43, model
                 };
                 AdvData.addData(Watch_Data, 15);
+                AdvData.setFlags(0x06);
             }
-            AdvData.setFlags(0x06);
             advertisementData = AdvData;
             return true;
         }
@@ -1564,16 +1577,20 @@ static void bleSpamDeinitAdvertiser() {
         vTaskDelay(5 / portTICK_PERIOD_MS);
         pAdvertising = nullptr;
     }
-    // FIX: Always deinit - self-contained module
-    BLEDevice::deinit();
 #ifdef CONFIG_BT_NIMBLE_ENABLED
     // NimBLEDevice::m_ownAddrType is a static class member that survives
     // deinit()/init() cycles. bleSpamRestartAdvertiserForMac() flips it to
     // BLE_OWN_ADDR_RANDOM for MAC rotation; every other module's scan/connect/
     // advertise call reads that same static value, so leaving it set breaks
     // all Bluetooth elsewhere in the firmware until a reboot clears statics.
+    // This must run BEFORE deinit(): setOwnAddrType() calls into the NimBLE
+    // host (ble_hs_id_copy_addr -> ble_npl_mutex_pend), which requires the
+    // host task/mutex still be alive. Calling it after deinit() pends on a
+    // torn-down mutex and crashes (Load access fault seen on ESP32-C5).
     NimBLEDevice::setOwnAddrType(BLE_OWN_ADDR_PUBLIC);
 #endif
+    // FIX: Always deinit - self-contained module
+    BLEDevice::deinit();
 }
 
 // CHANGED: replaces the old bleSpamRestartAdvertiserForMac which did a full deinit/init.

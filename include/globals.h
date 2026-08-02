@@ -228,11 +228,11 @@ extern String menuOptionLabel;
 extern volatile int EncoderLedChange;
 #endif
 
-#ifdef HAS_ENCODER
 // Net pending rotary encoder steps, independent from NextPress/PrevPress,
 // so a consumer can apply a whole backlog at once instead of one per redraw.
 extern volatile int32_t RotaryNetSteps;
 
+#ifdef HAS_ENCODER
 static inline int32_t drainRotarySteps() {
     int32_t steps = RotaryNetSteps;
     RotaryNetSteps -= steps;

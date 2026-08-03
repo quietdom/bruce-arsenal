@@ -131,11 +131,11 @@ bool reconnectToWiFi(const String &ssid, const String &bssid) {
     if (!(WiFi.getMode() & WIFI_MODE_STA)) return false;
     WiFi.begin(ssid, password);
     int attempts = 0;
-    while (WiFi.status() != WL_CONNECTED && attempts < 30) {
+    while (!WiFi.isConnected() && attempts < 30) {
         vTaskDelay(200 / portTICK_PERIOD_MS);
         attempts++;
     }
-    bool connected = WiFi.status() == WL_CONNECTED;
+    bool connected = WiFi.isConnected();
     if (connected) {
         wifiConnected = true;
         wifiIP = WiFi.localIP().toString();

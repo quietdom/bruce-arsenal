@@ -174,10 +174,10 @@ void showDeviceInfo() {
     area.addLine("MAC addr: " + String(WiFi.macAddress()));
     String localIP = WiFi.localIP().toString();
     String softAPIP = WiFi.softAPIP().toString();
-    String ipStatus = (WiFi.status() == WL_CONNECTED) ? (localIP != "0.0.0.0"    ? localIP
-                                                         : softAPIP != "0.0.0.0" ? softAPIP
-                                                                                 : "No valid IP")
-                                                      : "Not connected";
+    String ipStatus = (WiFi.isConnected()) ? (localIP != "0.0.0.0"    ? localIP
+                                              : softAPIP != "0.0.0.0" ? softAPIP
+                                                                      : "No valid IP")
+                                           : "Not connected";
     area.addLine("IP address: " + ipStatus);
     area.addLine("");
     area.addLine("[STORAGE]");

@@ -786,7 +786,7 @@ void sshWorkerTask(void *pvParameters) {
     ssh_options_set(sshSession, SSH_OPTIONS_GLOBAL_KNOWNHOSTS, SSH_GLOBAL_KNOWN_HOSTS_PATH);
     ssh_options_set(sshSession, SSH_OPTIONS_STRICTHOSTKEYCHECK, &strictHostKeyChecking);
 
-    if (WiFi.status() != WL_CONNECTED) {
+    if (!WiFi.isConnected()) {
         markSessionClosed("WiFi disconnected before SSH connect.", true);
         goto SSH_EXIT;
     }
@@ -831,7 +831,7 @@ void sshWorkerTask(void *pvParameters) {
     markSessionReady();
 
     while (!isStopRequested()) {
-        if (WiFi.status() != WL_CONNECTED) {
+        if (!WiFi.isConnected()) {
             markSessionClosed("WiFi disconnected during SSH session.", true);
             goto SSH_EXIT;
         }
@@ -1015,7 +1015,7 @@ void telnetWorkerTask(void *pvParameters) {
     markSessionReady();
 
     while (!isStopRequested()) {
-        if (WiFi.status() != WL_CONNECTED) {
+        if (!WiFi.isConnected()) {
             markSessionClosed("WiFi disconnected during Telnet session.", true);
             goto TELNET_EXIT;
         }

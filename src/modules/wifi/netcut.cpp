@@ -237,7 +237,7 @@ void netcutSaveVipList() {
 // SCAN DEVICES
 // ============================================
 int netcutScanDevices() {
-    if (WiFi.status() != WL_CONNECTED) return 0;
+    if (!WiFi.isConnected()) return 0;
 
     struct netif *iface = _getStaNetif();
     if (!iface) {
@@ -818,7 +818,7 @@ static void _deviceActionMenu(int idx) {
 // ============================================
 void netcutMenu() {
     // Require WiFi STA connection
-    if (WiFi.status() != WL_CONNECTED) {
+    if (!WiFi.isConnected()) {
         if (!wifiConnectMenu(WIFI_STA)) return;
     }
 

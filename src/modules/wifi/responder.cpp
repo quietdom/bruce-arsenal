@@ -87,7 +87,7 @@ void encodeNetBIOSName(const char *name, uint8_t out[32]) {
 
 IPAddress getIPAddress() {
     // 1) Station mode
-    if (WiFi.status() == WL_CONNECTED) {
+    if (WiFi.isConnected()) {
         IPAddress ip = WiFi.localIP();
         if (ip && ip != IPAddress(0, 0, 0, 0)) { return ip; }
     }

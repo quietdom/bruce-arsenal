@@ -295,6 +295,8 @@ void wifi_atk_menu() {
                 case WIFI_AUTH_WPA2_PSK: encryptionTypeStr = "WPA2/PSK"; break;
                 case WIFI_AUTH_WPA_WPA2_PSK: encryptionTypeStr = "WPA/WPA2/PSK"; break;
                 case WIFI_AUTH_WPA2_ENTERPRISE: encryptionTypeStr = "WPA2/Enterprise"; break;
+                case WIFI_AUTH_WPA3_PSK: encryptionTypeStr = "WPA3_PSK"; break;
+                case WIFI_AUTH_WPA2_WPA3_PSK: encryptionTypeStr = "WPA2_WPA3_PSK"; break;
                 default: encryptionTypeStr = "Unknown"; break;
             }
 
@@ -420,6 +422,8 @@ void capture_handshake(const String &tssid, const String &mac, uint8_t channel) 
                 case WIFI_AUTH_WPA2_PSK: encryptionTypeStr = "WPA2/PSK"; break;
                 case WIFI_AUTH_WPA_WPA2_PSK: encryptionTypeStr = "WPA/WPA2/PSK"; break;
                 case WIFI_AUTH_WPA2_ENTERPRISE: encryptionTypeStr = "WPA2/Enterprise"; break;
+                case WIFI_AUTH_WPA3_PSK: encryptionTypeStr = "WPA3_PSK"; break;
+                case WIFI_AUTH_WPA2_WPA3_PSK: encryptionTypeStr = "WPA2_WPA3_PSK"; break;
                 default: encryptionTypeStr = "Unknown"; break;
             }
             break;

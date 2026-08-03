@@ -583,8 +583,8 @@ static void _activeLoop() {
                     else trollOn++;
                 }
             }
-
-            tft.fillRect(0, tftHeight - 62, tftWidth, 62, bruceConfig.bgColor);
+            const int _lh = (LH * FP + 2);
+            tft.fillRect(6, tftHeight - 6 * _lh, tftWidth - 12, 6 * _lh - 6, bruceConfig.bgColor);
             tft.setTextSize(FP);
 
             // Troll timing info
@@ -594,24 +594,26 @@ static void _activeLoop() {
                     "Troll: " + String(s_trollOfflineMs / 1000) + "s OFF / " +
                         String(s_trollOnlineMs / 1000) + "s ON",
                     10,
-                    tftHeight - 60,
+                    tftHeight - 6 * _lh,
                     1
                 );
             }
 
             tft.setTextColor(TFT_RED, bruceConfig.bgColor);
-            tft.drawString("CUT:" + String(cutN) + " Dev:" + String(s_deviceCount), 10, tftHeight - 48, 1);
+            tft.drawString(
+                "CUT:" + String(cutN) + " Dev:" + String(s_deviceCount), 10, tftHeight - 5 * _lh, 1
+            );
             tft.setTextColor(TFT_MAGENTA, bruceConfig.bgColor);
             tft.drawString(
-                "TRL:" + String(trollOff) + "off/" + String(trollOn) + "on", 10, tftHeight - 36, 1
+                "TRL:" + String(trollOff) + "off/" + String(trollOn) + "on", 10, tftHeight - 4 * _lh, 1
             );
 
             // Draw SNIPER count
             for (int i = 0; i < s_deviceCount; i++) tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-            tft.drawString("Pkts:" + String(packetCount), 10, tftHeight - 24, 1);
+            tft.drawString("Pkts:" + String(packetCount), 10, tftHeight - 3 * _lh, 1);
 
             tft.setTextColor(TFT_DARKGREY, bruceConfig.bgColor);
-            tft.drawString("Esc=Stop", 10, tftHeight - 12, 1);
+            tft.drawString("Esc=Stop", 10, tftHeight - 2 * _lh, 1);
         }
 
         vTaskDelay(pdMS_TO_TICKS(10));

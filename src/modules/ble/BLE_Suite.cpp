@@ -4219,7 +4219,10 @@ String selectTargetFromScan(const char *title) {
 
             String address = String(device->getAddress().toString().c_str());
             String name = String(device->getName().c_str());
-            if (name.isEmpty() || name == "(null)" || name == "null" || name == "NULL") { name = "Unknown"; }
+            if (name.isEmpty() || name == "(null)" || name == "null" || name == "NULL") {
+                // name = "Unknown";
+                name = address;
+            }
             int rssi = device->getRSSI();
             if (rssi == 0) rssi = -100;
 
@@ -4253,7 +4256,10 @@ String selectTargetFromScan(const char *title) {
 
             String address = String(device->getAddress().toString().c_str());
             String name = String(device->getName().c_str());
-            if (name.isEmpty() || name == "(null)" || name == "null" || name == "NULL") { name = "Unknown"; }
+            if (name.isEmpty() || name == "(null)" || name == "null" || name == "NULL") {
+                // name = "Unknown";
+                name = address;
+            }
             int rssi = device->getRSSI();
             if (rssi == 0) rssi = -100;
 
@@ -4304,7 +4310,8 @@ String selectTargetFromScan(const char *title) {
         return "";
     }
 
-    size_t deviceCount = snapshot->count;
+    // size_t deviceCount = snapshot->count;
+    size_t deviceCount = scannerData.deviceAddresses.size();
 
     for (size_t i = 0; i < deviceCount - 1; i++) {
         for (size_t j = i + 1; j < deviceCount; j++) {
@@ -4459,7 +4466,8 @@ String selectMultipleTargetsFromScan(const char *title, std::vector<NimBLEAddres
     std::vector<bool> selected(snapshot->count, false);
     int currentIndex = 0, scrollOffset = 0;
     bool exitMenu = false;
-    size_t deviceCount = snapshot->count;
+    // size_t deviceCount = snapshot->count;
+    size_t deviceCount = scannerData.deviceAddresses.size();
     int menuStartY = 60, menuItemHeight = 25;
     int maxVisibleItems = (tftHeight - menuStartY - 50) / menuItemHeight;
     if (maxVisibleItems > (int)deviceCount) maxVisibleItems = deviceCount;

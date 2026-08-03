@@ -65,18 +65,17 @@ static void ca_stop_wifi() {
     vTaskDelay(1 / portTICK_RATE_MS);
 }
 
-static void ca_draw(
-    const uint8_t *load, const uint8_t *peak, const int8_t *rssi, uint8_t curCh, uint16_t dwell
-) {
-    drawMainBorderWithTitle("Channel Analyzer");
+static void
+ca_draw(const uint8_t *load, const uint8_t *peak, const int8_t *rssi, uint8_t curCh, uint16_t dwell) {
+    drawMainBorderWithTitle("Channel Analyzer", false);
 
     const int x0 = 8;                  // left of bars
     const int top = 26;                // below title
     const int bottom = tftHeight - 16; // leave room for footer
     const int avail = bottom - top;
     const int rowH = avail / CA_NCH;
-    const int labelW = 30;                  // "Ch11"
-    const int valW = 30;                    // " 100%"
+    const int labelW = 30; // "Ch11"
+    const int valW = 30;   // " 100%"
     const int barX = x0 + labelW;
     const int barW = tftWidth - barX - valW - 6;
 
@@ -87,23 +86,26 @@ static void ca_draw(
         bool isCur = (ch == curCh);
 
         // label
-        tft.setTextColor(isCur ? bruceConfig.bgColor : bruceConfig.priColor, isCur ? bruceConfig.priColor : bruceConfig.bgColor);
+        tft.setTextColor(
+            isCur ? bruceConfig.bgColor : bruceConfig.priColor,
+            isCur ? bruceConfig.priColor : bruceConfig.bgColor
+        );
         tft.drawString("Ch" + String(ch), x0, y, 1);
 
         // bar frame
         int bh = rowH - 3;
         if (bh < 4) bh = 4;
         tft.drawRect(barX, y, barW, bh, bruceConfig.priColor);
-        // clear interior
-        tft.fillRect(barX + 1, y + 1, barW - 2, bh - 2, bruceConfig.bgColor);
 
         // filled portion ~ load%
         int fillW = (barW - 2) * load[ch] / 100;
-        if (fillW > 0) {
-            // solid above threshold, dimmed below
-            uint16_t c = (load[ch] >= CA_BUSY_THRESHOLD) ? bruceConfig.priColor : TFT_DARKGREY;
-            tft.fillRect(barX + 1, y + 1, fillW, bh - 2, c);
-        }
+
+        // solid above threshold, dimmed below
+        uint16_t c = (load[ch] >= CA_BUSY_THRESHOLD) ? bruceConfig.priColor : TFT_DARKGREY;
+        tft.fillRect(barX + 1, y + 1, fillW, bh - 2, c);
+        // clear remaining area
+        tft.fillRect(barX + 1 + fillW, y + 1, barW - 2 - fillW, bh - 2, bruceConfig.bgColor);
+
         // peak-hold marker
         int peakX = barX + 1 + (barW - 2) * peak[ch] / 100;
         if (peakX > barX + 1) tft.drawFastVLine(peakX, y + 1, bh - 2, TFT_RED);
@@ -115,8 +117,8 @@ static void ca_draw(
 
     // footer: current channel detail + signal meter + dwell
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    String foot = "Ch" + String(curCh) + " " + String(load[curCh]) + "% pk" + String(peak[curCh]) +
-                  "% " + String(rssi[curCh]) + "dBm  dwell " + String(dwell) + "ms";
+    String foot = "Ch" + String(curCh) + " " + String(load[curCh]) + "% pk" + String(peak[curCh]) + "% " +
+                  String(rssi[curCh]) + "dBm  dwell " + String(dwell) + "ms";
     tft.drawString(foot, x0, tftHeight - 13, 1);
 }
 
@@ -147,8 +149,8 @@ void channel_analyzer_setup() {
             returnToMenu = true;
             break;
         }
-        if (check(UpPress) && dwell < 1000) dwell += 100;   // longer dwell = more accurate
-        if (check(DownPress) && dwell > 150) dwell -= 100;  // shorter dwell = faster sweep
+        if (check(UpPress) && dwell < 1000) dwell += 100;  // longer dwell = more accurate
+        if (check(DownPress) && dwell > 150) dwell -= 100; // shorter dwell = faster sweep
 
         uint8_t ch = CA_CHANNELS[idx];
         esp_wifi_set_channel(ch, WIFI_SECOND_CHAN_NONE);

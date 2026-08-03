@@ -182,7 +182,8 @@ void ble_scan() {
 
     bool bleWasActiveBefore = BLEConnected || (BLEDevice::getServer() != nullptr);
 #if !defined(LITE_VERSION)
-    bleWasActiveBefore = bleWasActiveBefore || BLEStateManager::isBLEActive() || BLEStateManager::getActiveClientCount() > 0;
+    bleWasActiveBefore =
+        bleWasActiveBefore || BLEStateManager::isBLEActive() || BLEStateManager::getActiveClientCount() > 0;
 #endif
 
     if (!ble_scan_setup() || pBLEScan == nullptr) {
@@ -202,7 +203,7 @@ void ble_scan() {
             const NimBLEAdvertisedDevice *advertisedDevice = foundDevices.getDevice(i);
             if (!advertisedDevice) continue;
 
-            String bt_title;
+            String bt_title = "";
             String bt_name;
             String bt_address;
             String bt_signal;
@@ -212,35 +213,27 @@ void ble_scan() {
             bt_signal = String(advertisedDevice->getRSSI());
 
             if (bt_name.isEmpty()) bt_name = "<no name>";
-            bt_title = bt_name;
+            else bt_title = bt_name;
             if (bt_title.isEmpty()) bt_title = bt_address;
 
             if (options.size() < MAX_DISPLAY_DEVICES) {
-                options.emplace_back(bt_title.c_str(), [=]() {
-                    ble_info(bt_name, bt_address, bt_signal);
-                });
+                options.emplace_back(bt_title.c_str(), [=]() { ble_info(bt_name, bt_address, bt_signal); });
                 processedCount++;
             }
         }
 
-        if (options.size() >= MAX_DISPLAY_DEVICES) {
-            options.emplace_back("... and more devices", nullptr);
-        }
+        if (options.size() >= MAX_DISPLAY_DEVICES) { options.emplace_back("... and more devices", nullptr); }
     } catch (...) {
         displayError("BLE scan error");
         pBLEScan->clearResults();
         return;
     }
 
-    if (pBLEScan) {
-        pBLEScan->stop();
-    }
+    if (pBLEScan) { pBLEScan->stop(); }
 
     if (!bleWasActiveBefore) {
 #if !defined(LITE_VERSION)
-        if (!BLEStateManager::isBLEActive()) {
-            stopBLEStack();
-        }
+        if (!BLEStateManager::isBLEActive()) { stopBLEStack(); }
 #else
         stopBLEStack();
 #endif
@@ -390,9 +383,7 @@ void ble_test() {
 
     disPlayBLESend();
 
-    if (pServer) {
-        pServer->getAdvertising()->stop();
-    }
+    if (pServer) { pServer->getAdvertising()->stop(); }
     stopBLEStack();
 
     printf("Quit ble test\n");

@@ -27,3 +27,4 @@ static constexpr BruteProtocol brute_protocols[] = {
 static constexpr int BRUTE_PROTOCOL_COUNT = sizeof(brute_protocols) / sizeof(brute_protocols[0]);
 
 void rf_bruteforce();
+void rf_bruteforce_set_protocol(int protocol_index);

@@ -36,7 +36,7 @@ void displayScrollingText(const String &text, Opt_Coord &coord, bool highlight) 
     int scrollLen = len + 8;                // Full text plus space buffer
     static int i = 0;
     static long _lastmillis = 0;
-    if(highlight) tft.setTextColor(coord.bgcolor, coord.fgcolor);
+    if (highlight) tft.setTextColor(coord.bgcolor, coord.fgcolor);
     else tft.setTextColor(coord.fgcolor, coord.bgcolor);
     if (len < coord.size) {
         // Text fits within limit, no scrolling needed
@@ -65,12 +65,14 @@ void displayScrollingText(const String &text, Opt_Coord &coord, bool highlight) 
 ** Description:   Draw touch screen footer
 ***************************************************************************************/
 void TouchFooter(uint16_t color) {
+#if defined(HAS_TOUCH)
     tft.drawRoundRect(5, tftHeight + 2, tftWidth - 10, 43, 5, color);
     tft.setTextColor(color);
     tft.setTextSize(FM);
     tft.drawCentreString("PREV", tftWidth / 6, tftHeight + 4, 1);
     tft.drawCentreString("SEL", tftWidth / 2, tftHeight + 4, 1);
     tft.drawCentreString("NEXT", 5 * tftWidth / 6, tftHeight + 4, 1);
+#endif
 }
 /***************************************************************************************
 ** Function name: TouchFooter
@@ -132,7 +134,7 @@ bool wakeUpScreen() {
 ** Function name: wrapText
 ** Description:   Wrap text to fit within a maximum width, returning vector of lines
 ***************************************************************************************/
-std::vector<String> wrapText(const String& text, int maxCharsPerLine) {
+std::vector<String> wrapText(const String &text, int maxCharsPerLine) {
     std::vector<String> lines;
     if (maxCharsPerLine <= 0) return lines;
 
@@ -177,7 +179,7 @@ void displayRedStripe(const String &text, uint16_t fgcolor, uint16_t bgcolor) {
 
     // Determine if we need to wrap the text
     std::vector<String> wrappedLines;
-    int boxHeight = 26;  // Default height for single line
+    int boxHeight = 26; // Default height for single line
 
     if (text.length() * LW * FM < (tftWidth - 2 * FM * LW)) {
         // Text fits with FM font
@@ -190,9 +192,7 @@ void displayRedStripe(const String &text, uint16_t fgcolor, uint16_t bgcolor) {
     }
 
     // Adjust box height based on number of lines
-    if (wrappedLines.size() > 1) {
-        boxHeight = 13 + (wrappedLines.size() * (size == FM ? 8 : 10));
-    }
+    if (wrappedLines.size() > 1) { boxHeight = 13 + (wrappedLines.size() * (size == FM ? 8 : 10)); }
 
     tft.drawPixel(0, 0, 0);
     tft.fillRoundRect(10, tftHeight / 2 - boxHeight / 2, tftWidth - 20, boxHeight, 7, bgcolor);
@@ -331,7 +331,6 @@ void displayWarning(const String &txt, bool waitKeyPress) {
     delay(200);
     while (waitKeyPress && !check(AnyKeyPress)) vTaskDelay(10 / portTICK_PERIOD_MS);
 }
-
 
 void displayInfo(const String &txt, bool waitKeyPress) {
     displayRedStripe(txt, TFT_WHITE, TFT_BLUE);
@@ -560,7 +559,8 @@ int loopOptions(
         );
     if (index >= options.size()) index = 0;
     bool firstRender = true;
-    unsigned long menuOpenTs = 0; // timestamp when this menu was first rendered (per-invocation, not shared across nested menus)
+    unsigned long menuOpenTs =
+        0; // timestamp when this menu was first rendered (per-invocation, not shared across nested menus)
     drawMainBorder();
     while (1) {
         // Check for shutdown before drawing menu to avoid drawing a black bar on the screen
@@ -654,6 +654,10 @@ int loopOptions(
                 redraw = true;
             }
             vTaskDelay(4 / portTICK_PERIOD_MS);
+            PrevPress = false;
+            NextPress = false;
+            UpPress = false;
+            DownPress = false;
         } else
 #endif
         {
@@ -733,6 +737,8 @@ int loopOptions(
         // interpreter -> loopOptions helper inside the Javascript
         if (interpreter_state > 0 && !interpreter) { break; }
     }
+
+    RotaryNetSteps = 0; // reset rotary steps to avoid unexpected jumps in the next menu
     return index;
 }
 
@@ -793,9 +799,9 @@ Opt_Coord drawOptions(
 
     if (index >= MAX_MENU_SIZE) init = index - MAX_MENU_SIZE + 1;
     // check if cycling from last item to first
-    if(abs(index - last_index) >= menuSize) {
-        if(index > last_index) last_index = init;             // from first to last
-        else last_index = menuSize - 1; // from last to first
+    if (abs(index - last_index) >= menuSize) {
+        if (index > last_index) last_index = init; // from first to last
+        else last_index = menuSize - 1;            // from last to first
     }
 
     cont = 1;
@@ -803,25 +809,15 @@ Opt_Coord drawOptions(
         if (i >= init) {
             int16_t cursorY = tft.getCursorY();
             // Erase previously highlited element,
-            if(i == last_index) {
+            if (i == last_index) {
                 tft.fillRoundRect(
-                    tftWidth * 0.10 + 2,
-                    cursorY + 2,
-                    tftWidth * 0.8 - 4,
-                    FM * LH + 2,
-                    3,
-                    bruceConfig.bgColor
+                    tftWidth * 0.10 + 2, cursorY + 2, tftWidth * 0.8 - 4, FM * LH + 2, 3, bruceConfig.bgColor
                 );
             }
             // Draw selection highlight bar
             if (i == index) {
                 tft.fillRoundRect(
-                    tftWidth * 0.10 + 2,
-                    cursorY + 2,
-                    tftWidth * 0.8 - 4,
-                    FM * LH + 2,
-                    3,
-                    bruceConfig.priColor
+                    tftWidth * 0.10 + 2, cursorY + 2, tftWidth * 0.8 - 4, FM * LH + 2, 3, bruceConfig.priColor
                 );
             }
 
@@ -842,9 +838,7 @@ Opt_Coord drawOptions(
             tft.setCursor(tftWidth * 0.10 + 5, tft.getCursorY() + 4);
 
             // Draw text with appropriate colors for selection
-            if (i == index) {
-                tft.setTextColor(bgcolor, bruceConfig.priColor);
-            }
+            if (i == index) { tft.setTextColor(bgcolor, bruceConfig.priColor); }
             tft.println(text.substring(0, (tftWidth * 0.8 - 10) / (LW * FM) - 1));
 
             // Reset text color for next item

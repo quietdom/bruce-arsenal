@@ -1696,8 +1696,8 @@ bool appStoreInstalled() {
 #include <HTTPClient.h>
 void installAppStoreJS() {
 
-    if (WiFi.status() != WL_CONNECTED) { wifiConnectMenu(WIFI_STA); }
-    if (WiFi.status() != WL_CONNECTED) {
+    if (!WiFi.isConnected()) { wifiConnectMenu(WIFI_STA); }
+    if (!WiFi.isConnected()) {
         displayWarning("WiFi not connected", true);
         return;
     }

@@ -3066,6 +3066,7 @@ String selectFileFromSD() {
 
             lastSelected = selected;
             lastScrollOffset = scrollOffset;
+            TouchFooter();
         }
 
         if (check(EscPress)) {
@@ -3146,6 +3147,7 @@ String getScriptFromUser() {
     while (!exitMenu) {
         if (selected != lastSelected || scrollOffset != lastScrollOffset) {
             tft.fillScreen(bruceConfig.bgColor);
+            TouchFooter();
             tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
 
             tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
@@ -4012,6 +4014,7 @@ void BLE_Sniffer() {
                         "PREV/NEXT: Navigate  SEL: View Details  ESC: Back", 10, tftHeight - 20, 1
                     );
                     redraw = false; // view screen
+                    TouchFooter();
                 }
 
                 if (check(NextPress)) {
@@ -4176,6 +4179,7 @@ String selectTargetFromScan(const char *title) {
 
     tft.fillScreen(bruceConfig.bgColor);
     tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
+    TouchFooter();
 
     tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
     tft.setTextSize(2);
@@ -4215,7 +4219,10 @@ String selectTargetFromScan(const char *title) {
 
             String address = String(device->getAddress().toString().c_str());
             String name = String(device->getName().c_str());
-            if (name.isEmpty() || name == "(null)" || name == "null" || name == "NULL") { name = "Unknown"; }
+            if (name.isEmpty() || name == "(null)" || name == "null" || name == "NULL") {
+                // name = "Unknown";
+                name = address;
+            }
             int rssi = device->getRSSI();
             if (rssi == 0) rssi = -100;
 
@@ -4249,7 +4256,10 @@ String selectTargetFromScan(const char *title) {
 
             String address = String(device->getAddress().toString().c_str());
             String name = String(device->getName().c_str());
-            if (name.isEmpty() || name == "(null)" || name == "null" || name == "NULL") { name = "Unknown"; }
+            if (name.isEmpty() || name == "(null)" || name == "null" || name == "NULL") {
+                // name = "Unknown";
+                name = address;
+            }
             int rssi = device->getRSSI();
             if (rssi == 0) rssi = -100;
 
@@ -4295,11 +4305,13 @@ String selectTargetFromScan(const char *title) {
         tft.print("Make sure BLE devices are");
         tft.setCursor(20, 100);
         tft.print("turned on and in range.");
+        TouchFooter();
         delay(2000);
         return "";
     }
 
-    size_t deviceCount = snapshot->count;
+    // size_t deviceCount = snapshot->count;
+    size_t deviceCount = scannerData.deviceAddresses.size();
 
     for (size_t i = 0; i < deviceCount - 1; i++) {
         for (size_t j = i + 1; j < deviceCount; j++) {
@@ -4337,6 +4349,7 @@ String selectTargetFromScan(const char *title) {
         if (selectedIdx != lastSelected || scrollOffset != lastScrollOffset) {
             tft.fillScreen(bruceConfig.bgColor);
             tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
+            TouchFooter();
 
             tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
             tft.setTextSize(2);
@@ -4453,7 +4466,8 @@ String selectMultipleTargetsFromScan(const char *title, std::vector<NimBLEAddres
     std::vector<bool> selected(snapshot->count, false);
     int currentIndex = 0, scrollOffset = 0;
     bool exitMenu = false;
-    size_t deviceCount = snapshot->count;
+    // size_t deviceCount = snapshot->count;
+    size_t deviceCount = scannerData.deviceAddresses.size();
     int menuStartY = 60, menuItemHeight = 25;
     int maxVisibleItems = (tftHeight - menuStartY - 50) / menuItemHeight;
     if (maxVisibleItems > (int)deviceCount) maxVisibleItems = deviceCount;
@@ -4461,6 +4475,7 @@ String selectMultipleTargetsFromScan(const char *title, std::vector<NimBLEAddres
     while (!exitMenu) {
         tft.fillScreen(bruceConfig.bgColor);
         tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
+        TouchFooter();
 
         tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
         tft.setTextSize(2);
@@ -4869,6 +4884,7 @@ void showWelcomeScreen() {
     if (welcomeShown) return;
 
     tft.fillScreen(bruceConfig.bgColor);
+    TouchFooter();
     tft.setTextSize(4);
     tft.setTextColor(TFT_PURPLE, bruceConfig.bgColor);
     tft.setCursor((tftWidth - tft.textWidth("BRUCE")) / 2, 35);
@@ -4926,6 +4942,7 @@ void BleSuiteMenu() {
     while (true) {
         if (selected != lastSelected || scrollOffset != lastScrollOffset) {
             tft.fillScreen(bruceConfig.bgColor);
+            TouchFooter();
             tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
 
             tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
@@ -5073,6 +5090,7 @@ void executeAttackWithTargetScan(int attackIndex) {
 
 int showSubMenu(const char *title, const char *options[], int optionCount) {
     tft.fillScreen(bruceConfig.bgColor);
+    TouchFooter();
     tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
 
     tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
@@ -5767,6 +5785,7 @@ void runAudioControlTest(NimBLEAddress target) {
     while (!exitSubmenu) {
         if (selectedTest != lastSelected) {
             tft.fillScreen(bruceConfig.bgColor);
+            TouchFooter();
             tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
 
             tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
@@ -5932,6 +5951,7 @@ void runHFPHIDPivotAttack(NimBLEAddress target) {
 
 void showAttackProgress(const char *message, uint16_t color) {
     tft.fillScreen(bruceConfig.bgColor);
+    TouchFooter();
     tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
 
     tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
@@ -5985,6 +6005,7 @@ void showAttackProgress(const char *message, uint16_t color) {
 void showAttackResult(bool success, const char *message) {
     if (success) {
         tft.fillScreen(TFT_GREEN);
+        TouchFooter();
         tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_BLACK);
         tft.setTextColor(TFT_WHITE, TFT_GREEN);
         tft.setTextSize(2);
@@ -5994,6 +6015,7 @@ void showAttackResult(bool success, const char *message) {
         tft.setTextColor(TFT_BLACK, TFT_GREEN);
     } else {
         tft.fillScreen(TFT_RED);
+        TouchFooter();
         tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_BLACK);
         tft.setTextColor(TFT_WHITE, TFT_RED);
         tft.setTextSize(2);
@@ -6049,6 +6071,7 @@ void showAttackResult(bool success, const char *message) {
 
 bool confirmAttack(const char *targetName) {
     tft.fillScreen(bruceConfig.bgColor);
+    TouchFooter();
     tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
 
     tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
@@ -6084,6 +6107,7 @@ bool confirmAttack(const char *targetName) {
 
 bool requireSimpleConfirmation(const char *message) {
     tft.fillScreen(bruceConfig.bgColor);
+    TouchFooter();
     tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
 
     tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
@@ -6149,6 +6173,7 @@ int8_t showAdaptiveMessage(
     if (strlen(btn3) > 0) buttonCount++;
 
     tft.fillScreen(bruceConfig.bgColor);
+    TouchFooter();
     tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
     tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
     tft.setTextSize(2);
@@ -6242,6 +6267,7 @@ int8_t showAdaptiveMessage(
 
 void showWarningMessage(const char *message) {
     tft.fillScreen(TFT_YELLOW);
+    TouchFooter();
     tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_BLACK);
     tft.setTextColor(TFT_BLACK, TFT_YELLOW);
     tft.setTextSize(2);
@@ -6295,6 +6321,7 @@ void showWarningMessage(const char *message) {
 
 void showErrorMessage(const char *message) {
     tft.fillScreen(TFT_RED);
+    TouchFooter();
     tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_BLACK);
     tft.setTextColor(TFT_WHITE, TFT_RED);
     tft.setTextSize(2);
@@ -6347,6 +6374,7 @@ void showErrorMessage(const char *message) {
 
 void showSuccessMessage(const char *message) {
     tft.fillScreen(TFT_GREEN);
+    TouchFooter();
     tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_BLACK);
     tft.setTextColor(TFT_WHITE, TFT_GREEN);
     tft.setTextSize(2);
@@ -6401,6 +6429,7 @@ void showDeviceInfoScreen(
     const char *title, const std::vector<String> &lines, uint16_t bgColor, uint16_t textColor
 ) {
     tft.fillScreen(bgColor);
+    TouchFooter();
     tft.drawRect(5, 5, tftWidth - 10, tftHeight - 10, TFT_WHITE);
 
     tft.setTextColor(TFT_WHITE, bgColor);

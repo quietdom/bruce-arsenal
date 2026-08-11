@@ -309,10 +309,17 @@ static gpio_num_t sharedSpiMosi = GPIO_NUM_NC;
 static SPIClass *acquireSharedSPI(gpio_num_t sck, gpio_num_t miso, gpio_num_t mosi) {
     if (sharedSpiSck != sck || sharedSpiMiso != miso || sharedSpiMosi != mosi) {
         if (sharedSpiSck != GPIO_NUM_NC) AUX_SPI.end();
-        AUX_SPI.begin((int8_t)sck, (int8_t)miso, (int8_t)mosi);
-        sharedSpiSck = sck;
-        sharedSpiMiso = miso;
-        sharedSpiMosi = mosi;
+        if (AUX_SPI.begin((int8_t)sck, (int8_t)miso, (int8_t)mosi)) {
+            // StickCPluses share SCK pins with SDCard, but not MISO and MOSI
+            // AUX_SPI must be restarted every time we use it with every module in legacy mode
+            // so if it doesn't conflict, save the variables to no reset the bus (T-HMI touch)
+            if (!bruceConfigPins.SDCARD_bus.checkConflict(sck)) {
+                sharedSpiMiso = miso;
+                sharedSpiMosi = mosi;
+            }
+            // save only `sharedSpiSck` to force `AUX_SPI.end();`
+            sharedSpiSck = sck;
+        } else return nullptr;
     }
     return &AUX_SPI;
 }

@@ -59,9 +59,9 @@ TouchPoint touchPoint;
 
 keyStroke KeyStroke;
 
-#ifdef HAS_ENCODER
 volatile int32_t RotaryNetSteps = 0;
 
+#ifdef HAS_ENCODER
 // Default no-op: boards that define HAS_ENCODER but don't implement
 // pollEncoder() (shouldn't happen, but keeps the linker happy either way).
 void __attribute__((weak)) pollEncoder(void) {}
@@ -210,6 +210,14 @@ void _setup_gpio() {}
  *********************************************************************/
 void _post_setup_gpio() __attribute__((weak));
 void _post_setup_gpio() {}
+
+/*********************************************************************
+ **  Function: _pre_storage_gpio()
+ **  Sets up a weak (empty) function for board fixes that must run
+ **  after the first TFT access and before storage is mounted.
+ *********************************************************************/
+void _pre_storage_gpio() __attribute__((weak));
+void _pre_storage_gpio() {}
 
 /*********************************************************************
  **  Function: setup_gpio
@@ -481,6 +489,7 @@ void setup() {
 #else
     tft.begin();
 #endif
+    _pre_storage_gpio();
     begin_storage();
     RAM_LOG("after-storage"); // bruceConfig/bruceConfigPins loaded from FS
     begin_tft();

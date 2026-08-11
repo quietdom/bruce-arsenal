@@ -699,8 +699,8 @@ String loopSD(FS &fs, bool filePicker, const String &allowed_ext, String rootPat
         }
 #endif
 
-        {
 #ifdef HAS_ENCODER
+        {
             int32_t rotarySteps = drainRotarySteps();
             if (rotarySteps != 0) {
                 check(PrevPress);
@@ -719,22 +719,27 @@ String loopSD(FS &fs, bool filePicker, const String &allowed_ext, String rootPat
                     rotarySteps++;
                     redraw = true;
                 }
-            } else
-#endif
-            {
-                if (check(PrevPress) || check(UpPress)) {
-                    if (index == 0) index = maxFiles;
-                    else if (index > 0) index--;
-                    redraw = true;
-                }
-                /* DW Btn to next item */
-                if (check(NextPress) || check(DownPress)) {
-                    if (index == maxFiles) index = 0;
-                    else index++;
-                    redraw = true;
-                }
+                vTaskDelay(4 / portTICK_PERIOD_MS);
+                PrevPress = false;
+                NextPress = false;
+                UpPress = false;
+                DownPress = false;
             }
         }
+#endif
+
+        if (check(PrevPress) || check(UpPress)) {
+            if (index == 0) index = maxFiles;
+            else if (index > 0) index--;
+            redraw = true;
+        }
+        /* DW Btn to next item */
+        if (check(NextPress) || check(DownPress)) {
+            if (index == maxFiles) index = 0;
+            else index++;
+            redraw = true;
+        }
+
         if (check(NextPagePress)) {
             index += PAGE_JUMP_SIZE;
             if (index > maxFiles) index = maxFiles - 1; // check bounds

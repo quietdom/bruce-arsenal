@@ -173,7 +173,7 @@ void arsenal_dns_tunnel(void) {
         if (!SD.exists("/arsenal")) SD.mkdir("/arsenal");
         File f = SD.open("/arsenal/dns_tunnel.txt", FILE_WRITE);
         if (f) {
-            f.write(tunnelData, tunnelIdx);
+            f.write((const uint8_t *)tunnelData, tunnelIdx);
             f.close();
         }
     }

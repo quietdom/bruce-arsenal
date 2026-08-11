@@ -13,8 +13,8 @@ static volatile bool c2GotCmd = false;
 static char c2LastCmd[128] = "";
 static int c2CommandsSent = 0;
 
-static void c2OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {}
-static void c2OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
+static void c2OnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {}
+static void c2OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, int len) {
     if (len > 0 && len < 128) {
         memcpy(c2LastCmd, incomingData, len);
         c2LastCmd[len] = '\0';
@@ -22,10 +22,10 @@ static void c2OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int le
 
         bool found = false;
         for (int i = 0; i < c2PeerCount; i++) {
-            if (memcmp(c2Peers[i], mac, 6) == 0) { found = true; break; }
+            if (memcmp(c2Peers[i], info->src_addr, 6) == 0) { found = true; break; }
         }
         if (!found && c2PeerCount < 8) {
-            memcpy(c2Peers[c2PeerCount], mac, 6);
+            memcpy(c2Peers[c2PeerCount], info->src_addr, 6);
             c2PeerCount++;
         }
     }

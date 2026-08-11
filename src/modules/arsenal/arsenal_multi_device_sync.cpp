@@ -19,8 +19,8 @@ static SyncState localState = {0, 0, 0, 0};
 static uint8_t syncPeer[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 static volatile bool gotSync = false;
 
-static void syncOnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {}
-static void syncOnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
+static void syncOnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {}
+static void syncOnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, int len) {
     if (len == sizeof(SyncState)) {
         memcpy(&remoteState, incomingData, sizeof(SyncState));
         gotSync = true;

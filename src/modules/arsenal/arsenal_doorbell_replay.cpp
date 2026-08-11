@@ -6,6 +6,7 @@
 #include "core/mykeyboard.h"
 #include "modules/rf/rf_utils.h"
 #include "modules/rf/rf_send.h"
+#include "modules/rf/rf_send.h"
 #include <globals.h>
 #include <ELECHOUSE_CC1101_SRC_DRV.h>
 #include <RCSwitch.h>
@@ -77,31 +78,13 @@ void arsenal_doorbell_replay(void) {
     if (gotSignal) {
         options.clear();
         options.push_back({"Replay 5x", [lastCode]() {
-            if (initRfModule("tx", 433.92)) {
-                for (int i = 0; i < 5; i++) {
-                    RCSwitch_send(lastCode, 24, 350, 1, 10);
-                    delay(200);
-                }
-                deinitRfModule();
-            }
+            if (initRfModule("tx", 433.92)) rfTransmitCode(lastCode, 24, 350, 1, 50);
         }});
         options.push_back({"Replay 20x", [lastCode]() {
-            if (initRfModule("tx", 433.92)) {
-                for (int i = 0; i < 20; i++) {
-                    RCSwitch_send(lastCode, 24, 350, 1, 10);
-                    delay(200);
-                }
-                deinitRfModule();
-            }
+            if (initRfModule("tx", 433.92)) rfTransmitCode(lastCode, 24, 350, 1, 200);
         }});
         options.push_back({"Replay 100x", [lastCode]() {
-            if (initRfModule("tx", 433.92)) {
-                for (int i = 0; i < 100; i++) {
-                    RCSwitch_send(lastCode, 24, 350, 1, 10);
-                    delay(200);
-                }
-                deinitRfModule();
-            }
+            if (initRfModule("tx", 433.92)) rfTransmitCode(lastCode, 24, 350, 1, 1000);
         }});
         addOptionToMainMenu();
         loopOptions(options, MENU_TYPE_SUBMENU, "Replay");

@@ -59,8 +59,6 @@ public:
     using TFT_eSPI::sleep;
     using TFT_eSPI::textWidth;
     using TFT_eSPI::width;
-    using TFT_eSPI::startWrite;
-    using TFT_eSPI::endWrite;
     using TFT_eSPI::write;
     using TFT_eSPI::writecommand;
 

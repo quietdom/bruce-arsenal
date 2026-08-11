@@ -8,43 +8,37 @@
 #include "modules/rf/rf_listen.h"
 #include "modules/rf/rf_scan.h"
 #include "modules/rf/rf_send.h"
+#include "modules/rf/rf_utils.h"
 #include "modules/rf/rf_spectrum.h"
 #include "modules/rf/rf_waterfall.h"
-#include "modules/arsenal/arsenal.h"
-#include "modules/arsenal/arsenal_config.h"
 
 void RFMenu::optionsMenu() {
     options = {
         {"Scan/copy",       [=]() { RFScan(); }       },
-#if !LITE_VERSION
-        {"Record RAW",      rf_raw_record             },
+#if !defined(LITE_VERSION)
+        {"Record RAW",      rf_raw_record             }, // Pablo-Ortiz-Lopez
         {"Custom SubGhz",   sendCustomRF              },
 #endif
         {"Spectrum",        rf_spectrum               },
-#if !LITE_VERSION
-        {"RSSI Spectrum",   rf_CC1101_rssi            },
-        {"SquareWave Spec", rf_SquareWave             },
-        {"Spectogram",      rf_waterfall              },
+#if !defined(LITE_VERSION)
+        {"RSSI Spectrum",   rf_CC1101_rssi            }, // @Pirata
+        {"SquareWave Spec", rf_SquareWave             }, // @Pirata
+        {"Spectogram",      rf_waterfall              }, // dev_eclipse
 #if defined(BUZZ_PIN) or defined(HAS_NS4168_SPKR) and defined(RF_LISTEN_H)
-        {"Listen",          rf_listen                 },
+        {"Listen",          rf_listen                 }, // dev_eclipse
 #endif
-        {"Bruteforce",      rf_bruteforce             },
+        {"Bruteforce",      rf_bruteforce             }, // dev_eclipse
         {"Jammer",          [=]() { RFJammer(true); } },
-        {"NRF24 MouseJack", arsenal_nrf24_mousejack   },
-        {"Doorbell Replay", arsenal_doorbell_replay   },
-        {"Rolljam",         arsenal_rolljam           },
-        {"Garage Brute",    arsenal_garage_brute_force},
-        {"Keyfob Logger",   arsenal_car_keyfob_logger },
 #endif
-        {"Freq Scanner",    arsenal_frequency_scanner },
-        {"Flipper Import",  arsenal_flipper_import    },
         {"Config",          [this]() { configMenu(); }},
     };
     addOptionToMainMenu();
+
     delay(200);
     String txt = "Radio Frequency";
-    if (bruceConfigPins.rfModule == CC1101_SPI_MODULE) txt += " (CC1101)";
+    if (bruceConfigPins.rfModule == CC1101_SPI_MODULE) txt += " (CC1101)"; // Indicates if CC1101 is connected
     else txt += " Tx: " + String(bruceConfigPins.rfTx) + " Rx: " + String(bruceConfigPins.rfRx);
+
     loopOptions(options, MENU_TYPE_SUBMENU, txt.c_str());
 }
 
@@ -56,6 +50,7 @@ void RFMenu::configMenu() {
         {"RF Frequency", setRFFreqMenu},
         {"Back", [this]() { optionsMenu(); }},
     };
+
     loopOptions(options, MENU_TYPE_SUBMENU, "RF Config");
 }
 
@@ -64,13 +59,82 @@ void RFMenu::drawIcon(float scale) {
     int radius = scale * 7;
     int deltaRadius = scale * 10;
     int triangleSize = scale * 30;
+
     if (triangleSize % 2 != 0) triangleSize++;
+
+    // Body
     tft.fillCircle(iconCenterX, iconCenterY - radius, radius, bruceConfig.priColor);
-    tft.fillTriangle(iconCenterX, iconCenterY, iconCenterX - triangleSize / 2, iconCenterY + triangleSize, iconCenterX + triangleSize / 2, iconCenterY + triangleSize, bruceConfig.priColor);
-    tft.drawArc(iconCenterX, iconCenterY - radius, 2.5 * radius, 2 * radius, 40, 140, bruceConfig.priColor, bruceConfig.bgColor);
-    tft.drawArc(iconCenterX, iconCenterY - radius, 2.5 * radius + deltaRadius, 2 * radius + deltaRadius, 40, 140, bruceConfig.priColor, bruceConfig.bgColor);
-    tft.drawArc(iconCenterX, iconCenterY - radius, 2.5 * radius + 2 * deltaRadius, 2 * radius + 2 * deltaRadius, 40, 140, bruceConfig.priColor, bruceConfig.bgColor);
-    tft.drawArc(iconCenterX, iconCenterY - radius, 2.5 * radius, 2 * radius, 220, 320, bruceConfig.priColor, bruceConfig.bgColor);
-    tft.drawArc(iconCenterX, iconCenterY - radius, 2.5 * radius + deltaRadius, 2 * radius + deltaRadius, 220, 320, bruceConfig.priColor, bruceConfig.bgColor);
-    tft.drawArc(iconCenterX, iconCenterY - radius, 2.5 * radius + 2 * deltaRadius, 2 * radius + 2 * deltaRadius, 220, 320, bruceConfig.priColor, bruceConfig.bgColor);
+    tft.fillTriangle(
+        iconCenterX,
+        iconCenterY,
+        iconCenterX - triangleSize / 2,
+        iconCenterY + triangleSize,
+        iconCenterX + triangleSize / 2,
+        iconCenterY + triangleSize,
+        bruceConfig.priColor
+    );
+
+    // Left Arcs
+    tft.drawArc(
+        iconCenterX,
+        iconCenterY - radius,
+        2.5 * radius,
+        2 * radius,
+        40,
+        140,
+        bruceConfig.priColor,
+        bruceConfig.bgColor
+    );
+    tft.drawArc(
+        iconCenterX,
+        iconCenterY - radius,
+        2.5 * radius + deltaRadius,
+        2 * radius + deltaRadius,
+        40,
+        140,
+        bruceConfig.priColor,
+        bruceConfig.bgColor
+    );
+    tft.drawArc(
+        iconCenterX,
+        iconCenterY - radius,
+        2.5 * radius + 2 * deltaRadius,
+        2 * radius + 2 * deltaRadius,
+        40,
+        140,
+        bruceConfig.priColor,
+        bruceConfig.bgColor
+    );
+
+    // Right Arcs
+    tft.drawArc(
+        iconCenterX,
+        iconCenterY - radius,
+        2.5 * radius,
+        2 * radius,
+        220,
+        320,
+        bruceConfig.priColor,
+        bruceConfig.bgColor
+    );
+    tft.drawArc(
+        iconCenterX,
+        iconCenterY - radius,
+        2.5 * radius + deltaRadius,
+        2 * radius + deltaRadius,
+        220,
+        320,
+        bruceConfig.priColor,
+        bruceConfig.bgColor
+    );
+    tft.drawArc(
+        iconCenterX,
+        iconCenterY - radius,
+        2.5 * radius + 2 * deltaRadius,
+        2 * radius + 2 * deltaRadius,
+        220,
+        320,
+        bruceConfig.priColor,
+        bruceConfig.bgColor
+    );
 }

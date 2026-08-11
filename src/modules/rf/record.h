@@ -7,6 +7,6 @@
 #include "structs.h"
 
 void rf_raw_record();
-int rf_raw_record_options(bool saved = false);
+int rf_raw_record_options();
 
 #endif

@@ -130,13 +130,6 @@ public:
     int16_t drawString(const String &string, int32_t x, int32_t y, uint8_t font = 1);
     int16_t drawCentreString(const String &string, int32_t x, int32_t y, uint8_t font = 1);
     int16_t drawRightString(const String &string, int32_t x, int32_t y, uint8_t font = 1);
-#if defined(HAS_SCREEN) && defined(USE_TFT_ESPI)
-    void startWrite() { BRUCE_TFT_DRIVER::startWrite(); }
-    void endWrite() { BRUCE_TFT_DRIVER::endWrite(); }
-#else
-    void startWrite() {}
-    void endWrite() {}
-#endif
 
     void log_print(String s);
 

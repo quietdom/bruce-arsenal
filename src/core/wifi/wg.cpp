@@ -37,6 +37,7 @@ void parse_config_file(File configFile) {
         } else if (line.startsWith("PrivateKey")) {
             line.remove(0, line.indexOf('=') + 1);
             line.trim();
+            Serial.println("Private Key: " + line);
             strncpy(private_key, line.c_str(), sizeof(private_key) - 1);
             private_key[sizeof(private_key) - 1] = '\0'; // Ensure null-terminated
         } else if (line.startsWith("Address")) {
@@ -56,6 +57,7 @@ void parse_config_file(File configFile) {
         } else if (line.startsWith("PublicKey")) {
             line.remove(0, line.indexOf('=') + 1);
             line.trim();
+            Serial.println("Public Key: " + line);
             strncpy(public_key, line.c_str(), sizeof(public_key) - 1);
             public_key[sizeof(public_key) - 1] = '\0'; // Ensure null-terminated
         } else if (line.startsWith("Endpoint")) {

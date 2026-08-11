@@ -6,7 +6,6 @@
 #include "modules/ir/custom_ir.h"
 #include "modules/ir/ir_jammer.h"
 #include "modules/ir/ir_read.h"
-#include "modules/ir/ir_remote_app.h"
 
 void IRMenu::optionsMenu() {
 #if defined(ARDUINO_M5STICK_S3)
@@ -15,7 +14,6 @@ void IRMenu::optionsMenu() {
 #endif
     options = {
         {"TV-B-Gone", StartTvBGone              },
-        {"IR Remote", ir_remote_app             },
         {"Custom IR", otherIRcodes              },
         {"IR Read",   [=]() { IrRead(); }       },
 #if !defined(LITE_VERSION)

@@ -9,7 +9,7 @@
  * Credits: Based on uC_mousejack / Bastille Research / EvilMouse,
  *          adapted for Bruce architecture with multi-platform input.
  */
-#if !LITE_VERSION
+#if !defined(LITE_VERSION)
 #include "nrf_mousejack.h"
 #include "core/display.h"
 #include "core/mykeyboard.h"
@@ -703,6 +703,7 @@ static bool mj_scan() {
                 lastDrawnCount = mj_targetCount;
                 lastRefresh = millis();
             }
+            vTaskDelay(pdMS_TO_TICKS(1));
         }
     }
 

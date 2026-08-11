@@ -14,8 +14,8 @@ static uint8_t peerMAC[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 static volatile bool chatGotMessage = false;
 static char lastMsg[128] = "";
 
-static void chatOnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {}
-static void chatOnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
+static void chatOnDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {}
+static void chatOnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, int len) {
     if (len > 0 && len < 128) {
         memcpy(lastMsg, incomingData, len);
         lastMsg[len] = '\0';

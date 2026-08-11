@@ -4,6 +4,7 @@
 #include "modules/arsenal/arsenal.h"
 
 void ArsenalMenu::optionsMenu() {
+#if !LITE_VERSION && defined(CONFIG_IDF_TARGET_ESP32S3)
     options = {
         {"WiFi", [this]() { wifiMenu(); }},
         {"RF / Sub-GHz", [this]() { rfMenu(); }},
@@ -15,6 +16,15 @@ void ArsenalMenu::optionsMenu() {
         {"Config", [this]() { configMenu(); }},
         {"Attack Scheduler", arsenal_attack_scheduler},
     };
+#else
+    options = {
+        {"Network Scanner", arsenal_network_scanner},
+        {"Frequency Scanner", arsenal_frequency_scanner},
+        {"Password Generator", arsenal_password_generator},
+        {"Attack Stats", arsenal_attack_stats},
+        {"Configure AP", arsenal_config_ap},
+    };
+#endif
 
     addOptionToMainMenu();
     loopOptions(options, MENU_TYPE_SUBMENU, "Arsenal");

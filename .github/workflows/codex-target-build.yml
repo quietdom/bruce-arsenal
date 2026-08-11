@@ -1,0 +1,36 @@
+name: Codex Target Build
+
+on:
+  push:
+    branches:
+      - 'codex/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: pip install platformio requests esptool intelhex
+
+      - name: Build T-Embed Plus CC1101
+        run: |
+          set -o pipefail
+          platformio run -e lilygo-t-embed-cc1101 | tee build-lilygo-t-embed-cc1101.log
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bruce-lilygo-t-embed-cc1101
+          path: |
+            Bruce-*.bin
+            build-lilygo-t-embed-cc1101.log
+          if-no-files-found: error

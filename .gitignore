@@ -4,7 +4,6 @@
 .vscode/launch.json
 .vscode/extensions.json
 .vscode/ipch
-.codex_tmp
 .claude
 Bruce3_*.bin
 bruce.conf

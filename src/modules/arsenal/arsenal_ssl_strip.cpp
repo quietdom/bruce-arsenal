@@ -45,7 +45,7 @@ void arsenal_ssl_strip(void) {
     stripServer->on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
         String host = request->host();
         if (request->hasHeader("Referer")) {
-            AsyncWebHeader *ref = request->getHeader("Referer");
+            const AsyncWebHeader *ref = request->getHeader("Referer");
             if (ref->value().indexOf("https://") >= 0) {
                 redirected++;
             }

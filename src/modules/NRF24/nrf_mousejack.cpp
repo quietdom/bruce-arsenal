@@ -9,7 +9,7 @@
  * Credits: Based on uC_mousejack / Bastille Research / EvilMouse,
  *          adapted for Bruce architecture with multi-platform input.
  */
-#if !defined(LITE_VERSION)
+#if !LITE_VERSION
 #include "nrf_mousejack.h"
 #include "core/display.h"
 #include "core/mykeyboard.h"

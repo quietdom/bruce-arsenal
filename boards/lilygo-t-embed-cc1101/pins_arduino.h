@@ -1,7 +1,7 @@
-#ifdef T_EMBED_1101
 #ifndef __T_EMBED_H__
 #define __T_EMBED_H__
 #define T_EMBED
+#define T_EMBED_1101
 
 #include "soc/soc_caps.h"
 #include <stdint.h>
@@ -320,5 +320,3 @@ static const uint8_t SCL = GROVE_SCL;
 #define DEEPSLEEP_PIN_ACT LOW
 
 #endif /* Pins_Arduino_h */
-
-#endif

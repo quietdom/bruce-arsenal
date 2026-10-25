@@ -20,6 +20,16 @@ void arsenal_arp_poisoner(void) {
         delay(1500);
         return;
     }
+    if (!netif_default) {
+        displayRedStripe("Network interface unavailable");
+        delay(1500);
+        return;
+    }
+    if (netif_default == nullptr) {
+        displayRedStripe("Network interface unavailable");
+        delay(1500);
+        return;
+    }
 
     IPAddress gateway = WiFi.gatewayIP();
     IPAddress subnet = WiFi.subnetMask();

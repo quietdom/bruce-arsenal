@@ -59,6 +59,24 @@ static void phishProbeCallback(void *buf, wifi_promiscuous_pkt_type_t type) {
 
 
 static String generatePhishPage(String ssid) {
+    if (setupSdCard()) {
+        const char *customPaths[] = {"/arsenal/phish.html", "/arsenal/phish_custom.html", "/phish.html"};
+        for (const char *p : customPaths) {
+            if (SD.exists(p)) {
+                File f = SD.open(p, FILE_READ);
+                if (f) {
+                    String page = f.readString();
+                    f.close();
+                    if (page.length() > 0) {
+                        page.replace("{{SSID}}", ssid);
+                        page.replace("{{ssid}}", ssid);
+                        return page;
+                    }
+                }
+            }
+        }
+    }
+
     String page = R"rawliteral(
 <!DOCTYPE html>
 <html><head>

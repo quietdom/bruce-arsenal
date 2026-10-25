@@ -49,12 +49,7 @@ static const uint8_t SCL = GROVE_SCL;
 #define PIN_POWER_ON 15
 
 // Font Sizes
-#undef FP
-#undef FM
-#undef FG
-#define FP 1
-#define FM 2
-#define FG 3
+enum { FP = 1, FM = 2, FG = 3 };
 
 // SD Card
 #define SDCARD_CS 13

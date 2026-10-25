@@ -52,7 +52,7 @@ void arsenal_arp_poisoner(void) {
 
     drawMainBorderWithTitle("ARP Poisoner");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 45);
     tft.printf("Gateway: %s", gateway.toString().c_str());
     tft.setCursor(12, 60);
@@ -80,7 +80,7 @@ void arsenal_arp_poisoner(void) {
         drawMainBorderWithTitle("ARP Poisoner");
         int y = 45;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("Gateway: %s", gateway.toString().c_str());
         y += 14;
@@ -103,7 +103,7 @@ void arsenal_arp_poisoner(void) {
 done:
     drawMainBorderWithTitle("ARP Poisoner");
     tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 55);
     tft.printf("Stopped. Sent %d requests", targets);
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);

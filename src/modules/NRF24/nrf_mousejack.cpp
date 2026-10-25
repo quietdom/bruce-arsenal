@@ -597,14 +597,14 @@ static String mj_formatAddr(const MjTarget &t) {
 
 static void mj_drawScanScreen(uint8_t currentCh, bool initial) {
     int contentY = BORDER_PAD_Y + FM * LH + 4; // Below title
-    int footerH = FP * LH + 4;
+    int footerH = FONTSZ * LH + 4;
     int listY = contentY + 14; // Below status line
     int listH = tftHeight - listY - footerH - 6;
 
     if (initial) { drawMainBorderWithTitle("MOUSEJACK SCAN"); }
 
     // Status line (below title, inside border)
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.fillRect(7, contentY, tftWidth - 14, 12, bruceConfig.bgColor);
     tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
     char statusBuf[40];
@@ -630,8 +630,8 @@ static void mj_drawScanScreen(uint8_t currentCh, bool initial) {
     }
 
     // Footer (inside border)
-    int footerY = tftHeight - BORDER_PAD_X - FP * LH - 2;
-    tft.fillRect(7, footerY, tftWidth - 14, FP * LH, bruceConfig.bgColor);
+    int footerY = tftHeight - BORDER_PAD_X - FONTSZ * LH - 2;
+    tft.fillRect(7, footerY, tftWidth - 14, FONTSZ * LH, bruceConfig.bgColor);
     tft.setTextColor(TFT_DARKGREY, bruceConfig.bgColor);
     tft.drawCentreString("[ESC] Stop", tftWidth / 2, footerY, 1);
 }
@@ -748,7 +748,7 @@ static void mj_attackString(int targetIndex) {
     if (text.length() == 0 || text == "\x1B") return;
 
     drawMainBorderWithTitle("INJECTING");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     int cy = tftHeight * 0.35;
     tft.drawCentreString(
@@ -805,7 +805,7 @@ static void mj_attackDucky(int targetIndex) {
     if (filepath.length() == 0) return;
 
     drawMainBorderWithTitle("DUCKYSCRIPT");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     int cy = tftHeight * 0.35;
     tft.drawCentreString(

@@ -88,7 +88,7 @@ void socks4Proxy(uint16_t port) {
     server.begin();
 
     drawMainBorderWithTitle("SOCKS4 PROXY");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.setCursor(10, BORDER_PAD_Y + FM * LH);
     tft.println("Port: " + String(port));

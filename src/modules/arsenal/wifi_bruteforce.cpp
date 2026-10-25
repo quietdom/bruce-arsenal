@@ -155,7 +155,7 @@ void arsenal_wifi_bruteforce(void) {
 
         drawMainBorderWithTitle("WiFi Brute Force");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.drawCentreString(String("Scanning networks..."), tftWidth / 2, tftHeight / 2, 1);
 
         WiFi.mode(WIFI_STA);
@@ -215,7 +215,7 @@ void arsenal_wifi_bruteforce(void) {
             int padX = 10;
 
             tft.setTextColor(TFT_RED, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(padX, y);
             tft.print("Target: " + targetSSID.substring(0, 18));
             y += 14;
@@ -263,7 +263,7 @@ void arsenal_wifi_bruteforce(void) {
             tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
             tft.setTextSize(FM);
             tft.drawCentreString(String("CRACKED!"), tftWidth / 2, 50, 1);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             int y = 80;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
             tft.setCursor(10, y);

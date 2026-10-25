@@ -212,7 +212,7 @@ void IrRead::display_banner() {
     tft.setTextSize(FM);
     padprintln("IR Read");
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("--------------");
     padprintln("Signals captured: " + String(signals_read));
     tft.println("");
@@ -297,7 +297,7 @@ void IrRead::emulate_signal() {
     }
     _emulate_mode = true;
     display_banner();
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("Signal emulated!");
     display_btn_options();
 }

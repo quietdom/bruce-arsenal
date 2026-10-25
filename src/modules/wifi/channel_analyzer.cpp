@@ -71,7 +71,7 @@ ca_draw(const uint8_t *load, const uint8_t *peak, const int8_t *rssi, uint8_t cu
 
     const int x0 = 8;                           // left of bars
     const int top = 26;                         // below title
-    const int bottom = tftHeight - 2 * LH * FP; // leave room for footer
+    const int bottom = tftHeight - 2 * LH * FONTSZ; // leave room for footer
     const int avail = bottom - top;
     const int rowH = avail / CA_NCH;
     const int labelW = 30; // "Ch11"
@@ -79,7 +79,7 @@ ca_draw(const uint8_t *load, const uint8_t *peak, const int8_t *rssi, uint8_t cu
     const int barX = x0 + labelW;
     const int barW = tftWidth - barX - valW - 6;
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     for (int i = 0; i < CA_NCH; i++) {
         uint8_t ch = CA_CHANNELS[i];
         int y = top + i * rowH;
@@ -137,7 +137,7 @@ void channel_analyzer_setup() {
 
     tft.fillScreen(bruceConfig.bgColor);
     drawMainBorderWithTitle("Channel Analyzer");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     padprintln("");
     padprintln(" sweeping 1-11 ...");

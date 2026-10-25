@@ -93,7 +93,7 @@ void arsenal_identity_cloner(void) {
 
         drawMainBorderWithTitle("Identity Cloner");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.drawCentreString(String("Capturing probe requests..."), tftWidth / 2, tftHeight / 2 - 10, 1);
         tft.drawCentreString(String("Press Sel when ready"), tftWidth / 2, tftHeight / 2 + 10, 1);
 
@@ -145,7 +145,7 @@ void arsenal_identity_cloner(void) {
 
                 drawMainBorderWithTitle("Identity Cloner");
                 tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-                tft.setTextSize(FP);
+                tft.setTextSize(FONTSZ);
                 int y = 50;
                 tft.setCursor(12, y);
                 tft.print("CLONED!");

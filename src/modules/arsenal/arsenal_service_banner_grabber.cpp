@@ -34,7 +34,7 @@ void arsenal_service_banner_grabber(void) {
 
     drawMainBorderWithTitle("Banner Grab");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.printf("Scanning %d hosts...", (int)total);
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
@@ -85,7 +85,7 @@ void arsenal_service_banner_grabber(void) {
             drawMainBorderWithTitle("Banner Grab");
             int y = 45;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, y);
             tft.printf("Host: %s", target.toString().c_str());
             y += 14;
@@ -99,7 +99,7 @@ void arsenal_service_banner_grabber(void) {
 
     drawMainBorderWithTitle("Banner Grab");
     tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     int y = 38;
     tft.setCursor(12, y);
     tft.printf("Found %d banners:", resultCount);

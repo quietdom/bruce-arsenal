@@ -45,7 +45,7 @@ void arsenal_car_keyfob_logger(void) {
 
     drawMainBorderWithTitle("Keyfob Logger");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.printf("Scanning: %.2f MHz", freqs[freqIdx]);
     tft.setCursor(12, 66);
@@ -102,7 +102,7 @@ void arsenal_car_keyfob_logger(void) {
         drawMainBorderWithTitle("Keyfob Logger");
         int y = 38;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("Freq: %.2f MHz", freqs[freqIdx]);
         y += 14;

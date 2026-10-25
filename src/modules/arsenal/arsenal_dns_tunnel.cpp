@@ -123,7 +123,7 @@ void arsenal_dns_tunnel(void) {
 
     drawMainBorderWithTitle("DNS Tunnel");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.printf("Listening on port 53");
     tft.setCursor(12, 66);
@@ -143,7 +143,7 @@ void arsenal_dns_tunnel(void) {
             drawMainBorderWithTitle("DNS Tunnel");
             int y = 45;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, y);
             tft.printf("Queries: %d", queriesSent);
             y += 14;

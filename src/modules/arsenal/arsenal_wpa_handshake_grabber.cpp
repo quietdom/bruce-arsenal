@@ -199,7 +199,7 @@ void arsenal_wpa_handshake_grabber(void) {
             drawMainBorderWithTitle("WPA Grabber");
             int y = 40;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, y);
             tft.printf("AP: %s", targetSSID.c_str());
             y += 14;
@@ -243,7 +243,7 @@ void arsenal_wpa_handshake_grabber(void) {
 
         drawMainBorderWithTitle("WPA Grabber");
         tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, 50);
         tft.printf("Saved %d EAPOL frames", eapolCount);
         tft.setCursor(12, 66);

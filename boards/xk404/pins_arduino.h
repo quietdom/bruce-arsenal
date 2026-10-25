@@ -60,7 +60,7 @@ static const uint8_t SCL = 48;
 #define NRF24_SCK_PIN SDCARD_SCK
 #define NRF24_MISO_PIN SDCARD_MISO
 
-#define FP 1
+#define FONTSZ 1
 #define FM 2
 #define FG 3
 

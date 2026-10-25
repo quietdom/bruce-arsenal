@@ -220,7 +220,7 @@ void renderModeSettings(JammerState &state, int &curY, int ySpacing) {
  */
 void displayStats(JammerState &state, int x, int y) {
     // Set text properties for the stats display
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(tftWidth / 2, tftHeight / 2);
     tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
 
@@ -431,7 +431,7 @@ void renderJammerUI(JammerState &state) {
     // Display current status with highlighting for selected setting
     int curY = yStart + 20;
     tft.setCursor(10, curY);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor((state.settingIndex == 0) ? TFT_YELLOW : bruceConfig.priColor, bruceConfig.bgColor);
     padprint("STATUS: ");
     tft.setTextColor(state.jamming_active ? TFT_RED : TFT_WHITE, bruceConfig.bgColor);
@@ -461,7 +461,7 @@ void renderJammerUI(JammerState &state) {
     // Display user instructions at the bottom of the screen
     int instructionsY = tftHeight - 20;
     tft.setCursor(10, instructionsY);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(TFT_BLUE, bruceConfig.bgColor);
     padprintln("[SEL] Change Set. | [NEXT/PREV] Adjust Val. ");
 

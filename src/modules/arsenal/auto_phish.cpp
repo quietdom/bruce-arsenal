@@ -133,7 +133,7 @@ void arsenal_captive_portal_autophish(void) {
 
         drawMainBorderWithTitle("Auto-Phish");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.drawCentreString(String("Listening for probe requests..."), tftWidth / 2, tftHeight / 2 - 10, 1);
         tft.drawCentreString(String("Sel to continue"), tftWidth / 2, tftHeight / 2 + 10, 1);
 
@@ -217,7 +217,7 @@ void arsenal_captive_portal_autophish(void) {
             int padX = 12;
 
             tft.setTextColor(TFT_RED, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(padX, y);
             tft.print("PHISHING ACTIVE");
             y += 16;

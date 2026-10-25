@@ -42,7 +42,7 @@ void arsenal_auth_flood(void) {
 
     drawMainBorderWithTitle("Auth Flood");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.printf("Target: %s", targetSSID.c_str());
     tft.setCursor(12, 66);
@@ -103,7 +103,7 @@ void arsenal_auth_flood(void) {
             drawMainBorderWithTitle("Auth Flood");
             int y = 45;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, y);
             tft.printf("Target: %s", targetSSID.c_str());
             y += 14;

@@ -59,7 +59,7 @@ void arsenal_espnow_chat(void) {
 
     drawMainBorderWithTitle("ESP-NOW Chat");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 45);
     tft.print("Listening for messages...");
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
@@ -74,7 +74,7 @@ void arsenal_espnow_chat(void) {
         drawMainBorderWithTitle("ESP-NOW Chat");
         int y = 36;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
 
         int start = chatMsgIdx - 1;
         int shown = 0;

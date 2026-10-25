@@ -357,8 +357,8 @@ bool handleDelete(String &current_text, int &cursor_x, int &cursor_y) {
     // delete from screen:
     int fontSize = FM;
     if (current_text.length() > max_FP_size) {
-        tft.setTextSize(FP);
-        fontSize = FP;
+        tft.setTextSize(FONTSZ);
+        fontSize = FONTSZ;
     } else tft.setTextSize(FM);
     tft.setCursor((cursor_x - fontSize * LW), cursor_y);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
@@ -504,7 +504,7 @@ String generalKeyboard(
 
     const int PAD = 2;
     const int KBLH = 6 + LH * FM;
-    const int counter_height = LH * FP;
+    const int counter_height = LH * FONTSZ;
     const int top_button_text_y = 2 + (KBLH - LH * FM) / 2;
     const int counter_y = KBLH + 4;
     const int textbox_y = KBLH + counter_height + 5;
@@ -680,17 +680,17 @@ String generalKeyboard(
             }
 
             // Prints the chars counter
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setTextColor(getComplementaryColor2(bruceConfig.bgColor), bruceConfig.bgColor);
             String chars_counter = String(current_text.length()) + "/" + String(max_size);
             tft.fillRect(
-                tftWidth - ((chars_counter.length() * LW * FP) + 20),
+                tftWidth - ((chars_counter.length() * LW * FONTSZ) + 20),
                 counter_y,
-                (chars_counter.length() * LW * FP) + 20,
-                LH * FP,
+                (chars_counter.length() * LW * FONTSZ) + 20,
+                LH * FONTSZ,
                 bruceConfig.bgColor
             ); // clear previous text
-            tft.drawString(chars_counter, tftWidth - ((chars_counter.length() * LW * FP) + 10), counter_y);
+            tft.drawString(chars_counter, tftWidth - ((chars_counter.length() * LW * FONTSZ) + 10), counter_y);
 
             // Prints the title of the textbox, it should report what the user has to write in it
             tft.setTextColor(getComplementaryColor2(bruceConfig.bgColor), 0x5AAB);
@@ -709,7 +709,7 @@ String generalKeyboard(
 
             if (current_text.length() >
                 max_FM_size) { // if the text is too long, we try to set the smaller font
-                tft.setTextSize(FP);
+                tft.setTextSize(FONTSZ);
 
                 if (current_text.length() >
                     max_FP_size) { // if its still too long, we divide it into two lines
@@ -723,7 +723,7 @@ String generalKeyboard(
                         (mask_input ? repeatString(current_text.length() - max_FP_size, "*")
                                     : current_text.substring(max_FP_size, current_text.length())),
                         5,
-                        textbox_text_y + LH * FP
+                        textbox_text_y + LH * FONTSZ
                     );
                 } else {
                     tft.drawString(
@@ -779,13 +779,13 @@ String generalKeyboard(
 
         // Cursor Handler
         if (current_text.length() > max_FM_size) {
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             if (current_text.length() > (max_FP_size)) {
-                cursor_y = textbox_text_y + LH * FP;
-                cursor_x = 5 + (current_text.length() - max_FP_size) * LW * FP;
+                cursor_y = textbox_text_y + LH * FONTSZ;
+                cursor_x = 5 + (current_text.length() - max_FP_size) * LW * FONTSZ;
             } else {
                 cursor_y = textbox_text_y;
-                cursor_x = 5 + current_text.length() * LW * FP;
+                cursor_x = 5 + current_text.length() * LW * FONTSZ;
             }
         } else {
             cursor_y = textbox_text_y;
@@ -1166,8 +1166,8 @@ String generalKeyboard(
                     current_text.remove(current_text.length() - 1);
                     int fontSize = FM;
                     if (current_text.length() > max_FP_size) {
-                        tft.setTextSize(FP);
-                        fontSize = FP;
+                        tft.setTextSize(FONTSZ);
+                        fontSize = FONTSZ;
                     } else tft.setTextSize(FM);
                     tft.setCursor((cursor_x - fontSize * LW), cursor_y);
                     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);

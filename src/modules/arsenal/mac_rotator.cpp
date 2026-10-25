@@ -49,7 +49,7 @@ void arsenal_mac_rotator(void) {
             int y = 45;
 
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
 
             tft.setCursor(padX, y);
             tft.print("Current MAC:");

@@ -186,7 +186,7 @@ void BLE_Sniffer() {
                 int lineH = max(14, tftHeight / 12);
                 int visibleItems = (tftHeight - y - 50) / lineH;
 
-                tft.setTextSize(FP);
+                tft.setTextSize(FONTSZ);
                 tft.setTextColor(TFT_CYAN, bruceConfig.bgColor);
                 tft.setCursor(10, y);
                 tft.println("Packets: " + String(snifferPacketCount));
@@ -244,7 +244,7 @@ void BLE_Sniffer() {
                     drawMainBorderWithTitle("PACKET DETAILS");
                     int dy = BORDER_PAD_Y + FM * LH + 4;
                     int dlh = max(12, tftHeight / 14);
-                    tft.setTextSize(FP);
+                    tft.setTextSize(FONTSZ);
                     tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
 
                     tft.setCursor(10, dy);

@@ -19,7 +19,7 @@ void arsenal_frequency_scanner(void) {
     }
     drawMainBorderWithTitle("Freq Scanner");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 45);
     tft.print("Sweeping 300-928 MHz...");
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
@@ -59,7 +59,7 @@ void arsenal_frequency_scanner(void) {
         drawMainBorderWithTitle("Freq Scanner");
         int y = 38;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("Scanning: %.2f MHz", sweepFreqs[f]);
         y += 14;
@@ -87,7 +87,7 @@ void arsenal_frequency_scanner(void) {
     if (peakCount > 0) {
         drawMainBorderWithTitle("Freq Scanner");
         tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         int y = 38;
         tft.setCursor(12, y);
         tft.printf("Found %d active freqs:", peakCount);

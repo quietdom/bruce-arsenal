@@ -75,7 +75,7 @@ static void jd_stop_wifi() {
 static void
 jd_draw(const uint16_t *dps, const uint16_t *peak, uint32_t thr, uint8_t curCh, int attackCh) {
     drawMainBorderWithTitle("Jam Detect");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     const int x0 = 8;
     int y = 26;

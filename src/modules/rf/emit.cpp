@@ -18,7 +18,7 @@ void rf_raw_emit_draw(void *parameter) {
     tft.fillScreen(bruceConfig.bgColor);
     drawMainBorder();
     tft.setCursor(20, 38);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.print("Emitting: ");
     tft.print(frequency);

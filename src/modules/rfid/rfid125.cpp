@@ -137,7 +137,7 @@ void RFID125::display_banner() {
     cls();
     tft.setTextSize(FM);
     padprintln("RFID 125kHz");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     switch (_current_state) {
         case READ_MODE:
@@ -170,7 +170,7 @@ void RFID125::display_banner() {
             break;
     }
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("");
     padprintln("Press [OK] to change mode.");
     padprintln("");

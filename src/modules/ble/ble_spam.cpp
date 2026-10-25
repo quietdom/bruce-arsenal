@@ -897,10 +897,10 @@ static BleSpamListMetrics bleSpamGetListMetrics(int footerLines) {
     metrics.list_x = 10;
     metrics.list_y = BORDER_PAD_Y + FM * LH + 4;
     metrics.list_w = tftWidth - 20;
-    int footer_h = footerLines * (FP * LH + 4);
+    int footer_h = footerLines * (FONTSZ * LH + 4);
     metrics.footer_y = tftHeight - footer_h - 10;
     metrics.list_h = metrics.footer_y - metrics.list_y - 2;
-    metrics.row_h = max(12, FP * LH + 4);
+    metrics.row_h = max(12, FONTSZ * LH + 4);
     metrics.visible_rows = max(1, metrics.list_h / metrics.row_h);
     return metrics;
 }
@@ -920,7 +920,7 @@ static String bleSpamTruncateText(const String &text, int maxWidth) {
 }
 
 static String bleSpamMakeTitle(const String &title) {
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     int maxWidth = tftWidth - 2 * BORDER_PAD_X;
     return bleSpamTruncateText(title, maxWidth);
 }
@@ -940,7 +940,7 @@ static void bleSpamRenderList(
 ) {
     if (fullRedraw) drawMainBorderWithTitle(bleSpamMakeTitle(title));
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.fillRect(metrics.list_x, metrics.list_y, metrics.list_w, metrics.list_h, bruceConfig.bgColor);
 
     for (int row = 0; row < metrics.visible_rows; row++) {
@@ -964,7 +964,7 @@ static void bleSpamRenderList(
 
     if (footer != nullptr) {
         tft.setTextColor(TFT_DARKGREY, bruceConfig.bgColor);
-        tft.fillRect(8, metrics.footer_y, tftWidth - 16, FP * LH, bruceConfig.bgColor);
+        tft.fillRect(8, metrics.footer_y, tftWidth - 16, FONTSZ * LH, bruceConfig.bgColor);
         tft.drawCentreString(footer, tftWidth / 2, metrics.footer_y + 2, 1);
     }
 }
@@ -1693,7 +1693,7 @@ static String bleSpamFormatMs(uint32_t ms) { return String(ms) + " ms"; }
 static void bleSpamRenderConfigRows(
     const BleSpamConfig &config, int cursor, const BleSpamEditState &editState, int startY, int rowH
 ) {
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     struct RowInfo {
         const char *label;
@@ -1739,10 +1739,10 @@ bleSpamConfigScreen(const BleSpamSelection &selection, BleSpamConfig &config, bo
 
         if (redrawRows) {
             int rowStart = BORDER_PAD_Y + FM * LH + 10;
-            int footerH = FP * LH + 4;
+            int footerH = FONTSZ * LH + 4;
             int footerY = tftHeight - footerH - 8;
             int available = footerY - rowStart - 4;
-            int rowH = max(1, min(FP * LH + 4, available / 5));
+            int rowH = max(1, min(FONTSZ * LH + 4, available / 5));
             int startRowY = rowStart + rowH * 4;
 
             bleSpamRenderConfigRows(config, cursor, editState, rowStart, rowH);
@@ -1850,11 +1850,11 @@ static void bleSpamRenderRunningScreen(
         drawMainBorderWithTitle(bleSpamMakeTitle(title));
 
         statsY = BORDER_PAD_Y + FM * LH + 8;
-        int footerH = FP * LH + 4;
+        int footerH = FONTSZ * LH + 4;
         int footerY = tftHeight - footerH - 8;
         int sepGap = 4;
         int available = footerY - statsY - sepGap - 2;
-        rowH = max(1, min(FP * LH + 4, available / 6));
+        rowH = max(1, min(FONTSZ * LH + 4, available / 6));
         configStartY = statsY + rowH * 2 + sepGap;
 
         tft.drawFastHLine(8, statsY + rowH * 2 - 2, tftWidth - 16, bruceConfig.priColor);
@@ -1866,7 +1866,7 @@ static void bleSpamRenderRunningScreen(
     }
 
     if (blinkDirty) {
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setTextColor(TFT_MAGENTA, bruceConfig.bgColor);
         int starX = tftWidth - 18;
         int starY = BORDER_PAD_Y + 2;
@@ -1875,7 +1875,7 @@ static void bleSpamRenderRunningScreen(
     }
 
     if (statsDirty) {
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
 
         tft.fillRect(10, statsY, tftWidth - 20, rowH * 2, bruceConfig.bgColor);
@@ -1908,21 +1908,21 @@ static bool bleSpamStoppedPrompt(const BleSpamSelection &selection, uint32_t sen
                     String(bleSpamGetDeviceName(selection.attack_type, selection.device_index)) + " STOPPED";
                 drawMainBorderWithTitle(bleSpamMakeTitle(title));
 
-                tft.setTextSize(FP);
+                tft.setTextSize(FONTSZ);
                 char buf[32];
                 snprintf(buf, sizeof(buf), "Sent: %06lu  Pkt/s: 0.0", (unsigned long)sentCount);
                 int statsY = BORDER_PAD_Y + FM * LH + 8;
-                tft.fillRect(10, statsY, tftWidth - 20, FP * LH + 6, bruceConfig.bgColor);
+                tft.fillRect(10, statsY, tftWidth - 20, FONTSZ * LH + 6, bruceConfig.bgColor);
                 tft.drawString(buf, 12, statsY + 2, 1);
 
                 tft.setTextColor(TFT_DARKGREY, bruceConfig.bgColor);
-                int footerY = tftHeight - FP * LH - 12;
-                tft.fillRect(8, footerY, tftWidth - 16, FP * LH + 4, bruceConfig.bgColor);
+                int footerY = tftHeight - FONTSZ * LH - 12;
+                tft.fillRect(8, footerY, tftWidth - 16, FONTSZ * LH + 4, bruceConfig.bgColor);
                 tft.drawCentreString("Click=Select  ESC=Back", tftWidth / 2, footerY + 2, 1);
                 layoutDrawn = true;
             }
 
-            int rowH = max(12, FP * LH + 4);
+            int rowH = max(12, FONTSZ * LH + 4);
             int listY = BORDER_PAD_Y + FM * LH + 8 + rowH * 2;
             for (int i = 0; i < optionCount; i++) {
                 int rowY = listY + i * rowH;
@@ -2107,7 +2107,7 @@ static int bleSpamTwoOptionPrompt(const String &title, const char *opt0, const c
                 drawMainBorderWithTitle(bleSpamMakeTitle(title));
                 layoutDrawn = true;
             }
-            int rowH = max(12, FP * LH + 4);
+            int rowH = max(12, FONTSZ * LH + 4);
             int startY = BORDER_PAD_Y + FM * LH + 16;
             for (int i = 0; i < 2; i++) {
                 int rowY = startY + i * rowH;
@@ -2116,7 +2116,7 @@ static int bleSpamTwoOptionPrompt(const String &title, const char *opt0, const c
                 uint16_t fg = sel ? bruceConfig.bgColor : bruceConfig.priColor;
                 tft.fillRect(10, rowY, tftWidth - 20, rowH, bg);
                 tft.setTextColor(fg, bg);
-                tft.setTextSize(FP);
+                tft.setTextSize(FONTSZ);
                 tft.drawString(String(sel ? "> " : "  ") + (i == 0 ? opt0 : opt1), 14, rowY + 2, 1);
             }
             redraw = false;

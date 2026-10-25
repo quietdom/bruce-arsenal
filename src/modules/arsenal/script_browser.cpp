@@ -67,7 +67,7 @@ static void executeScript(String filepath) {
 
         drawMainBorderWithTitle("Running BadUSB");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, 50);
         tft.print("Script: " + filepath.substring(filepath.lastIndexOf('/') + 1));
         tft.setCursor(12, 70);
@@ -96,7 +96,7 @@ static void executeScript(String filepath) {
 
         drawMainBorderWithTitle("Sub-GHz");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, 50);
         tft.print("Signal: " + filepath.substring(filepath.lastIndexOf('/') + 1));
         tft.setCursor(12, 70);
@@ -117,7 +117,7 @@ static void executeScript(String filepath) {
 
         drawMainBorderWithTitle("IR Remote");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, 50);
         tft.print("IR: " + filepath.substring(filepath.lastIndexOf('/') + 1));
         tft.setCursor(12, 70);
@@ -138,7 +138,7 @@ static void executeScript(String filepath) {
 
         drawMainBorderWithTitle("Evil Portal");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, 50);
         tft.print("Template: " + filepath.substring(filepath.lastIndexOf('/') + 1));
         File f = SD.open(filepath, FILE_READ);
@@ -165,7 +165,7 @@ static void executeScript(String filepath) {
 
         drawMainBorderWithTitle("JS Script");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, 50);
         tft.print("Script: " + filepath.substring(filepath.lastIndexOf('/') + 1));
         tft.setCursor(12, 70);
@@ -186,7 +186,7 @@ static void executeScript(String filepath) {
 
         drawMainBorderWithTitle("File Info");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, 50);
         tft.print("File: " + filepath.substring(filepath.lastIndexOf('/') + 1));
         tft.setCursor(12, 70);
@@ -292,7 +292,7 @@ void arsenal_script_browser(void) {
     if (!SD.exists(ARSENAL_SCRIPTS_ROOT)) {
         drawMainBorderWithTitle("Script Browser");
         tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         int y = 45;
         tft.setCursor(12, y); tft.print("No scripts found!"); y += 16;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);

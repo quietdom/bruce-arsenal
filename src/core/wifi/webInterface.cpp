@@ -283,32 +283,32 @@ void drawWebUiScreen(bool mode_ap) {
     int currentY = 55;
 
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     if (mode_ap) {
         tft.setCursor(padX, currentY);
         tft.print("Net: BruceNet/brucenet");
-        currentY += LH * FP + 6;
+        currentY += LH * FONTSZ + 6;
     }
 
     tft.setCursor(padX, currentY);
     if (mdnsRunning) tft.print("Url: http://bruce.local");
-    currentY += LH * FP + 6;
+    currentY += LH * FONTSZ + 6;
 
     tft.setCursor(padX, currentY);
     tft.print("IP:  " + txt);
-    currentY += LH * FP + 6;
+    currentY += LH * FONTSZ + 6;
 
     tft.setCursor(padX, currentY);
     tft.print("Usr: " + String(bruceConfig.webUI.user));
-    currentY += LH * FP + 6;
+    currentY += LH * FONTSZ + 6;
 
     tft.setCursor(padX, currentY);
     tft.print("Pwd: " + String(bruceConfig.webUI.pwd));
 
     tft.setTextColor(TFT_RED, bruceConfig.bgColor);
-    tft.setTextSize(FP);
-    tft.drawCentreString("press Esc to stop", tftWidth / 2, tftHeight - 2 * LH * FP - 5, 1);
+    tft.setTextSize(FONTSZ);
+    tft.drawCentreString("press Esc to stop", tftWidth / 2, tftHeight - 2 * LH * FONTSZ - 5, 1);
 
 #if defined(HAS_TOUCH)
     TouchFooter();

@@ -117,7 +117,7 @@ void wg_setup() {
 
     drawMainBorderWithTitle("WIREGUARD");
     printSubtitle("Connecting...");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("");
     padprintln("Syncing time...");
 
@@ -128,7 +128,7 @@ void wg_setup() {
 
     drawMainBorderWithTitle("WIREGUARD");
     printSubtitle("Connected");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("");
     tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
     padprintln("Status: Connected");

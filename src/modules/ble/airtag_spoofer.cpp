@@ -69,7 +69,7 @@ void airtagSpoofer() {
         int padX = 12;
 
         tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(padX, y);
         tft.print("Status: BROADCASTING");
         y += 16;

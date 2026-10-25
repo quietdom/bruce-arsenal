@@ -91,7 +91,7 @@ void arsenal_decoy_traffic(void) {
                 int padX = 12;
 
                 tft.setTextColor(TFT_CYAN, bruceConfig.bgColor);
-                tft.setTextSize(FP);
+                tft.setTextSize(FONTSZ);
                 tft.setCursor(padX, y);
                 tft.print("GENERATING NOISE");
                 y += 16;

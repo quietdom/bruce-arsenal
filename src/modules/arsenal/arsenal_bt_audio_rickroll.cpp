@@ -18,7 +18,7 @@ void arsenal_bt_audio_rickroll(void) {
 
     drawMainBorderWithTitle("BT Rickroll");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 45);
     tft.print("Scanning for audio devices...");
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
@@ -131,7 +131,7 @@ void arsenal_bt_audio_rickroll(void) {
 
     drawMainBorderWithTitle("BT Rickroll");
     tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.printf("Target: %s", devices[targetIdx].name.c_str());
     tft.setCursor(12, 66);
@@ -161,7 +161,7 @@ void arsenal_bt_audio_rickroll(void) {
             drawMainBorderWithTitle("BT Rickroll");
             int y = 50;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, y);
             tft.printf("Target: %s", devices[targetIdx].name.c_str());
             y += 14;

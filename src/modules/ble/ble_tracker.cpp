@@ -47,7 +47,7 @@ static void drawTrackerScreen() {
     int y = 45;
 
     tft.setTextColor(TFT_CYAN, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, y);
     tft.printf("Devices found: %d", (int)trackedDevices.size());
     y += 16;

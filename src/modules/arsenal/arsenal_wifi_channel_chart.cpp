@@ -41,7 +41,7 @@ void arsenal_wifi_channel_chart(void) {
         drawMainBorderWithTitle("Channel Chart");
         int y = 36;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         unsigned long elapsed = (millis() - startTime) / 1000;
         tft.setCursor(12, y);
         tft.printf("Collecting... %lus", elapsed);

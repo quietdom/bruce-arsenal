@@ -46,7 +46,7 @@ static void arpScan(IPAddress gateway, IPAddress subnet) {
 
     drawMainBorderWithTitle("Network Scan");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     for (uint32_t i = 1; i <= totalHosts; i++) {
         if (check(EscPress)) { returnToMenu = true; return; }
@@ -143,7 +143,7 @@ void arsenal_network_scanner(void) {
 
                 drawMainBorderWithTitle("Port Scan");
                 tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-                tft.setTextSize(FP);
+                tft.setTextSize(FONTSZ);
                 tft.setCursor(12, 50);
                 tft.print("Scanning " + discoveredHosts[i].ip.toString());
 

@@ -175,7 +175,7 @@ void displayRedStripe(const String &text, uint16_t fgcolor, uint16_t bgcolor) {
 
     // Calculate max chars per line based on font size
     int maxCharsFM = (tftWidth - 20) / (LW * FM);
-    int maxCharsFP = (tftWidth - 20) / (LW * FP);
+    int maxCharsFP = (tftWidth - 20) / (LW * FONTSZ);
 
     // Determine if we need to wrap the text
     std::vector<String> wrappedLines;
@@ -186,8 +186,8 @@ void displayRedStripe(const String &text, uint16_t fgcolor, uint16_t bgcolor) {
         size = FM;
         wrappedLines = wrapText(text, maxCharsFM);
     } else {
-        // Text needs FP font or larger
-        size = FP;
+        // Text needs FONTSZ font or larger
+        size = FONTSZ;
         wrappedLines = wrapText(text, maxCharsFP);
     }
 
@@ -443,7 +443,7 @@ void padprintln(const String &s, int16_t padx) {
 
     String buff;
     size_t start = 0;
-    int _maxCharsInLine = (tftWidth - (padx + 1) * BORDER_PAD_X) / (FP * LW);
+    int _maxCharsInLine = (tftWidth - (padx + 1) * BORDER_PAD_X) / (FONTSZ * LW);
 
     // automatically split into multiple lines
     while (!(buff = s.substring(start, start + _maxCharsInLine)).isEmpty()) {
@@ -461,7 +461,7 @@ void padprintln(const char str[], int16_t padx) {
 
     String buff;
     size_t start = 0;
-    int _maxCharsInLine = (tftWidth - (padx + 1) * BORDER_PAD_X) / (FP * LW);
+    int _maxCharsInLine = (tftWidth - (padx + 1) * BORDER_PAD_X) / (FONTSZ * LW);
 
     // automatically split into multiple lines
     while (!(buff = String(str).substring(start, start + _maxCharsInLine)).isEmpty()) {
@@ -864,9 +864,9 @@ void drawSubmenu(int index, std::vector<Option> &options, const char *title) {
     drawStatusBar();
     int menuSize = options.size();
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.drawPixel(0, 0, 0);
-    tft.fillRect(6, 30, tftWidth - 12, 8 * FP, bruceConfig.bgColor);
+    tft.fillRect(6, 30, tftWidth - 12, 8 * FONTSZ, bruceConfig.bgColor);
     tft.drawString(title, 12, 30);
 
     // middle of the drawing area
@@ -1032,7 +1032,7 @@ void printTitle(const String &title) {
 
     // Scale down title font if it doesn't fit the screen width
     int titleSize = FM;
-    while (titleSize > FP && (int)(t.length() * titleSize * LW) > tftWidth - 2 * BORDER_PAD_X) {
+    while (titleSize > FONTSZ && (int)(t.length() * titleSize * LW) > tftWidth - 2 * BORDER_PAD_X) {
         titleSize--;
     }
 
@@ -1040,13 +1040,13 @@ void printTitle(const String &title) {
     tft.setCursor((tftWidth - (t.length() * titleSize * LW)) / 2, BORDER_PAD_Y);
     tft.println(t);
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 }
 
 void printSubtitle(const String &subtitle, bool withLine) {
-    int16_t cursorX = (tftWidth - (subtitle.length() * FP * LW)) / 2;
+    int16_t cursorX = (tftWidth - (subtitle.length() * FONTSZ * LW)) / 2;
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     tft.setCursor(cursorX, BORDER_PAD_Y + FM * LH);
     tft.println(subtitle);
@@ -1061,14 +1061,14 @@ void printSubtitle(const String &subtitle, bool withLine) {
 }
 
 void printFootnote(const String &text) {
-    tft.setTextSize(FP);
-    tft.drawRightString(text, tftWidth - BORDER_PAD_X, tftHeight - BORDER_PAD_X - FP * LH, SMOOTH_FONT);
+    tft.setTextSize(FONTSZ);
+    tft.drawRightString(text, tftWidth - BORDER_PAD_X, tftHeight - BORDER_PAD_X - FONTSZ * LH, SMOOTH_FONT);
 }
 
 void printCenterFootnote(const String &text) {
-    tft.fillRect(10, tftHeight - BORDER_PAD_X - FP * LH, tftWidth - 20, FP * LH, bruceConfig.bgColor);
-    tft.setTextSize(FP);
-    tft.drawCentreString(text, tftWidth / 2, tftHeight - BORDER_PAD_X - FP * LH, SMOOTH_FONT);
+    tft.fillRect(10, tftHeight - BORDER_PAD_X - FONTSZ * LH, tftWidth - 20, FONTSZ * LH, bruceConfig.bgColor);
+    tft.setTextSize(FONTSZ);
+    tft.drawCentreString(text, tftWidth / 2, tftHeight - BORDER_PAD_X - FONTSZ * LH, SMOOTH_FONT);
 }
 
 void drawBatteryStatus(uint8_t bat) {
@@ -1081,7 +1081,7 @@ void drawBatteryStatus(uint8_t bat) {
     if (bat < 16) barcolor = color = TFT_RED;
 
     tft.drawRoundRect(tftWidth - 42, 7, 34, 17, 2, color);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.fillRect(tftWidth - 85, 7, 42, 18, bruceConfig.bgColor);
     if (charging) {
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);

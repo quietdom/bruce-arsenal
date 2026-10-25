@@ -252,7 +252,7 @@ void arsenal_combo_menu(void) {
         options.push_back({label, [combo]() {
             drawMainBorderWithTitle("Combo");
             tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, 45);
             tft.print("Running: " + combo.name);
             int y = 65;
@@ -281,7 +281,7 @@ void arsenal_combo_menu(void) {
     options.push_back({"+ Create New Combo", []() {
         drawMainBorderWithTitle("New Combo");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, 50);
         tft.print("Create a .txt file in:");
         tft.setCursor(12, 66);

@@ -58,7 +58,7 @@ void arsenal_beacon_flood(void) {
             drawMainBorderWithTitle("Beacon Flood");
             int y = 45;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, y);
             tft.printf("Sent: %d  Failed: %d", sent, failed);
             y += 14;

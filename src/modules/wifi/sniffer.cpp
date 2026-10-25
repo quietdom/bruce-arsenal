@@ -1168,7 +1168,7 @@ void sniffer_setup() {
     SnifferMode startMode = sniffer_full_mode_available() ? SnifferMode::Full : SnifferMode::HandshakesOnly;
     sniffer_set_mode(startMode);
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.setCursor(10, BORDER_PAD_Y + FM * LH);
     tft.println("Sniffing Started");
@@ -1368,7 +1368,7 @@ void sniffer_setup() {
             tft.drawPixel(0, 0, 0);
             drawMainBorderWithTitle("pcap sniffer", clearScreen); // Clear Screen and redraw border
             clearScreen = false;
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
             String activeFile = "File: ";
             if (sniffer_get_mode() == SnifferMode::Full && rawCaptureEnabled()) {

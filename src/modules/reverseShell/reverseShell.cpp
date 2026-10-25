@@ -71,7 +71,7 @@ void ReverseShell() {
     tft.setTextColor(TFT_RED, bruceConfig.bgColor);
     tft.drawCentreString("Reverse Shell", tftWidth / 2, 10, 1);
     tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(15, 33);
     tft.println("Developed by Fourier & Ninja-jr");
     tft.println("Starting reverse shell server...");

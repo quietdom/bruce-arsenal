@@ -99,7 +99,7 @@ static void jamAudioTarget(String targetAddr) {
             int padX = 12;
 
             tft.setTextColor(TFT_RED, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(padX, y);
             tft.print("JAMMING ACTIVE");
             y += 16;
@@ -152,7 +152,7 @@ void arsenal_bt_audio_jammer(void) {
 
         drawMainBorderWithTitle("Audio Jammer");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.drawCentreString(String("Scanning for audio devices..."), tftWidth / 2, tftHeight / 2, 1);
 
         pScan->start(5, false);

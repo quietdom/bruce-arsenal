@@ -101,7 +101,7 @@ void arsenal_attack_scheduler(void) {
             int padX = 10;
 
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
 
             for (auto &t : scheduledTasks) {
                 tft.setCursor(padX, y);

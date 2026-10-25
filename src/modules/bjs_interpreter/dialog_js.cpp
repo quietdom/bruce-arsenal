@@ -201,7 +201,7 @@ JSValue native_dialogViewText(JSContext *ctx, JSValue *this_val, int argc, JSVal
         tft.setTextSize(FM);
         tft.println(title);
         padY = tft.getCursorY();
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
     }
     ScrollableTextArea area = ScrollableTextArea(
         1, 10, padY, tftWidth - 2 * BORDER_PAD_X, tftHeight - BORDER_PAD_X - padY, false, true

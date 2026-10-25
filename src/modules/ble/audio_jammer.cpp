@@ -54,7 +54,7 @@ void audioJammer() {
     int y = 45;
 
     tft.setTextColor(TFT_MAGENTA, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, y);
     tft.print("Jamming BLE audio streams");
     y += 14;

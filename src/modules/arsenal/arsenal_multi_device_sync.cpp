@@ -65,7 +65,7 @@ void arsenal_multi_device_sync(void) {
         drawMainBorderWithTitle("Multi Sync");
         int y = 40;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("Local state:");
         y += 14;

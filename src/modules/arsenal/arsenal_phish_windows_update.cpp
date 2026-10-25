@@ -67,7 +67,7 @@ void arsenal_phish_windows_update(void) {
 
     drawMainBorderWithTitle("Phish WinUpdate");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.print("Fake Windows Update portal");
     tft.setCursor(12, 66);
@@ -79,7 +79,7 @@ void arsenal_phish_windows_update(void) {
         drawMainBorderWithTitle("Phish WinUpdate");
         int y = 45;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("Clients: %d", WiFi.softAPgetStationNum());
         y += 14;

@@ -90,7 +90,7 @@ void arsenal_ssid_history_logger(void) {
         drawMainBorderWithTitle("SSID History");
         int y = 38;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         unsigned long elapsed = (millis() - startTime) / 1000;
         tft.printf("Unique SSIDs: %d  %lus", ssidUnique, elapsed);

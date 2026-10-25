@@ -59,7 +59,7 @@ void dhcpStarvation() {
     int y = 45;
 
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, y);
     tft.print("Flooding DHCP server");
     y += 14;

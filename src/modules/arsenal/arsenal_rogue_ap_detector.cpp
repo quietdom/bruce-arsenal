@@ -101,7 +101,7 @@ void arsenal_rogue_ap_detector(void) {
         drawMainBorderWithTitle("Rogue AP Detect");
         int y = 40;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("SSID: %s", targetSSID.c_str());
         y += 14;

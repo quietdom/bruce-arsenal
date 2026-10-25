@@ -12,7 +12,7 @@ void print_errorMessage(const char *msg, const char *stackTrace) {
     tft.setTextColor(TFT_RED, bruceConfig.bgColor);
     tft.drawCentreString("Error", tftWidth / 2, 10, 1);
     tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(0, 33);
 
     tft.printf("%s\n%s\n", msg, stackTrace);
@@ -36,7 +36,7 @@ void js_fatal_error_handler(JSContext *ctx) {
     tft.setTextColor(TFT_RED, bruceConfig.bgColor);
     tft.drawCentreString("Error", tftWidth / 2, 10, 1);
     tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(0, 33);
 
     JSValue jsvStack = JS_GetPropertyStr(ctx, obj, "stack");

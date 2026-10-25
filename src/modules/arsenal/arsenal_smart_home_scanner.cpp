@@ -90,7 +90,7 @@ void arsenal_smart_home_scanner(void) {
 
     drawMainBorderWithTitle("Smart Home Scan");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.print("Scanning for smart devices...");
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
@@ -123,7 +123,7 @@ void arsenal_smart_home_scanner(void) {
             drawMainBorderWithTitle("Smart Home Scan");
             int y = 50;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, y);
             tft.printf("Scanning: %s", target.toString().c_str());
             y += 14;
@@ -137,7 +137,7 @@ void arsenal_smart_home_scanner(void) {
 
     drawMainBorderWithTitle("Smart Home Scan");
     tft.setTextColor(devCount > 0 ? TFT_GREEN : TFT_RED, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     int y = 38;
     tft.setCursor(12, y);
     tft.printf("Found %d devices:", devCount);

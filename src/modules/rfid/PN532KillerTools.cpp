@@ -72,7 +72,7 @@ void PN532KillerTools::displayInitialScreen() {
     _titleName = "PN532 UART";
     drawMainBorderWithTitle(_titleName.c_str());
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     int margin = tftWidth / 16;
     if (margin < 6) margin = 6;
     if (margin > 24) margin = 24;
@@ -82,12 +82,12 @@ void PN532KillerTools::displayInitialScreen() {
     String line2 = "via UART port.";
     String line3 = "Press OK to check device type.";
 
-    int leftX = (tftWidth - line1.length() * 6 * FP) / 2;
+    int leftX = (tftWidth - line1.length() * 6 * FONTSZ) / 2;
     tft.setCursor(leftX, baseY);
     tft.println(line1);
-    tft.setCursor(leftX, baseY + FP * 12);
+    tft.setCursor(leftX, baseY + FONTSZ * 12);
     tft.println(line2);
-    tft.setCursor(leftX, baseY + FP * 24);
+    tft.setCursor(leftX, baseY + FONTSZ * 24);
     tft.println(line3);
 
     delay(200);
@@ -631,7 +631,7 @@ void PN532KillerTools::printUid(const char *protocol, const char *uid) {
     tft.println(protocol);
     tft.setCursor((tftWidth - strlen(uid) * 6 * FM) / 2, tft.getCursorY() + 2);
     tft.println(uid);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 }
 
 void PN532KillerTools::setEmulatorNextSlot(bool reverse, bool redrawTypeName) {

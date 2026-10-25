@@ -210,7 +210,7 @@ void TagOMatic::display_banner() {
         case SAVE_MODE: printSubtitle("SAVE MODE"); break;
     }
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("");
     tft.setTextColor(getColorVariation(bruceConfig.priColor), bruceConfig.bgColor);
     padprintln("Press [OK] to change mode.");

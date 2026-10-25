@@ -78,7 +78,7 @@ void arsenal_device_nickname(void) {
     options.push_back({"Add Nickname", []() {
         drawMainBorderWithTitle("Add Nickname");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, 45);
         tft.print("Format: XX:XX:XX:XX:XX:XX");
         tft.setCursor(12, 60);
@@ -128,7 +128,7 @@ void arsenal_device_nickname(void) {
         drawMainBorderWithTitle("Nicknames");
         int y = 40;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         for (int i = 0; i < nickCount && i < 10; i++) {
             tft.setCursor(12, y);
             tft.printf("%02X:%02X..%s",

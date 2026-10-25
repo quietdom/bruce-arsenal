@@ -320,7 +320,7 @@ void jamall_draw_gui(JamAllState &state) {
     char timeStr[16];
     snprintf(timeStr, sizeof(timeStr), "%02lu:%02lu", elapsed / 60, elapsed % 60);
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(TFT_RED, bruceConfig.bgColor);
     tft.drawString("JAM ALL", padX, startY, 1);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
@@ -392,7 +392,7 @@ void jamall_draw_gui(JamAllState &state) {
 
     int bottomY = tftHeight - 20;
     tft.fillRect(0, bottomY - 2, tftWidth, 22, tft.color565(20, 20, 20));
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     if (state.running) {
         tft.setTextColor(TFT_RED, tft.color565(20, 20, 20));

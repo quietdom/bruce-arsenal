@@ -66,7 +66,7 @@ void arsenal_espnow_c2(void) {
         drawMainBorderWithTitle("ESP-NOW C2");
         int y = 40;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("Connected devices: %d", c2PeerCount);
         y += 14;
@@ -110,7 +110,7 @@ void arsenal_espnow_c2(void) {
                 c2CommandsSent++;
                 drawMainBorderWithTitle("ESP-NOW C2");
                 tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-                tft.setTextSize(FP);
+                tft.setTextSize(FONTSZ);
                 tft.setCursor(12, 50);
                 tft.printf("Sent: %s", cmd);
                 delay(1000);

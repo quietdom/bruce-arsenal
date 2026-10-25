@@ -52,7 +52,7 @@ void arsenal_oui_lookup(void) {
         if (!SD.exists(OUI_FILE)) {
             drawMainBorderWithTitle("OUI Lookup");
             tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             int y = 50;
             tft.setCursor(12, y);
             tft.print("OUI database not found!");
@@ -81,7 +81,7 @@ void arsenal_oui_lookup(void) {
 
         drawMainBorderWithTitle("OUI Lookup");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.drawCentreString(String("Scanning WiFi..."), tftWidth / 2, tftHeight / 2, 1);
 
         WiFi.mode(WIFI_STA);

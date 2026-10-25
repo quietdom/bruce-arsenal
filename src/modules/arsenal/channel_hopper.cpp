@@ -39,7 +39,7 @@ void arsenal_channel_hopper(void) {
                 int padX = 12;
 
                 tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-                tft.setTextSize(FP);
+                tft.setTextSize(FONTSZ);
 
                 uint8_t currentCh = HOP_PATTERN[(hopIndex - 1) % HOP_PATTERN_LEN];
 

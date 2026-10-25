@@ -38,7 +38,7 @@ void sinewave_animation() {
 
 void rf_raw_record_draw(RawRecordingStatus status) {
     tft.setCursor(20, 38);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     if (status.frequency <= 0) {
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
         tft.print("Looking for frequency...");

@@ -23,7 +23,7 @@ void listenTcpPort() {
 
     WiFiClient tcpClient;
     drawMainBorderWithTitle("LISTEN TCP");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
 
     WiFiServer server(portNumberInt);
@@ -53,11 +53,11 @@ void listenTcpPort() {
                     }
                     inputMode = false;
                     drawMainBorderWithTitle("LISTEN TCP");
-                    tft.setTextSize(FP);
+                    tft.setTextSize(FONTSZ);
                     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
                     tft.setCursor(10, BORDER_PAD_Y + FM * LH);
                     if (keyString.length() > 0 && keyString != "\x1B") {
-                        if (tft.getCursorY() > tftHeight - 3 * LH * FP) {
+                        if (tft.getCursorY() > tftHeight - 3 * LH * FONTSZ) {
                             drawMainBorderWithTitle("LISTEN TCP");
                             padprint(keyString);
                         }
@@ -67,7 +67,7 @@ void listenTcpPort() {
                 } else {
                     if (client.available()) {
                         String incomingData = client.readString();
-                        if (tft.getCursorY() > tftHeight - 3 * LH * FP) drawMainBorderWithTitle("LISTEN TCP");
+                        if (tft.getCursorY() > tftHeight - 3 * LH * FONTSZ) drawMainBorderWithTitle("LISTEN TCP");
                         padprint(incomingData);
                         Serial.print(incomingData);
                     }
@@ -107,7 +107,7 @@ void clientTCP() {
 
     WiFiClient client;
     drawMainBorderWithTitle("TCP CLIENT");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
 
     padprintln("Connecting to:");
@@ -126,11 +126,11 @@ void clientTCP() {
             String keyString = keyboard("", 16, "send input data");
             inputMode = false;
             drawMainBorderWithTitle("TCP CLIENT");
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
             tft.setCursor(10, BORDER_PAD_Y + FM * LH);
             if (keyString.length() > 0 && keyString != "\x1B") {
-                if (tft.getCursorY() > tftHeight - 3 * LH * FP) drawMainBorderWithTitle("LISTEN TCP");
+                if (tft.getCursorY() > tftHeight - 3 * LH * FONTSZ) drawMainBorderWithTitle("LISTEN TCP");
                 padprint(keyString);
                 client.print(keyString);
                 Serial.print(keyString);
@@ -138,7 +138,7 @@ void clientTCP() {
         } else {
             if (client.available()) {
                 String incomingData = client.readString();
-                if (tft.getCursorY() > tftHeight - 3 * LH * FP) drawMainBorderWithTitle("LISTEN TCP");
+                if (tft.getCursorY() > tftHeight - 3 * LH * FONTSZ) drawMainBorderWithTitle("LISTEN TCP");
                 padprint(incomingData);
                 Serial.print(incomingData);
             }

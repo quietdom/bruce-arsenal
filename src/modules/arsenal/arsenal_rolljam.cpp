@@ -46,7 +46,7 @@ void arsenal_rolljam(void) {
 
     drawMainBorderWithTitle("Rolljam");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     int y = 40;
     tft.setCursor(12, y); y += 14;
     tft.printf("Freq: %.2f MHz", freq);
@@ -70,7 +70,7 @@ void arsenal_rolljam(void) {
             // receiver while the fob's code goes past unheard.
             drawMainBorderWithTitle("Rolljam - JAMMING");
             tft.setTextColor(TFT_RED, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, 50);
             tft.print("Jamming receiver...");
             tft.drawCentreString(String("Esc:stop"), tftWidth / 2, tftHeight - 20, 1);
@@ -87,7 +87,7 @@ void arsenal_rolljam(void) {
             // Now switch to RX and capture whatever the fob sent.
             drawMainBorderWithTitle("Rolljam - CAPTURE");
             tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, 50);
             tft.print("Listening for code...");
             tft.drawCentreString(String("Esc:stop"), tftWidth / 2, tftHeight - 20, 1);
@@ -128,7 +128,7 @@ void arsenal_rolljam(void) {
     if (capturedCount > 0) {
         drawMainBorderWithTitle("Rolljam - Replay");
         tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, 50);
         tft.print("Open RF Send to replay");
         tft.setCursor(12, 66);

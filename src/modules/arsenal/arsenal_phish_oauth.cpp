@@ -61,7 +61,7 @@ void arsenal_phish_oauth(void) {
         drawMainBorderWithTitle("Phish OAuth");
         int y = 45;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("Clients: %d  Creds: %d", WiFi.softAPgetStationNum(), credsCaptured);
         y += 14;

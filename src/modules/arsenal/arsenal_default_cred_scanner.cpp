@@ -59,7 +59,7 @@ void arsenal_default_cred_scanner(void) {
 
     drawMainBorderWithTitle("Def Cred Scan");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.print("Scanning network...");
     delay(500);
@@ -112,7 +112,7 @@ void arsenal_default_cred_scanner(void) {
                         }
                         drawMainBorderWithTitle("Def Cred Scan");
                         tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-                        tft.setTextSize(FP);
+                        tft.setTextSize(FONTSZ);
                         tft.setCursor(12, 60);
                         tft.printf("HIT: %s", target.toString().c_str());
                         tft.setCursor(12, 76);
@@ -131,7 +131,7 @@ void arsenal_default_cred_scanner(void) {
             drawMainBorderWithTitle("Def Cred Scan");
             int y = 45;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, y);
             tft.printf("Scanning: %s", target.toString().c_str());
             y += 14;
@@ -153,7 +153,7 @@ void arsenal_default_cred_scanner(void) {
 
     drawMainBorderWithTitle("Def Cred Scan");
     tft.setTextColor(found > 0 ? TFT_GREEN : TFT_RED, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 55);
     tft.printf("Hosts: %d  Creds: %d", scanned, found);
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);

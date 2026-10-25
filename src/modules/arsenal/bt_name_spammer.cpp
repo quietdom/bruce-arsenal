@@ -86,7 +86,7 @@ void arsenal_bt_name_spammer(void) {
                 int padX = 12;
 
                 tft.setTextColor(TFT_MAGENTA, bruceConfig.bgColor);
-                tft.setTextSize(FP);
+                tft.setTextSize(FONTSZ);
                 tft.setCursor(padX, y);
                 tft.print("SPAMMING BLE NAMES");
                 y += 16;

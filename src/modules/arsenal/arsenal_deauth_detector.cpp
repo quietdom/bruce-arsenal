@@ -59,7 +59,7 @@ void arsenal_deauth_detector(void) {
 
     drawMainBorderWithTitle("Deauth Detector");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.print("Listening for deauth frames");
     tft.setCursor(12, 66);
@@ -100,7 +100,7 @@ void arsenal_deauth_detector(void) {
             drawMainBorderWithTitle("Deauth Detector");
             int y = 45;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, y);
             tft.printf("Deauth: %lu  Disassoc: %lu",
                        (unsigned long)dd_deauth_count, (unsigned long)dd_disassoc_count);

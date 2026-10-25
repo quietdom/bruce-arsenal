@@ -70,7 +70,7 @@ void arsenal_bt_device_profiler(void) {
 
     drawMainBorderWithTitle("BT Profiler");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.print("Scanning BLE devices...");
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
@@ -111,7 +111,7 @@ void arsenal_bt_device_profiler(void) {
         drawMainBorderWithTitle("BT Profiler");
         int y = 36;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("%d/%d: %s", i + 1, profiledCount, profiledDevices[i].name.c_str());
         y += 14;

@@ -55,7 +55,7 @@ void dnsSpoofer() {
     int y = 45;
 
     tft.setTextColor(TFT_CYAN, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, y);
     tft.printf("Spoofing to: %s", spoofIp.toString().c_str());
     y += 14;

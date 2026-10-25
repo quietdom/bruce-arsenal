@@ -163,7 +163,7 @@ void SRIXTool::display_banner() {
         case LOAD_MODE: printSubtitle("LOAD MODE"); break;
     }
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("");
 }
 
@@ -174,7 +174,7 @@ void SRIXTool::show_main_menu() {
     }
 
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     padprintln("SRIX Tool for SRIX4K/512 v1.3");
     padprintln("");
@@ -417,7 +417,7 @@ void SRIXTool::write_tag() {
         padprintln("Written: " + String(blocks_written) + "/128");
         padprintln("Failed: " + String(blocks_failed));
         padprintln("");
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
 
         // Over 10 failed block add "..."
         if (blocks_failed > 10) {
@@ -487,7 +487,7 @@ void SRIXTool::read_uid() {
     uid_line.toUpperCase();
     padprintln(uid_line); // Output: "0123 4567 89AB CDEF"
     padprintln("");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("");
 
     tft.setTextColor(getColorVariation(bruceConfig.priColor), bruceConfig.bgColor);
@@ -517,7 +517,7 @@ void SRIXTool::show_pn_info() {
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.setTextSize(FM);
     padprintln("PN532 Info:");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("");
 
     uint8_t chip = (ver >> 24) & 0xFF;
@@ -826,7 +826,7 @@ void SRIXTool::load_file_data(FS *fs, const String &filepath) {
     padprintln("");
     padprintln("Blocks: " + String(blocks_loaded));
     padprintln("");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     tft.setTextColor(getColorVariation(bruceConfig.priColor), bruceConfig.bgColor);
     padprintln("Press [OK] to open menu");

@@ -211,7 +211,7 @@ void Chameleon::displayBanner() {
         case HF_LOAD_MODE: printSubtitle("HF LOAD MODE"); break;
     }
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("");
     padprintln("Press [OK] to change mode.");
     padprintln("");

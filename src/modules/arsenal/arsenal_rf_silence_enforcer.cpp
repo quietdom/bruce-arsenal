@@ -35,7 +35,7 @@ void arsenal_rf_silence_enforcer(void) {
 
     drawMainBorderWithTitle("RF Silence");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.print("Monitoring RF activity...");
     tft.setCursor(12, 66);
@@ -54,7 +54,7 @@ void arsenal_rf_silence_enforcer(void) {
             tft.setTextColor(TFT_RED, bruceConfig.bgColor);
             tft.setTextSize(FM);
             tft.drawCentreString(String("RF DETECTED!"), tftWidth / 2, tftHeight / 2 - 20, 1);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.drawCentreString(String("Transmission detected!"), tftWidth / 2, tftHeight / 2 + 5, 1);
             tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
             tft.printf("Alerts: %d", alertCount);
@@ -67,7 +67,7 @@ void arsenal_rf_silence_enforcer(void) {
         drawMainBorderWithTitle("RF Silence");
         int y = 45;
         tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.print("STATUS: MONITORING");
         y += 14;

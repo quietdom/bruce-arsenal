@@ -1,7 +1,7 @@
 #include "scrollableTextArea.h"
 #define _scrollBuffer tft
 ScrollableTextArea::ScrollableTextArea(const String &title)
-    : firstVisibleLine{0}, _redraw{true}, _title(title), _fontSize(FP), _startX(BORDER_PAD_X),
+    : firstVisibleLine{0}, _redraw{true}, _title(title), _fontSize(FONTSZ), _startX(BORDER_PAD_X),
       _startY(BORDER_PAD_Y), _width(tftWidth - 2 * BORDER_PAD_X),
       _height(tftHeight - 4 - BORDER_PAD_X - BORDER_PAD_Y) {
     drawMainBorder();
@@ -185,7 +185,7 @@ void ScrollableTextArea::draw(bool force) {
     _scrollBuffer.fillRect(_startX, _startY, _width, _height, bruceConfig.bgColor);
     _scrollBuffer.setTextColor(bruceConfig.priColor);
     uint8_t _fSize = tft.getTextSize();
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     uint16_t yOffset = 0;
     size_t lines = 0;

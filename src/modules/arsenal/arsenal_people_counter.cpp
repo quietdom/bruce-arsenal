@@ -86,7 +86,7 @@ void arsenal_people_counter(void) {
         drawMainBorderWithTitle("People Counter");
         int y = 40;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("Active: %d", activeCount);
         y += 14;

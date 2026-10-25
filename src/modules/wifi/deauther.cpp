@@ -433,7 +433,7 @@ void stationDeauth(Host host, const uint8_t *apBssidIn) {
     buildOptimizedDeauthFrame(disassoc_sta_to_ap, apBSSID, targetMAC, apBSSID, 0x07, true);
 
     drawMainBorderWithTitle("Station Deauth");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("Target: " + host.mac);
     padprintln("AP: " + macToString(apBSSID));
     String bandStr = (band == 1) ? "5GHz" : (band == 2) ? "6GHz" : "2.4GHz";
@@ -710,7 +710,7 @@ void runDeauthAll(uint8_t *targetMAC, int channel) {
     }
 
     drawMainBorderWithTitle("Deauth All");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("Deauthing all clients...");
     String bandStr = (band == 1) ? "5GHz" : (band == 2) ? "6GHz" : "2.4GHz";
     padprintln("Channel: " + String(channel) + " (" + bandStr + ")");
@@ -905,7 +905,7 @@ void runDeauthTargetList(const std::vector<Host> &targets, uint8_t *targetMAC, i
     }
 
     drawMainBorderWithTitle("Deauth List");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("Deauthing " + String(targets.size()) + " targets...");
     String bandStr = (band == 1) ? "5GHz" : (band == 2) ? "6GHz" : "2.4GHz";
     padprintln("Channel: " + String(channel) + " (" + bandStr + ")");
@@ -1083,7 +1083,7 @@ void scanClientsOnAP(uint8_t *targetMAC, int channel) {
     bool wasConnected = savedState.was_connected;
 
     drawMainBorderWithTitle("Scanning Clients");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     padprintln("Scanning for clients on CH " + String(channel));
     padprintln("");
     padprintln("Press BACK to stop");

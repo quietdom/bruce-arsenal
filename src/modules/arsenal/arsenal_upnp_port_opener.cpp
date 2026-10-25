@@ -44,7 +44,7 @@ void arsenal_upnp_port_opener(void) {
 
     drawMainBorderWithTitle("UPnP Opener");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.print("Discovering UPnP devices...");
 
@@ -135,7 +135,7 @@ void arsenal_upnp_port_opener(void) {
 
     drawMainBorderWithTitle("UPnP Opener");
     tft.setTextColor(TFT_GREEN, bruceConfig.priColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.printf("Device: %s", dev.friendlyName);
     tft.setCursor(12, 66);

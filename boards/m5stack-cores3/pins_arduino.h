@@ -74,7 +74,7 @@ static const uint8_t ADC = 10;
 #define LED_OFF LOW
 
 // Font sizes
-#define FP 1
+#define FONTSZ 1
 #define FM 2
 #define FG 3
 

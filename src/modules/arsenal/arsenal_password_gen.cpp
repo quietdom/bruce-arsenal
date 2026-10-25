@@ -93,7 +93,7 @@ void arsenal_password_generator(void) {
 
         drawMainBorderWithTitle("Password Gen");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(8, 36);
         tft.printf("[%s] [%s]", lengthLabels[lengthIdx], modeLabels[mode]);
 
@@ -109,7 +109,7 @@ void arsenal_password_generator(void) {
         }
 
         tft.setTextColor(TFT_RED, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.drawCentreString(String("Sel=menu  Esc=exit"), tftWidth / 2, tftHeight - 10, 1);
 
         if (check(SelPress)) {

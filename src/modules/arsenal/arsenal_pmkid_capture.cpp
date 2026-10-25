@@ -149,7 +149,7 @@ void arsenal_pmkid_capture(void) {
 
     drawMainBorderWithTitle("PMKID Capture");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.print("Scanning for WPA2 networks...");
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
@@ -209,7 +209,7 @@ void arsenal_pmkid_capture(void) {
 
     drawMainBorderWithTitle("PMKID Capture");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 45);
     tft.printf("AP: %.20s", pmkidSsid);
     tft.setCursor(12, 61);

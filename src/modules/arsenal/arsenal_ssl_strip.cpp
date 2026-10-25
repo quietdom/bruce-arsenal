@@ -77,7 +77,7 @@ void arsenal_ssl_strip(void) {
 
     drawMainBorderWithTitle("SSL Strip");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.print("HTTP downgrade proxy active");
     tft.setCursor(12, 66);
@@ -89,7 +89,7 @@ void arsenal_ssl_strip(void) {
         drawMainBorderWithTitle("SSL Strip");
         int y = 45;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("Redirects: %d", redirected);
         y += 14;

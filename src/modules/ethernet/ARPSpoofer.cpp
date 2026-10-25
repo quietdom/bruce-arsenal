@@ -80,7 +80,7 @@ void ARPSpoofer::setup(const Host &host, IPAddress gateway) {
     padprintln("Single Target Attack.");
 
     if (mitm) {
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         // padprintln("Man in The middle Activated");
         // padprintln("/BrucePCAP/ARP_session_" + String(nf) + ".pcap");
         Serial.println("Still in development");

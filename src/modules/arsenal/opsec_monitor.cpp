@@ -148,7 +148,7 @@ void arsenal_opsec_monitor(void) {
             y += 30;
 
 
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
 
             tft.setCursor(padX, y);

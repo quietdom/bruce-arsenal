@@ -266,7 +266,7 @@ void boot_screen() {
     tft.setTextSize(FM);
     tft.drawPixel(0, 0, bruceConfig.bgColor);
     tft.drawCentreString("Bruce", tftWidth / 2, 10, 1);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.drawCentreString(BRUCE_VERSION, tftWidth / 2, 25, 1);
     tft.setTextSize(FM);
     tft.drawCentreString(

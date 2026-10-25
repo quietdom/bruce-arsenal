@@ -824,21 +824,21 @@ void key_input(FS fs, const String &bad_script, HIDInterface *_hid) {
     printHeaderBadUSBBLE(bad_script);
     printStatusBadUSBBLE("Running");
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor);
-    tft.setCursor(BORDER_OFFSET_FROM_SCREEN_EDGE * 2, FP * 8 * 3 + 2 + STATUS_BAR_HEIGHT);
+    tft.setCursor(BORDER_OFFSET_FROM_SCREEN_EDGE * 2, FONTSZ * 8 * 3 + 2 + STATUS_BAR_HEIGHT);
     tft.print("Run Time:");
     printDecimalTime(0);
 
     tft.drawLine(
         BORDER_OFFSET_FROM_SCREEN_EDGE,
-        tftHeight / 2 - FP * 4 - 2,
+        tftHeight / 2 - FONTSZ * 4 - 2,
         tftWidth - BORDER_OFFSET_FROM_SCREEN_EDGE,
-        tftHeight / 2 - FP * 4 - 2,
+        tftHeight / 2 - FONTSZ * 4 - 2,
         bruceConfig.priColor
     );
     if (!bruceConfig.badUSBBLEShowOutput) {
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setTextColor(TFT_RED);
         tft.setCursor(BORDER_OFFSET_FROM_SCREEN_EDGE * 2, tftHeight / 2);
         tft.print("Script output disabled");
@@ -967,7 +967,7 @@ void key_input(FS fs, const String &bad_script, HIDInterface *_hid) {
     printStatusBadUSBBLE("Finished");
 
 EXIT:
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     payloadFile.close();
     _hid->releaseAll();
 }
@@ -1019,18 +1019,18 @@ void ducky_keyboard(HIDInterface *&hid, bool ble) {
     }
 
     drawMainBorder();
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor);
     tft.drawString("Keyboard Started", tftWidth / 2, tftHeight / 2);
 
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     drawMainBorder();
     tft.setCursor(10, 28);
     if (ble) tft.println("BLE Keyboard:");
     else tft.println("USB Keyboard:");
     tft.drawCentreString("> " + String(KB_HID_EXIT_MSG) + " <", tftWidth / 2, tftHeight - 20, 1);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     while (1) {
 #if defined(HAS_KEYBOARD)
@@ -1281,13 +1281,13 @@ void printTextAtPosition(uint16_t xOffset, uint16_t yOffset, const String &text)
     uint16_t currentTextCursorX = tft.getCursorX();
     uint16_t currentTextCursorY = tft.getCursorY();
 
-    uint16_t x = FP * 6 * xOffset + 2 + BORDER_OFFSET_FROM_SCREEN_EDGE;
-    uint16_t y = FP * 8 * yOffset + 2 + STATUS_BAR_HEIGHT;
+    uint16_t x = FONTSZ * 6 * xOffset + 2 + BORDER_OFFSET_FROM_SCREEN_EDGE;
+    uint16_t y = FONTSZ * 8 * yOffset + 2 + STATUS_BAR_HEIGHT;
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.secColor);
     tft.setCursor(x, y);
-    tft.fillRect(x, y, tftWidth - x - BORDER_OFFSET_FROM_SCREEN_EDGE * 2, FP * 8, bruceConfig.bgColor);
+    tft.fillRect(x, y, tftWidth - x - BORDER_OFFSET_FROM_SCREEN_EDGE * 2, FONTSZ * 8, bruceConfig.bgColor);
     tft.print(text);
     tft.setCursor(currentTextCursorX, currentTextCursorY);
 }
@@ -1300,16 +1300,16 @@ void printHeaderBadUSBBLE(const String &bad_script) {
     tft.fillScreen(bruceConfig.bgColor);
     drawMainBorder();
 
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor);
-    tft.drawCentreString("BadUSB/BLE", tftWidth / 2, FP + STATUS_BAR_HEIGHT);
+    tft.drawCentreString("BadUSB/BLE", tftWidth / 2, FONTSZ + STATUS_BAR_HEIGHT);
 
-    tft.setCursor(BORDER_OFFSET_FROM_SCREEN_EDGE * 2, FP * 8 * 1 + 2 + STATUS_BAR_HEIGHT);
+    tft.setCursor(BORDER_OFFSET_FROM_SCREEN_EDGE * 2, FONTSZ * 8 * 1 + 2 + STATUS_BAR_HEIGHT);
     tft.print("Script: ");
     tft.setTextColor(bruceConfig.secColor);
     tft.print(bad_script.substring(bad_script.lastIndexOf("/") + 1));
 
-    tft.setCursor(BORDER_OFFSET_FROM_SCREEN_EDGE * 2, FP * 8 * 2 + 2 + STATUS_BAR_HEIGHT);
+    tft.setCursor(BORDER_OFFSET_FROM_SCREEN_EDGE * 2, FONTSZ * 8 * 2 + 2 + STATUS_BAR_HEIGHT);
     tft.setTextColor(bruceConfig.priColor);
     tft.println("Status:");
 }
@@ -1339,9 +1339,9 @@ void printTFTBadUSBBLE(const String &text, uint16_t color, bool newline) {
 
     tft.setCursor(cursorX, currentOutputY);
     tft.setTextColor(color);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
-    int charWidth = 6 * FP;
+    int charWidth = 6 * FONTSZ;
     int availableWidth = rightLimit - cursorX;
     int maxChars = availableWidth / charWidth;
 

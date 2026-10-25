@@ -626,7 +626,7 @@ void arsenal_remote_dashboard(void) {
     int currentY = 45;
 
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     tft.setCursor(padX, currentY);
     tft.print("Net: " + String(AP_SSID));

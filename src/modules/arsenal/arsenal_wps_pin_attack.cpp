@@ -26,7 +26,7 @@ void arsenal_wps_pin_attack(void) {
 
     drawMainBorderWithTitle("WPS PIN Reference");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.print("Scanning for WPS...");
     tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
@@ -81,7 +81,7 @@ void arsenal_wps_pin_attack(void) {
     drawMainBorderWithTitle("WPS PIN Reference");
     int y = 36;
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, y);
     tft.printf("Target: %s", tgt.ssid.c_str());
     y += 14;

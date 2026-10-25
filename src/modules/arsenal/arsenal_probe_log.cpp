@@ -137,7 +137,7 @@ void arsenal_wifi_probe_log(void) {
 
         drawMainBorderWithTitle("Probe Log");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(8, 38);
         tft.printf("Logging: %s", probeLogActive ? "ON" : "OFF");
         tft.setCursor(8, 52);

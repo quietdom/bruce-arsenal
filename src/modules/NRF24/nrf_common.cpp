@@ -12,7 +12,7 @@ void nrf_info() {
     tft.setTextColor(TFT_RED, bruceConfig.bgColor);
     tft.drawCentreString("_Disclaimer_", tftWidth / 2, 10, 1);
     tft.setTextColor(TFT_WHITE, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(15, 33);
     padprintln("These functions were made to be used in a controlled environment for STUDY only.");
     padprintln("");

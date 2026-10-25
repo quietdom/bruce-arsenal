@@ -761,7 +761,7 @@ static void destroyActivePortal() {
 void forceFullRedraw() {
     tft.fillScreen(bruceConfig.bgColor);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
 
     tft.setCursor(0, 0);
     tft.fillRect(0, 0, tftWidth, tftHeight, bruceConfig.bgColor);
@@ -2634,7 +2634,7 @@ void karma_setup() {
 
     forceFullRedraw();
     drawMainBorderWithTitle("ENHANCED KARMA ATK");
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     padprintln("Saved to " + FileSys);
     padprintln("Modern Karma Started");
@@ -3289,7 +3289,7 @@ void karma_setup() {
 
             forceFullRedraw();
             drawMainBorderWithTitle("ENHANCED KARMA ATK");
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
             padprintln("Saved to " + FileSys);
             if (templateSelected) padprintln("Template: " + selectedTemplate.name);

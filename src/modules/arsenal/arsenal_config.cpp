@@ -108,7 +108,7 @@ bool arsenal_pin_check(void) {
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.setTextSize(FM);
     tft.drawCentreString(String("Enter 4-digit PIN"), tftWidth / 2, 60, 1);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.drawCentreString(String("Sel=next  Esc=cancel"), tftWidth / 2, 80, 1);
 
     int digitY = 110;
@@ -388,7 +388,7 @@ void arsenal_attack_stats(void) {
 
         drawMainBorderWithTitle("Attack Stats");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
 
         int y = 38;
         int lineH = 16;

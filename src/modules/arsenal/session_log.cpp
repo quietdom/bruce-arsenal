@@ -107,7 +107,7 @@ void arsenal_session_log_menu(void) {
                         if (f) {
                             drawMainBorderWithTitle("Log Viewer");
                             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-                            tft.setTextSize(FP);
+                            tft.setTextSize(FONTSZ);
                             int y = 35;
                             int lines = 0;
                             while (f.available() && lines < 10) {

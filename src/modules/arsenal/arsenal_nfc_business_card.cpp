@@ -43,7 +43,7 @@ void arsenal_nfc_business_card(void) {
     drawMainBorderWithTitle("NFC Biz Card");
     int y = 40;
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, y);
     tft.print("NFC tag emulation");
     y += 14;
@@ -65,7 +65,7 @@ void arsenal_nfc_business_card(void) {
             while (check(SelPress)) delay(10);
             drawMainBorderWithTitle("NFC Biz Card");
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, 45);
             tft.print("Enter URL on serial:");
             tft.setCursor(12, 60);
@@ -97,7 +97,7 @@ void arsenal_nfc_business_card(void) {
             drawMainBorderWithTitle("NFC Biz Card");
             y = 40;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, y);
             tft.printf("URL: %s", String(nfcURL).substring(0, 24).c_str());
             y += 14;

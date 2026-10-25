@@ -35,7 +35,7 @@ void arsenal_time_based_randomizer(void) {
         drawMainBorderWithTitle("Timing Info");
         int y = 45;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("Evasion: %s", g_arsenalEvasionActive ? "ON" : "OFF");
         y += 14;

@@ -26,7 +26,7 @@ static void sendFileViaIR(const String &path) {
 
     drawMainBorderWithTitle("IR Transfer");
     tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.printf("Sending: %s", path.substring(path.lastIndexOf('/') + 1).c_str());
     tft.setCursor(12, 66);
@@ -83,7 +83,7 @@ static void sendFileViaIR(const String &path) {
             drawMainBorderWithTitle("IR Transfer");
             int y = 45;
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, y);
             tft.printf("Sent: %d / %d", (int)sent, (int)fileSize);
             y += 14;
@@ -106,7 +106,7 @@ static void sendFileViaIR(const String &path) {
 
     drawMainBorderWithTitle("IR Transfer");
     tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.printf("Transfer complete!");
     tft.setCursor(12, 66);

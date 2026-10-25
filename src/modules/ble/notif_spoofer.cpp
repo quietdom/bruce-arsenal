@@ -212,7 +212,7 @@ void notifSpoofer() {
             int padX = 12;
 
             tft.setTextColor(TFT_MAGENTA, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(padX, y);
             tft.print("SPAMMING NOTIFICATIONS");
             y += 16;

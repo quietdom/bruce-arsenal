@@ -60,7 +60,7 @@ void arsenal_ap_clone_flood(void) {
 
     drawMainBorderWithTitle("AP Clone Flood");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.printf("SSID: %s", targetSSID.c_str());
     tft.setCursor(12, 66);
@@ -102,7 +102,7 @@ void arsenal_ap_clone_flood(void) {
         drawMainBorderWithTitle("AP Clone Flood");
         int y = 45;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("SSID: %s", targetSSID.c_str());
         y += 14;

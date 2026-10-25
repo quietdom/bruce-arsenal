@@ -18,7 +18,7 @@ void arsenal_garage_brute_force(void) {
     }
     drawMainBorderWithTitle("Garage Brute");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 45);
     tft.print("12-bit garage brute force");
     tft.setCursor(12, 60);

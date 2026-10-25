@@ -65,7 +65,7 @@ void arsenal_dead_drop_mesh(void) {
         drawMainBorderWithTitle("Dead Drop");
         int y = 38;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, y);
         tft.printf("Messages: %d", dropCount);
         y += 14;
@@ -88,7 +88,7 @@ void arsenal_dead_drop_mesh(void) {
         }
         drawMainBorderWithTitle("Write Drop");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, 50);
         tft.print("Type on serial:");
         tft.setCursor(12, 66);

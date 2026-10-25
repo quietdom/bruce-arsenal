@@ -23,7 +23,7 @@ void arsenal_doorbell_replay(void) {
 
     drawMainBorderWithTitle("Doorbell Replay");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 45);
     tft.print("Listening on 433.92MHz...");
     tft.setCursor(12, 60);
@@ -55,7 +55,7 @@ void arsenal_doorbell_replay(void) {
                 gotSignal = true;
                 drawMainBorderWithTitle("Doorbell Replay");
                 tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-                tft.setTextSize(FP);
+                tft.setTextSize(FONTSZ);
                 tft.setCursor(12, 50);
                 tft.printf("Signal! Code: %08lX", (unsigned long)val);
                 tft.setCursor(12, 66);

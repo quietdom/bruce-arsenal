@@ -43,7 +43,7 @@ void arsenal_qr_poisoner(void) {
 
         drawMainBorderWithTitle("QR Poisoner");
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.setCursor(12, tftHeight - 30);
         tft.print(url.substring(0, 28));
         tft.drawCentreString(String("Esc to exit"), tftWidth / 2, tftHeight - 16, 1);
@@ -56,7 +56,7 @@ void arsenal_qr_poisoner(void) {
 
         tft.fillRect(qrX, qrY, qrSize, qrSize, TFT_WHITE);
         tft.setTextColor(TFT_BLACK, TFT_WHITE);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         tft.drawCentreString(String("QR CODE"), tftWidth / 2, qrY + qrSize / 2 - 10, 1);
         tft.drawCentreString(url.substring(0, 20), tftWidth / 2, qrY + qrSize / 2 + 5, 1);
 

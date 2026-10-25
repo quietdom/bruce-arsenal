@@ -33,7 +33,7 @@ RFJamMode RFJammer::showModeMenu(bool defaultFull) {
 
         if (redraw) {
             drawMainBorderWithTitle("RF JAMMER MODE");
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
 
             int y = BORDER_PAD_Y + FM * LH + 4;
             int lineH = max(14, tftHeight / (modeCount + 4));
@@ -61,8 +61,8 @@ RFJamMode RFJammer::showModeMenu(bool defaultFull) {
             tft.drawCentreString(descs[menuIdx], tftWidth / 2, descY + 2, 1);
 
             // Footer
-            int footerY = tftHeight - BORDER_PAD_X - FP * LH - 2;
-            tft.fillRect(7, footerY, tftWidth - 14, FP * LH, bruceConfig.bgColor);
+            int footerY = tftHeight - BORDER_PAD_X - FONTSZ * LH - 2;
+            tft.fillRect(7, footerY, tftWidth - 14, FONTSZ * LH, bruceConfig.bgColor);
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
             tft.drawCentreString("[OK]Select [ESC]Back", tftWidth / 2, footerY, 1);
 
@@ -120,7 +120,7 @@ void RFJammer::display_banner() {
 
     int y = BORDER_PAD_Y + FM * LH + 4;
     int lineH = max(14, tftHeight / 10);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     char buf[40];
     uint16_t accent = getComplementaryColor2(bruceConfig.priColor);
 
@@ -165,7 +165,7 @@ void RFJammer::display_banner() {
     tft.drawString("JAMMING ACTIVE", tftWidth / 2 - 38, y + 2, 1);
 
     // Footer
-    int footerY = tftHeight - BORDER_PAD_X - FP * LH - 2;
+    int footerY = tftHeight - BORDER_PAD_X - FONTSZ * LH - 2;
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
     tft.drawCentreString("[ESC] Stop", tftWidth / 2, footerY, 1);
 }
@@ -183,7 +183,7 @@ void RFJammer::update_display(uint32_t elapsedMs) {
 
     // Update timer + stats
     tft.fillRect(7, y, tftWidth - 14, lineH, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setTextColor(accent, bruceConfig.bgColor);
     char buf[30];
     snprintf(buf, sizeof(buf), "%02lu:%02lu", mins, secs);
@@ -367,7 +367,7 @@ void RFJammer::run_noise_jammer() {
     tft.fillRect(7, y, tftWidth - 14, lineH, bruceConfig.bgColor);
     tft.fillCircle(tftWidth / 2 - 50, y + lineH / 2, 4, accent);
     tft.setTextColor(accent, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.drawString("PN9 HW NOISE TX", tftWidth / 2 - 38, y + 2, 1);
 
     uint8_t modCycle = 0;
@@ -390,7 +390,7 @@ void RFJammer::run_noise_jammer() {
             tft.fillRect(7, modY, tftWidth - 14, max(14, tftHeight / 10), bruceConfig.bgColor);
             tft.fillCircle(tftWidth / 2 - 50, modY + max(14, tftHeight / 10) / 2, 4, accent);
             tft.setTextColor(accent, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             char modBuf[30];
             snprintf(modBuf, sizeof(modBuf), "PN9 %s TX", modNames[modCycle]);
             tft.drawString(modBuf, tftWidth / 2 - 38, modY + 2, 1);
@@ -491,7 +491,7 @@ void RFJammer::run_sweep_jammer() {
             int lineH = max(14, tftHeight / 10);
             y += lineH; // Freq line
             tft.fillRect(7, y, tftWidth - 14, lineH, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
             char buf[30];
             snprintf(buf, sizeof(buf), "%.2f MHz", currentFreq);

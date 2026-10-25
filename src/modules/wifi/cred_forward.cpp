@@ -127,7 +127,7 @@ void credForward() {
 
     drawMainBorderWithTitle("Cred Forward");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.drawCentreString(String("Scanning networks..."), tftWidth / 2, tftHeight / 2, 1);
 
     WiFi.mode(WIFI_STA);
@@ -175,7 +175,7 @@ void credForward() {
 
         if (!credsCaptured) {
             tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(padX, y);
             tft.print("Waiting for creds...");
             y += 16;
@@ -193,7 +193,7 @@ void credForward() {
             tft.printf("Elapsed: %lus", elapsed);
         } else if (!bridgeActive) {
             tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(padX, y);
             tft.print("PASSWORD CAPTURED!");
             y += 16;
@@ -219,7 +219,7 @@ void credForward() {
             }
         } else {
             tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(padX, y);
             tft.print("BRIDGE ACTIVE - MITM!");
             y += 16;

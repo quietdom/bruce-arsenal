@@ -170,7 +170,7 @@ void arsenal_device_fingerprinter(void) {
             int padX = 8;
 
             tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
 
             unsigned long elapsed = (millis() - startTime) / 1000;
             tft.setCursor(padX, y);
@@ -219,7 +219,7 @@ void arsenal_device_fingerprinter(void) {
                         drawMainBorderWithTitle("Device Details");
                         int dy = 40;
                         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-                        tft.setTextSize(FP);
+                        tft.setTextSize(FONTSZ);
                         tft.setCursor(8, dy); tft.print("MAC: " + macStr(d.mac)); dy += 14;
                         tft.setCursor(8, dy); tft.print("OS: " + d.osGuess); dy += 14;
                         tft.setCursor(8, dy); tft.print("Vendor: " + d.vendor.substring(0, 20)); dy += 14;

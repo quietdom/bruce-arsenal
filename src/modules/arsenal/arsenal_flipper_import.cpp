@@ -140,7 +140,7 @@ void arsenal_flipper_import(void) {
 
     drawMainBorderWithTitle("Flipper Import");
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, 50);
     tft.print("Loading .sub file...");
 
@@ -153,7 +153,7 @@ void arsenal_flipper_import(void) {
     drawMainBorderWithTitle("Flipper Import");
     int y = 40;
     tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.setCursor(12, y);
     tft.printf("File: %s", selectedPath.substring(selectedPath.lastIndexOf('/') + 1).c_str());
     y += 14;
@@ -173,7 +173,7 @@ void arsenal_flipper_import(void) {
         if (initRfModule("tx", 433.92)) {
             drawMainBorderWithTitle("Flipper Import");
             tft.setTextColor(TFT_GREEN, bruceConfig.bgColor);
-            tft.setTextSize(FP);
+            tft.setTextSize(FONTSZ);
             tft.setCursor(12, 50);
             tft.print("Replaying...");
             tft.setTextColor(TFT_YELLOW, bruceConfig.bgColor);

@@ -56,7 +56,7 @@ String scanChannels(bool web) {
 
 void nrf_spectrum() {
     tft.fillScreen(bruceConfig.bgColor);
-    tft.setTextSize(FP);
+    tft.setTextSize(FONTSZ);
     tft.drawString("2.40Ghz", 0, tftHeight - LH);
     tft.drawCentreString("2.44Ghz", tftWidth / 2, tftHeight - LH, 1);
     tft.drawRightString("2.48Ghz", tftWidth, tftHeight - LH, 1);

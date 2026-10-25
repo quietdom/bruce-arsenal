@@ -79,7 +79,7 @@ void arsenal_flipper_detector(void) {
         drawMainBorderWithTitle("Flipper Detector");
         int y = 40;
         tft.setTextColor(bruceConfig.priColor, bruceConfig.bgColor);
-        tft.setTextSize(FP);
+        tft.setTextSize(FONTSZ);
         unsigned long elapsed = (millis() - startTime) / 1000;
         tft.setCursor(12, y);
         tft.printf("Scanning... %lus", elapsed);

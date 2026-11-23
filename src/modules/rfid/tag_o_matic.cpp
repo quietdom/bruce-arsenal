@@ -882,8 +882,8 @@ int TagOMatic::load_file_headless(const String &filename) {
         if (line.startsWith("Device type:")) {
             _rfid->printableUID.picc_type = line.substring(12);
             _rfid->printableUID.picc_type.trim();
-            _rfid->printableUID.picc_type.replace("\r", ""); // ← Remove \r Windows
-            _rfid->printableUID.picc_type.replace("\n", ""); // ← Remove \n
+            _rfid->printableUID.picc_type.replace("\r", ""); // â† Remove \r Windows
+            _rfid->printableUID.picc_type.replace("\n", ""); // â† Remove \n
 
         } else if (line.startsWith("UID:")) {
             _rfid->printableUID.uid = line.substring(5);

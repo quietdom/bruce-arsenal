@@ -16,7 +16,7 @@ void ReverseShell() {
     bool shellConnected = false;
     bool wsConnected = false;
 
-    // ── WebSocket Event Handler ────────────────────────────────
+    // â”€â”€ WebSocket Event Handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     auto onWsEvent = [&](AsyncWebSocket *server,
                          AsyncWebSocketClient *client,
                          AwsEventType type,
@@ -70,7 +70,7 @@ void ReverseShell() {
         }
     };
 
-    // ── Setup ──────────────────────────────────────────────────
+    // â”€â”€ Setup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     tft.fillScreen(bruceConfig.bgColor);
     tft.setTextSize(FM);
     tft.setTextColor(TFT_RED, bruceConfig.bgColor);
@@ -87,7 +87,7 @@ void ReverseShell() {
         return;
     }
 
-    // ── AP Password: bruce ─────────────────────────────────────
+    // â”€â”€ AP Password: bruce â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if (!WiFi.softAP("BruceShell", "bruce")) {
         tft.println("Failed to start AP");
         return;
@@ -99,7 +99,7 @@ void ReverseShell() {
     tcpServer.begin();
     tft.println("TCP server started on port 23.");
 
-    // ── Web Interface ──────────────────────────────────────────
+    // â”€â”€ Web Interface â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     ws.onEvent(onWsEvent);
     webServer.addHandler(&ws);
 
@@ -124,7 +124,7 @@ void ReverseShell() {
             </head>
             <body>
                 <div class="container">
-                    <h1>🔴 BruceShell <span id="statusDot" class="status offline"></span> <span id="statusText">Offline</span></h1>
+                    <h1>ðŸ”´ BruceShell <span id="statusDot" class="status offline"></span> <span id="statusText">Offline</span></h1>
                     <p>IP: 192.168.4.1 | Port: 23</p>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <input type="text" id="cmd" placeholder="Enter command..." onkeyup="if(event.keyCode==13) sendCommand();" autofocus>
@@ -172,7 +172,7 @@ void ReverseShell() {
 
     dnsServer.start(53, "*", apGateway);
 
-    // ── Main Loop ──────────────────────────────────────────────
+    // â”€â”€ Main Loop â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     while (true) {
         dnsServer.processNextRequest();
         ws.cleanupClients();

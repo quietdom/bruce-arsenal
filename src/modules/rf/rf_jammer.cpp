@@ -19,7 +19,7 @@ RFJammer::RFJammer(bool full) {
 
 RFJammer::~RFJammer() { deinitRfModule(); }
 
-// ── Mode selection menu ─────────────────────────────────────────
+// â”€â”€ Mode selection menu â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 RFJamMode RFJammer::showModeMenu(bool defaultFull) {
     isCC1101 = (bruceConfigPins.rfModule == CC1101_SPI_MODULE);
 
@@ -202,7 +202,7 @@ void RFJammer::update_display(uint32_t elapsedMs) {
     tft.fillCircle(tftWidth / 2 - 50, y + lineH / 2, 4, dotOn ? accent : bruceConfig.bgColor);
 }
 
-// ── FULL POWER: Maximum duty cycle continuous TX ────────────────
+// â”€â”€ FULL POWER: Maximum duty cycle continuous TX â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Aggressive multi-pattern approach: alternates between sustained carrier,
 // rapid micro-glitches, and burst disruption patterns for maximum spectral
 // pollution across the widest bandwidth possible.
@@ -222,7 +222,7 @@ void RFJammer::run_full_jammer() {
 
         switch (phase) {
             case 0:
-                // Phase A: Ultra-rapid micro-glitches (1µs LOW every 4µs)
+                // Phase A: Ultra-rapid micro-glitches (1Âµs LOW every 4Âµs)
                 for (int i = 0; i < 100 && sendRF; i++) {
                     digitalWrite(nTransmitterPin, HIGH);
                     delayMicroseconds(3);
@@ -232,7 +232,7 @@ void RFJammer::run_full_jammer() {
                 }
                 break;
             case 1:
-                // Phase B: Variable-width burst disruption (2-20µs pulses)
+                // Phase B: Variable-width burst disruption (2-20Âµs pulses)
                 for (int i = 0; i < 50 && sendRF; i++) {
                     uint32_t w = 2 + (micros() % 18);
                     digitalWrite(nTransmitterPin, HIGH);
@@ -273,7 +273,7 @@ void RFJammer::run_full_jammer() {
     digitalWrite(nTransmitterPin, LOW);
 }
 
-// ── INTERMITTENT: Varied pulse patterns + bursts ────────────────
+// â”€â”€ INTERMITTENT: Varied pulse patterns + bursts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 void RFJammer::run_itmt_jammer() {
     uint32_t startTime = millis();
     uint32_t lastCheckTime = startTime;
@@ -283,7 +283,7 @@ void RFJammer::run_itmt_jammer() {
     for (uint32_t i = 0; i < MAX_SEQUENCE; i++) { sequenceValues[i] = 10 * (i + 1); }
 
     while (sendRF) {
-        // Forward sweep: 10µs → 500µs
+        // Forward sweep: 10Âµs â†’ 500Âµs
         for (uint32_t sequence = 0; sequence < MAX_SEQUENCE && sendRF; sequence++) {
             uint32_t pulseWidth = sequenceValues[sequence];
 
@@ -308,7 +308,7 @@ void RFJammer::run_itmt_jammer() {
             }
         }
 
-        // Reverse sweep: 500µs → 10µs for chirp effect
+        // Reverse sweep: 500Âµs â†’ 10Âµs for chirp effect
         for (int sequence = MAX_SEQUENCE - 1; sequence >= 0 && sendRF; sequence--) {
             send_optimized_pulse(sequenceValues[sequence]);
             pulseCount++;
@@ -339,14 +339,14 @@ void RFJammer::run_itmt_jammer() {
     digitalWrite(nTransmitterPin, LOW);
 }
 
-// ── NOISE STORM: CC1101 PN9 hardware random TX ─────────────────
+// â”€â”€ NOISE STORM: CC1101 PN9 hardware random TX â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Uses CC1101's internal PN9 pseudo-random generator to transmit
 // continuous modulated noise at maximum bandwidth. Cycles between
-// modulation schemes (ASK→2FSK→MSK) for wideband spectral coverage.
+// modulation schemes (ASKâ†’2FSKâ†’MSK) for wideband spectral coverage.
 void RFJammer::run_noise_jammer() {
     if (!isCC1101) return;
 
-    // Switch CC1101 to PN9 random TX mode — maximum aggression
+    // Switch CC1101 to PN9 random TX mode â€” maximum aggression
     ELECHOUSE_cc1101.setSidle();
     ELECHOUSE_cc1101.setPktFormat(2);    // PN9 random TX mode
     ELECHOUSE_cc1101.setDRate(800);      // Push data rate higher for wider occupied BW
@@ -418,8 +418,8 @@ void RFJammer::run_noise_jammer() {
     ELECHOUSE_cc1101.setPktFormat(3); // Restore async serial mode
 }
 
-// ── FREQ SWEEP: Hop around target frequency ─────────────────────
-// Sweeps ±5MHz around the configured frequency in 50kHz steps.
+// â”€â”€ FREQ SWEEP: Hop around target frequency â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Sweeps Â±5MHz around the configured frequency in 50kHz steps.
 // Alternates sweep direction each pass for maximum coverage.
 // TX burst at each step creates wideband interference.
 void RFJammer::run_sweep_jammer() {
@@ -447,7 +447,7 @@ void RFJammer::run_sweep_jammer() {
         // Sweep frequency
         ELECHOUSE_cc1101.setMHZ(currentFreq);
 
-        // TX burst at each frequency — 40 pulses with tight timing
+        // TX burst at each frequency â€” 40 pulses with tight timing
         for (int burst = 0; burst < 40 && sendRF; burst++) {
             digitalWrite(nTransmitterPin, HIGH);
             delayMicroseconds(30);
@@ -509,7 +509,7 @@ void RFJammer::run_sweep_jammer() {
 }
 
 void RFJammer::send_optimized_pulse(int width) {
-    // Aggressive HIGH phase: rapid micro-interruptions every 6µs
+    // Aggressive HIGH phase: rapid micro-interruptions every 6Âµs
     // creates wideband harmonic content around center frequency
     for (uint32_t i = 0; i < (uint32_t)width; i += 6) {
         digitalWrite(nTransmitterPin, HIGH);
@@ -522,7 +522,7 @@ void RFJammer::send_optimized_pulse(int width) {
     delayMicroseconds(width / 3); // Extra sustained tail
     digitalWrite(nTransmitterPin, LOW);
 
-    // Minimal dead time — maximize duty cycle
+    // Minimal dead time â€” maximize duty cycle
     uint32_t lowPeriod = width / 4;
     if (lowPeriod > 0) delayMicroseconds(lowPeriod);
 }
@@ -539,7 +539,7 @@ void RFJammer::send_random_pattern(int numPulses) {
 
         digitalWrite(nTransmitterPin, LOW);
 
-        // Minimal dead time: 1-8µs for near-max duty cycle
+        // Minimal dead time: 1-8Âµs for near-max duty cycle
         uint32_t spaceWidth = 1 + (micros() % 8);
         delayMicroseconds(spaceWidth);
 

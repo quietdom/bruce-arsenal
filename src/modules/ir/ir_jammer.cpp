@@ -631,7 +631,7 @@ void performRandomJamming(JammerState &state, IRsend &irsend) {
     if (currentMillis - state.last_update > 100) {
         // Generate new random pattern for each transmission
         for (int i = 0; i < 30; i++) {
-            state.randomPattern[i] = random(5, 1000); // Random durations between 5-1000µs
+            state.randomPattern[i] = random(5, 1000); // Random durations between 5-1000Âµs
         }
 
         // Send multiple random patterns based on jam density

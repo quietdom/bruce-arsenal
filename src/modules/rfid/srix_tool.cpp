@@ -341,7 +341,7 @@ void SRIXTool::write_tag() {
         return;
     }
 #ifdef SRIX_DEBUG_WRITE_SIMULATION
-    // ✅ DEBUG MODE
+    // âœ… DEBUG MODE
     display_banner();
     tft.setTextSize(FM);
     padprintln("DEBUG MODE ACTIVE");
@@ -401,14 +401,14 @@ void SRIXTool::write_tag() {
         block[3] = _dump[off + 3];
 
         if (!nfc->SRIX_write_block(b, block)) {
-            SRIX_LOG("[WriteBlock_GUI] ❌ WRITE BLOCK FAILED");
+            SRIX_LOG("[WriteBlock_GUI] âŒ WRITE BLOCK FAILED");
             blocks_failed++;
             if (blocks_failed <= 10) { // Max 10 block for report
                 if (failed_blocks.length() > 0) failed_blocks += ",";
                 failed_blocks += String(b);
             }
         } else {
-            SRIX_LOG("[WriteBlock_GUI] ✅ WRITE BLOCK: %u", blocks_written);
+            SRIX_LOG("[WriteBlock_GUI] âœ… WRITE BLOCK: %u", blocks_written);
             blocks_written++;
             delay(SRIX_EEPROM_WRITE_DELAY_MS); // Delay for write
             waitForTagHeadless(600);
@@ -892,10 +892,10 @@ SRIXTool::SRIXTool(bool headless_mode) {
             nfc->SRIX_init();
             SRIX_LOG("[SRIX] Ready.");
         } else {
-            SRIX_LOG("[SRIX] ❌ Init FAILED! (Check wiring)");
+            SRIX_LOG("[SRIX] âŒ Init FAILED! (Check wiring)");
         }
     } else {
-        SRIX_LOG("[SRIX] ❌ Failed to create NFC object (Out of memory?)");
+        SRIX_LOG("[SRIX] âŒ Failed to create NFC object (Out of memory?)");
     }
 }
 
@@ -911,7 +911,7 @@ bool SRIXTool::waitForTagHeadless(uint32_t timeout_ms) {
 
         // Init_select
         if (nfc->SRIX_initiate_select()) {
-            SRIX_LOG("[WaitHeadless] ✅ Tag detected!");
+            SRIX_LOG("[WaitHeadless] âœ… Tag detected!");
             return true;
         }
 
@@ -919,7 +919,7 @@ bool SRIXTool::waitForTagHeadless(uint32_t timeout_ms) {
         delay(100);
     }
 
-    SRIX_LOG("[WaitHeadless] ❌ Timeout. No tag found.");
+    SRIX_LOG("[WaitHeadless] âŒ Timeout. No tag found.");
     return false;
 }
 
@@ -1001,22 +1001,22 @@ String SRIXTool::read_tag_headless(int timeout_seconds) {
 int SRIXTool::write_tag_headless(int timeout_seconds) {
 
     if (!nfc) {
-        SRIX_LOG("[WriteTag_Headless] ❌ NFC object is NULL");
+        SRIX_LOG("[WriteTag_Headless] âŒ NFC object is NULL");
         return -6;
     }
 
     if (!_dump_valid_from_read && !_dump_valid_from_load) {
-        SRIX_LOG("[WriteTag_Headless] ❌ No dump loaded in memory");
+        SRIX_LOG("[WriteTag_Headless] âŒ No dump loaded in memory");
         return -2;
     }
 
     // Wait tag headless mode
     if (!waitForTagHeadless((uint32_t)timeout_seconds * 1000UL)) {
-        SRIX_LOG("[WriteTag_Headless] ❌ Timeout waiting for tag");
+        SRIX_LOG("[WriteTag_Headless] âŒ Timeout waiting for tag");
         return -1;
     }
 
-    SRIX_LOG("[WriteTag_Headless] ✅ Tag detected, starting write");
+    SRIX_LOG("[WriteTag_Headless] âœ… Tag detected, starting write");
 
     uint8_t block[4];
     uint8_t readCheck[4];
@@ -1035,26 +1035,26 @@ int SRIXTool::write_tag_headless(int timeout_seconds) {
 
         // WRITE (critical)
         if (!nfc->SRIX_write_block(b, block)) {
-            SRIX_LOG("[WriteTag_Headless] ❌ WRITE FAILED at block %u", b);
+            SRIX_LOG("[WriteTag_Headless] âŒ WRITE FAILED at block %u", b);
             return -5; // Error
         }
 
         blocks_written++;
         delay(SRIX_EEPROM_WRITE_DELAY_MS);
-        SRIX_LOG("[WriteTag_Headless] ✅ WRITE BLOCK: %u", blocks_written);
+        SRIX_LOG("[WriteTag_Headless] âœ… WRITE BLOCK: %u", blocks_written);
 
         // VERIFY (best-effort)
         if (nfc->SRIX_read_block(b, readCheck)) {
             if (memcmp(block, readCheck, 4) == 0) { blocks_verified++; }
         }
         if (!waitForTagHeadless(600)) {
-            SRIX_LOG("[WriteTag_Headless] ❌ Tag lost at block %u", b);
+            SRIX_LOG("[WriteTag_Headless] âŒ Tag lost at block %u", b);
             return blocks_written;
         }
     }
 
     SRIX_LOG(
-        "[WriteTag_Headless] ✅ WRITE COMPLETE. Written=%u Verified=%u", blocks_written, blocks_verified
+        "[WriteTag_Headless] âœ… WRITE COMPLETE. Written=%u Verified=%u", blocks_written, blocks_verified
     );
 
     // Return if OK
@@ -1210,15 +1210,15 @@ int SRIXTool::load_file_headless(const String &filename) {
 
 int SRIXTool::write_single_block_headless(uint8_t block_num, const uint8_t *block_data) {
     if (!nfc) {
-        SRIX_LOG("[WriteBlock_Headless] ❌ NFC object is NULL");
+        SRIX_LOG("[WriteBlock_Headless] âŒ NFC object is NULL");
         return -6;
     }
     if (block_num > 127) {
-        SRIX_LOG("[WriteBlock_Headless] ❌ Invalid block num: %d", block_num);
+        SRIX_LOG("[WriteBlock_Headless] âŒ Invalid block num: %d", block_num);
         return -4;
     }
     if (!block_data) {
-        SRIX_LOG("[WriteBlock_Headless] ❌ Invalid data pointer");
+        SRIX_LOG("[WriteBlock_Headless] âŒ Invalid data pointer");
         return -3;
     }
 
@@ -1234,7 +1234,7 @@ int SRIXTool::write_single_block_headless(uint8_t block_num, const uint8_t *bloc
     // 1. Wait Tag
     // Timeout 2500ms
     if (!waitForTagHeadless(2500)) {
-        SRIX_LOG("[WriteBlock_Headless] ❌ Timeout: Tag not found");
+        SRIX_LOG("[WriteBlock_Headless] âŒ Timeout: Tag not found");
         return -1;
     }
 
@@ -1245,7 +1245,7 @@ int SRIXTool::write_single_block_headless(uint8_t block_num, const uint8_t *bloc
 
         // 3. Wait HW write (Critical Wait)
         delay(SRIX_EEPROM_WRITE_DELAY_MS);
-        SRIX_LOG("[WriteBlock_Headless] ✅ WRITE SENT OK");
+        SRIX_LOG("[WriteBlock_Headless] âœ… WRITE SENT OK");
 
         // ==============================
         // 4. VERIFY (NEED BIGGER UPGRADE)
@@ -1253,24 +1253,24 @@ int SRIXTool::write_single_block_headless(uint8_t block_num, const uint8_t *bloc
         uint8_t readBuffer[4];
 
         // Re-select: NEED TO IMPLEMNTAT VERIFY WRITTEN BLOCK - NOT POSSIBLE NOW
-        if (!nfc->SRIX_initiate_select()) { SRIX_LOG("[WriteBlock_Headless] ⚠️ Re-select failed (ignored)"); }
+        if (!nfc->SRIX_initiate_select()) { SRIX_LOG("[WriteBlock_Headless] âš ï¸ Re-select failed (ignored)"); }
         delay(10);
 
         if (nfc->SRIX_read_block(block_num, readBuffer)) {
             delay(5);
             if (memcmp(block_data, readBuffer, 4) == 0) {
-                SRIX_LOG("[WriteBlock_Headless] ✅ VERIFY OK");
+                SRIX_LOG("[WriteBlock_Headless] âœ… VERIFY OK");
                 return 0; // WRITE + VERIFY OK
             } else {
-                SRIX_LOG("[WriteBlock_Headless] ⚠️ VERIFY MISMATCH (write assumed OK)");
+                SRIX_LOG("[WriteBlock_Headless] âš ï¸ VERIFY MISMATCH (write assumed OK)");
                 return 1; // WRITE OK, VERIFY FAIL
             }
         }
 
-        SRIX_LOG("[WriteBlock_Headless] ⚠️ VERIFY SKIPPED (no RST / RF dirty)");
+        SRIX_LOG("[WriteBlock_Headless] âš ï¸ VERIFY SKIPPED (no RST / RF dirty)");
         return 2; // WRITE OK, VERIFY NOT POSSIBLE
     } else {
-        SRIX_LOG("[WriteBlock_Headless] ❌ WRITE FAILED");
+        SRIX_LOG("[WriteBlock_Headless] âŒ WRITE FAILED");
         return -5;
     }
 }

@@ -88,7 +88,7 @@ void __attribute__((weak)) taskInputHandler(void *parameter) {
         // Sometimes this task run 2 or more times before looptask,
         // and navigation gets stuck, the idea here is run the input detection
         // if AnyKeyPress is false, or rerun if it was not renewed within 75ms (arbitrary)
-        // because AnyKeyPress will be true if didn´t passed through a check(bool var)
+        // because AnyKeyPress will be true if didnÂ´t passed through a check(bool var)
         if (!AnyKeyPress || millis() - timer > 75) {
             // Held across the whole update so consumers never observe a half-written state
             inputLock();
@@ -614,11 +614,11 @@ void loop() {
     tft.setLogging();
     Serial.println(
         "\n"
-        "██████  ██████  ██    ██  ██████ ███████ \n"
-        "██   ██ ██   ██ ██    ██ ██      ██      \n"
-        "██████  ██████  ██    ██ ██      █████   \n"
-        "██   ██ ██   ██ ██    ██ ██      ██      \n"
-        "██████  ██   ██  ██████   ██████ ███████ \n"
+        "â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ  â–ˆâ–ˆ    â–ˆâ–ˆ  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ \n"
+        "â–ˆâ–ˆ   â–ˆâ–ˆ â–ˆâ–ˆ   â–ˆâ–ˆ â–ˆâ–ˆ    â–ˆâ–ˆ â–ˆâ–ˆ      â–ˆâ–ˆ      \n"
+        "â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ  â–ˆâ–ˆ    â–ˆâ–ˆ â–ˆâ–ˆ      â–ˆâ–ˆâ–ˆâ–ˆâ–ˆ   \n"
+        "â–ˆâ–ˆ   â–ˆâ–ˆ â–ˆâ–ˆ   â–ˆâ–ˆ â–ˆâ–ˆ    â–ˆâ–ˆ â–ˆâ–ˆ      â–ˆâ–ˆ      \n"
+        "â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ  â–ˆâ–ˆ   â–ˆâ–ˆ  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ   â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ \n"
         "                                         \n"
         "         PREDATORY FIRMWARE\n\n"
         "Tips: Connect to the WebUI for better experience\n"

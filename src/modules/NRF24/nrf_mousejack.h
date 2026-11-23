@@ -11,7 +11,7 @@
  */
 #ifndef __NRF_MOUSEJACK_H
 #define __NRF_MOUSEJACK_H
-#if !defined(LITE_VERSION)
+#if !LITE_VERSION
 #include "modules/NRF24/nrf_common.h"
 
 // ── Maximum targets ───────────────────────────────────────────

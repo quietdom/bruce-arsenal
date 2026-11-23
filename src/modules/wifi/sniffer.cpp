@@ -289,12 +289,12 @@ bool matchesTargetAP(const wifi_promiscuous_pkt_t *pkt, const uint8_t targetBssi
            memcmp(addr3, targetBssid, 6) == 0;
 }
 
-// Définition de l'en-tête d'un paquet PCAP
+// DÃ©finition de l'en-tÃªte d'un paquet PCAP
 typedef struct pcaprec_hdr_s {
     uint32_t ts_sec;   /* timestamp secondes */
     uint32_t ts_usec;  /* timestamp microsecondes */
-    uint32_t incl_len; /* nombre d'octets du paquet enregistrés dans le fichier */
-    uint32_t orig_len; /* longueur réelle du paquet */
+    uint32_t incl_len; /* nombre d'octets du paquet enregistrÃ©s dans le fichier */
+    uint32_t orig_len; /* longueur rÃ©elle du paquet */
 } pcaprec_hdr_t;
 
 void saveHandshake(const wifi_promiscuous_pkt_t *packet, bool beacon, FS &Fs, const char *ssidLabel) {
@@ -342,7 +342,7 @@ void saveHandshake(const wifi_promiscuous_pkt_t *packet, bool beacon, FS &Fs, co
     auto &buf = eapol4WayBuffer[apKey];
     uint16_t dataLen = std::min<uint16_t>(packet->rx_ctrl.sig_len, EAPOL_BUF_SIZE);
 
-    // M1: buffer — don't write to file yet
+    // M1: buffer â€” don't write to file yet
     if (eapolMsg == 1) {
         if (tracker.msg1) { return; }
         tracker.msg1 = true;
@@ -353,7 +353,7 @@ void saveHandshake(const wifi_promiscuous_pkt_t *packet, bool beacon, FS &Fs, co
         return;
     }
 
-    // M2: buffer — don't write to file yet
+    // M2: buffer â€” don't write to file yet
     if (eapolMsg == 2) {
         if (!tracker.msg1 || tracker.msg2) { return; }
         tracker.msg2 = true;
@@ -364,7 +364,7 @@ void saveHandshake(const wifi_promiscuous_pkt_t *packet, bool beacon, FS &Fs, co
         return;
     }
 
-    // M3: buffer — don't write to file yet
+    // M3: buffer â€” don't write to file yet
     if (eapolMsg == 3) {
         if (!tracker.msg2 || tracker.msg3) { return; }
         tracker.msg3 = true;
@@ -1013,14 +1013,14 @@ void event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, voi
     if (event_base == WIFI_EVENT) {
         switch (event_id) {
             case WIFI_EVENT_STA_START:
-                // Ação para quando a estação WiFi inicia
+                // AÃ§Ã£o para quando a estaÃ§Ã£o WiFi inicia
                 break;
                 // Outros casos...
         }
     } else if (event_base == IP_EVENT) {
         switch (event_id) {
             case IP_EVENT_STA_GOT_IP:
-                // Ação para quando a estação WiFi obtém um endereço IP
+                // AÃ§Ã£o para quando a estaÃ§Ã£o WiFi obtÃ©m um endereÃ§o IP
                 break;
                 // Outros casos...
         }
@@ -1229,7 +1229,7 @@ void sniffer_setup() {
                 Serial.println("Not enough space on LittleFS");
                 displayError("LittleFS Full", true);
             }
-            break; // user exit or storage exit — either way stop loop
+            break; // user exit or storage exit â€” either way stop loop
         }
         unsigned long currentTime = millis();
         if (isLittleFS && (currentTime - lastLittleFsCheck) > 500) {

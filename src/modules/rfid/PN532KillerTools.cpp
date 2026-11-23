@@ -467,7 +467,7 @@ void PN532KillerTools::failedInitMenu() {
                        }});
     options.push_back({"Return", [&]() { returnToMenu = true; }});
 
-    // 默认选择Reset项（倒数第二个选项）
+    // é»˜è®¤é€‰æ‹©Reseté¡¹ï¼ˆå€’æ•°ç¬¬äºŒä¸ªé€‰é¡¹ï¼‰
     loopOptions(options, options.size() - 2);
 }
 

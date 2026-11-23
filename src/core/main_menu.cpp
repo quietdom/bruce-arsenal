@@ -9,6 +9,8 @@ MainMenu::MainMenu() {
         &bleMenu,
         &rfMenu,
         &nrf24Menu,
+        &arsenalMenu,
+        &arsenalMenu,
 #if !defined(LITE_VERSION)
         &loraMenu,
 #endif

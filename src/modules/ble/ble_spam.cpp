@@ -1,12 +1,12 @@
 /**
- * ble_spam.cpp — BLE Spam Module for Bruce Firmware
+ * ble_spam.cpp â€” BLE Spam Module for Bruce Firmware
  *
  * Original BLE spam implementation by Bruce/EA7KDO.
  *
  * Major improvements by Doominator1 (https://github.com/Doominator1):
  *   - Unified spam UI with per-device selection, configurable adv/gap timing,
  *     TX power control, MAC randomisation frequency selector, and live pkt/s stats
- *   - Eliminated BLE stack deinit/init on MAC rotation — fixes crashes at tight intervals
+ *   - Eliminated BLE stack deinit/init on MAC rotation â€” fixes crashes at tight intervals
  *   - xorshift64* PRNG for fast MAC generation without hardware RNG overhead
  *   - Watchdog reset in run loop for stability at tight intervals
  *   - BLE Beacon spam, Swift Pair presets + persistent custom name lists
@@ -14,7 +14,7 @@
  *   - Config persistence across reboots via Preferences
  *
  * Packet improvements merged from MarlinSchuck (https://github.com/MarlinSchuck):
- *   - Apple Continuity dynamic random fields matching Flipper Zero reference —
+ *   - Apple Continuity dynamic random fields matching Flipper Zero reference â€”
  *     triggers iOS popups where static payloads failed (ProximityPair, NearbyAction,
  *     CustomCrash variants)
  *   - Samsung EasySetup Galaxy Buds packet (previously only Watch was present)
@@ -259,7 +259,7 @@ struct DeviceType {
 
 enum EBLEPayloadType { Microsoft, Samsung, Google };
 
-// Apple Continuity — Nearby Action type codes
+// Apple Continuity â€” Nearby Action type codes
 static const uint8_t continuity_na_actions[] = {
     0x13,
     0x24,
@@ -281,7 +281,7 @@ static const int continuity_na_actions_count =
     sizeof(continuity_na_actions) / sizeof(continuity_na_actions[0]);
 
 // ============================================================================
-// Google Fast Pair — 3-byte model codes
+// Google Fast Pair â€” 3-byte model codes
 // Expanded list (Doominator1 original + MarlinSchuck additions, deduped)
 // Each triggers "New device nearby" Fast Pair popup on Android
 // ============================================================================
@@ -301,10 +301,10 @@ const DeviceType android_models[] = {
 int android_models_count = sizeof(android_models) / sizeof(android_models[0]);
 
 // ============================================================================
-// Samsung EasySetup — Galaxy Watch + Galaxy Buds models
+// Samsung EasySetup â€” Galaxy Watch + Galaxy Buds models
 // ============================================================================
 
-// Galaxy Watch — single byte model selector, ported from the current Flipper
+// Galaxy Watch â€” single byte model selector, ported from the current Flipper
 // Zero ble_spam app's samsung_watches table.
 // Triggers "Galaxy Watch detected" pairing popup on Samsung Android devices
 const WatchModel watch_models[] = {
@@ -315,7 +315,7 @@ const WatchModel watch_models[] = {
 };
 static const int watch_models_count = sizeof(watch_models) / sizeof(watch_models[0]);
 
-// Galaxy Buds — 3-byte RGB color codes, ported from the current Flipper Zero
+// Galaxy Buds â€” 3-byte RGB color codes, ported from the current Flipper Zero
 // ble_spam app's samsung_buds table.
 // Triggers "Galaxy Buds detected" pairing popup on Samsung Android devices
 static const uint32_t samsung_buds_models[] = {
@@ -438,7 +438,7 @@ BLEAdvertisementData GetUniversalAdvertisementData(EBLEPayloadType Type, const S
                 Buds_Data[bi++] = 0xC7;
                 Buds_Data[bi++] = 0x00;
                 // Trailing truncated record (length=0x10 claimed, only 2 data
-                // bytes present) — ported from the Flipper Zero ble_spam app.
+                // bytes present) â€” ported from the Flipper Zero ble_spam app.
                 // Real Galaxy Buds advertise this stub second record; without
                 // it Samsung's scanner doesn't recognize the packet.
                 Buds_Data[bi++] = 0x10;
@@ -881,7 +881,7 @@ static void bleSpamSaveConfig(const BleSpamConfig &config) {
 }
 
 static uint32_t bleSpamMsStep(uint32_t ms) {
-    // <= (not <) so stepping away from 20 in either direction uses step 1 —
+    // <= (not <) so stepping away from 20 in either direction uses step 1 â€”
     // otherwise decrementing from exactly 20 used the 10-199 bracket's step
     // (10) and jumped straight to 10, skipping 11-19, while incrementing from
     // 19 stayed on step 1. Keeps the whole 10-20 range at increments of 1.
@@ -1261,7 +1261,7 @@ static void bleSpamFastRandomMac(uint8_t *mac) {
     mac[0] = (mac[0] & 0xFE) | 0x02;
 }
 
-// 16-char printable ASCII name, regenerated every call via xorshift — used for beacon random spam
+// 16-char printable ASCII name, regenerated every call via xorshift â€” used for beacon random spam
 static void bleSpamRandomBeaconName(char *buf) {
     const uint8_t len = 16;
     for (uint8_t i = 0; i < len; i++) { buf[i] = 0x21 + (uint8_t)(bleSpamNextRand64() % 94); }
@@ -1290,7 +1290,7 @@ static bool bleSpamGetNextMac(BleSpamRunState &state, BleSpamMacRandMode mode, u
 
 // ============================================================================
 // Apple Continuity dynamic packet builders (MarlinSchuck)
-// Dynamic random fields matching Flipper Zero reference — triggers iOS popups
+// Dynamic random fields matching Flipper Zero reference â€” triggers iOS popups
 // where static payloads failed. Only used by the new BLE spam UI Apple paths.
 // ============================================================================
 
@@ -1315,7 +1315,7 @@ static size_t bleSpamBuildContinuityNearbyAction(uint8_t *buf) {
 
 // Builds a dynamic Apple Continuity NearbyAction (Action modal) advertisement.
 // Previously alternated 50/50 with a "CustomCrash" variant that appended 6
-// bytes past the declared Continuity Size — not a real Continuity TLV, so
+// bytes past the declared Continuity Size â€” not a real Continuity TLV, so
 // roughly half of all Action packets were malformed and silently dropped by
 // iOS. Always emit the real NearbyAction format now.
 static bool bleSpamBuildAppleContinuityAdvertisement(BLEAdvertisementData &advertisementData) {
@@ -1334,13 +1334,13 @@ static bool bleSpamBuildAdvertisementData(
     switch (attackType) {
 #if !defined(LITE_VERSION)
         case BLE_SPAM_ATTACK_APPLE_PAIRING: {
-            // ProximityPair device popup (AirPods, Beats etc.) — prefix 0x07 = new device.
+            // ProximityPair device popup (AirPods, Beats etc.) â€” prefix 0x07 = new device.
             uint16_t deviceId = bleSpamResolveProximityDeviceId(deviceIndex);
             return buildAppleProximityPair(0x07, deviceId, advertisementData);
         }
         case BLE_SPAM_ATTACK_APPLE_ACTION: {
             // Action modals (SetupNewPhone, AppleTV etc.) use dynamic Continuity NearbyAction
-            // packets (MarlinSchuck) — these trigger iOS popups more reliably than static payloads
+            // packets (MarlinSchuck) â€” these trigger iOS popups more reliably than static payloads
             return bleSpamBuildAppleContinuityAdvertisement(advertisementData);
         }
         case BLE_SPAM_ATTACK_APPLE_NOT_YOUR_DEVICE: {
@@ -1375,7 +1375,7 @@ static bool bleSpamBuildAdvertisementData(
             int nPresets = (int)(sizeof(BLE_SPAM_WINDOWS_PRESETS) / sizeof(BLE_SPAM_WINDOWS_PRESETS[0]));
             String name;
             if (deviceIndex == nPresets) {
-                // Random/All — pick random preset
+                // Random/All â€” pick random preset
                 name = String(BLE_SPAM_WINDOWS_PRESETS[random(nPresets)]);
             } else if (deviceIndex >= 0 && deviceIndex < nPresets) {
                 name = String(BLE_SPAM_WINDOWS_PRESETS[deviceIndex]);
@@ -1393,7 +1393,7 @@ static bool bleSpamBuildAdvertisementData(
             BLEAdvertisementData AdvData = BLEAdvertisementData();
             bool sendBuds;
             if (deviceIndex == BLE_SPAM_SAMSUNG_RANDOM_IDX || deviceIndex == 2) {
-                // Random/All or Generic — pick randomly each packet
+                // Random/All or Generic â€” pick randomly each packet
                 sendBuds = (random(2) == 0);
             } else if (deviceIndex == 0) {
                 sendBuds = true; // Galaxy Buds
@@ -1434,7 +1434,7 @@ static bool bleSpamBuildAdvertisementData(
                 Buds_Data[bi++] = 0xC7;
                 Buds_Data[bi++] = 0x00;
                 // Trailing truncated record (length=0x10 claimed, only 2 data
-                // bytes present) — ported from the Flipper Zero ble_spam app.
+                // bytes present) â€” ported from the Flipper Zero ble_spam app.
                 // Real Galaxy Buds advertise this stub second record; without
                 // it Samsung's scanner doesn't recognize the packet.
                 Buds_Data[bi++] = 0x10;
@@ -1466,7 +1466,7 @@ static bool bleSpamBuildAdvertisementData(
                 name = String(BLE_SPAM_BEACON_PRESETS[deviceIndex]);
                 bleSpamBeaconName = name;
             } else if (deviceIndex == randomBeaconIdx || bleSpamBeaconName.length() == 0) {
-                // Random — generate fresh each packet
+                // Random â€” generate fresh each packet
                 bleSpamRandomBeaconName(randomBuf);
                 name = String(randomBuf);
             } else {
@@ -1618,7 +1618,7 @@ static void
 bleSpamRestartAdvertiserForMac(BleSpamRunState &state, const BleSpamConfig &config, const uint8_t *mac) {
     if (pAdvertising) pAdvertising->stop();
 
-    // Set the address at the hardware/interface level first — works for both stacks
+    // Set the address at the hardware/interface level first â€” works for both stacks
     esp_iface_mac_addr_set(mac, ESP_MAC_BT);
 
 #ifdef CONFIG_BT_NIMBLE_ENABLED
@@ -1645,7 +1645,7 @@ bleSpamRestartAdvertiserForMac(BleSpamRunState &state, const BleSpamConfig &conf
 #endif
 
     state.mac_initialized = true;
-    // pAdvertising is still valid — caller proceeds straight to start()
+    // pAdvertising is still valid â€” caller proceeds straight to start()
 }
 
 static void
@@ -2180,12 +2180,12 @@ static bool bleSpamHandleCustomNameDevice(
         bleSpamSaveCustomNames(ns, saved);
         nameVar = newName;
         selection.device_index = deviceIndex;
-        vTaskDelay(200 / portTICK_PERIOD_MS); // debounce — prevent stale press escaping to list
+        vTaskDelay(200 / portTICK_PERIOD_MS); // debounce â€” prevent stale press escaping to list
         return false;                         // return to device list, not to spam menu
     }
 
     if (deviceIndex >= savedBase && deviceIndex < addNewIdx) {
-        // It's a saved custom name — show Use/Delete prompt
+        // It's a saved custom name â€” show Use/Delete prompt
         int choice = bleSpamTwoOptionPrompt(
             String(saved[deviceIndex - savedBase]), "Use Saved Name", "Delete Saved Name"
         );
@@ -2202,7 +2202,7 @@ static bool bleSpamHandleCustomNameDevice(
         return false;
     }
 
-    // Preset or Random/All — clear custom name var, just run
+    // Preset or Random/All â€” clear custom name var, just run
     nameVar = "";
     selection.device_index = deviceIndex;
     return true;

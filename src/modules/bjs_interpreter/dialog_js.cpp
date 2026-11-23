@@ -106,7 +106,7 @@ JSValue native_dialogPickFile(JSContext *ctx, JSValue *this_val, int argc, JSVal
     }
     FS *fs = NULL;
     if (SD.exists(filepath)) fs = &SD;
-    else if (LittleFS.exists(filepath)) fs = &LittleFS; // ← added 'else'
+    else if (LittleFS.exists(filepath)) fs = &LittleFS; // â† added 'else'
     if (fs) { r = loopSD(*fs, true, extension, filepath); }
     return JS_NewString(ctx, r.c_str());
 }
@@ -184,7 +184,7 @@ JSValue native_dialogViewFile(JSContext *ctx, JSValue *this_val, int argc, JSVal
     if (!filepath.startsWith("/")) filepath = "/" + filepath;
     FS *fs = NULL;
     if (SD.exists(filepath)) fs = &SD;
-    else if (LittleFS.exists(filepath)) fs = &LittleFS; // ← add "else if" for SD Priority
+    else if (LittleFS.exists(filepath)) fs = &LittleFS; // â† add "else if" for SD Priority
     if (fs) { viewFile(*fs, filepath); }
     return JS_UNDEFINED;
 }

@@ -19,10 +19,12 @@
 #include "menu_items/RFMenu.h"
 #include "menu_items/ScriptsMenu.h"
 #include "menu_items/WifiMenu.h"
+#include "menu_items/ArsenalMenu.h"
 #include "menu_items/WireToolsMenu.h"
 class MainMenu {
 public:
     FileMenu fileMenu;
+    ArsenalMenu arsenalMenu;
     BleMenu bleMenu;
     ClockMenu clockMenu;
     ConnectMenu connectMenu;

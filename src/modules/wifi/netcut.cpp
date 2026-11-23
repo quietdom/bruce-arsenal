@@ -537,11 +537,11 @@ static void _activeLoop() {
                 s_devices[i].lastTrollToggle = millis();
 
                 if (s_devices[i].isTrollOffline) {
-                    // Phase: OFFLINE → instant poison burst (20x)
+                    // Phase: OFFLINE â†’ instant poison burst (20x)
                     netcutPoisonDevice(i, 20);
                     Serial.printf("[Troll] %s -> OFFLINE (poison)\n", s_devices[i].ip.toString().c_str());
                 } else {
-                    // Phase: ONLINE → instant restore + 5s forced restore window
+                    // Phase: ONLINE â†’ instant restore + 5s forced restore window
                     s_devices[i].restoreUntil = millis() + 5000;
                     netcutRestoreDevice(i);
                     Serial.printf("[Troll] %s -> ONLINE (restore)\n", s_devices[i].ip.toString().c_str());

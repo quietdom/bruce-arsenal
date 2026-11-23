@@ -43,7 +43,7 @@ bool nrf_start(NRF24_MODE mode) {
 
     if (!CHECK_NRF_SPI(mode)) return result;
 
-    // Always re-assert CE LOW and CS HIGH before begin() — these pins
+    // Always re-assert CE LOW and CS HIGH before begin() â€” these pins
     // may have been left in an indeterminate state by the previous session,
     // especially after stopConstCarrier() which can leave CE HIGH internally.
     pinMode(bruceConfigPins.NRF24_bus.cs, OUTPUT);
@@ -93,7 +93,7 @@ NRF24_MODE nrf_setMode() {
     if (nrfSPI && nrfUART) {
         // FIX: having both valid SPI pins AND valid UART pins is not an error.
         // A UART-NRF can't be reliably auto-detected from pin config, so when the
-        // SPI pins are configured, default to SPI (the common case — e.g. the
+        // SPI pins are configured, default to SPI (the common case â€” e.g. the
         // M5Stick RF Pack S3 with an SPI nRF24). Previously this branch wrongly
         // raised "NRF24 pins undefined", blocking every SPI-only NRF24 device.
         mode = NRF_MODE_SPI;
